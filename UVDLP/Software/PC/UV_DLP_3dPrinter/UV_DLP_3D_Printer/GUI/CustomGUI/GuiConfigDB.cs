@@ -1434,6 +1434,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             SaveButtons(xd, toplevel);
             SaveControls(xd, toplevel);
             SaveDecals(xd, toplevel);
+            SaveLayouts(xd, toplevel);
             SaveSequences(xd, toplevel);
             if (Plugin != null)
                 fileName += "_" + Plugin.Name + ".xml";

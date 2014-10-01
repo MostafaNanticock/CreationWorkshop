@@ -23,6 +23,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         Dictionary<String, Control> Controls;
         Dictionary<String, ctlImageButton> Buttons;
         Dictionary<String, GuiControlStyle> GuiControlStylesDict;
+        Dictionary<String, Control> GuiLayouts;
         List<GuiDecorItem> BgndDecorList;
         List<GuiDecorItem> FgndDecorList;
         ResourceManager Res; // the resource manager for the main CW application
@@ -30,6 +31,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         Control mTopLevelControl = null;
         public GuiControlStyle DefaultControlStyle;
         public GuiControlStyle DefaultButtonStyle;
+        GuiConfigDB guiConf;
         
 
 
@@ -40,6 +42,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             GuiControlStylesDict = new Dictionary<string, GuiControlStyle>();
             BgndDecorList = new List<GuiDecorItem>();
             FgndDecorList = new List<GuiDecorItem>();
+            GuiLayouts = new Dictionary<string, Control>();
             Res = global::UV_DLP_3D_Printer.Properties.Resources.ResourceManager;
             Plugin = null;
             DefaultControlStyle = new GuiControlStyle("DefaultControl");
@@ -82,6 +85,14 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             return Buttons[name];
         }
 
+        public Control GetControlOrButton(string name)
+        {
+            Control ctl = GetButton(name);
+            if (ctl == null)
+                return GetControl(name);
+            return ctl;
+        }
+
         public GuiControlStyle GetControlStyle(string name)
         {
             if ((name == null) || !GuiControlStylesDict.ContainsKey(name))
@@ -116,6 +127,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         public void ApplyConfiguration(GuiConfigDB conf)
         {
+            guiConf = conf;
             try
             {
                 // read and store all styles
@@ -124,13 +136,33 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
                 HandleDecals(conf);
                 HandleButtons(conf);
+                HandleLayouts(conf);
                 HandleControls(conf);
                 HandleSequences(conf);
+
             }
             catch (Exception ex) 
             {
                 DebugLogger.Instance().LogError(ex);
             }
+        }
+
+
+        public void DumpDatabase(string fname)
+        {
+            StreamWriter sw = new StreamWriter(fname);
+            sw.WriteLine("Controls:");
+            foreach (KeyValuePair<String, Control> pair in Controls)
+            {
+                sw.WriteLine("  {0,-30}{1}", pair.Key, pair.Value.GetType().ToString());
+            }
+            sw.WriteLine("");
+            sw.WriteLine("Buttons:");
+            foreach (KeyValuePair<String, ctlImageButton> pair in Buttons)
+            {
+                sw.WriteLine("  {0,-30}{1}", pair.Key, pair.Value.GetType().ToString());
+            }
+            sw.Close();
         }
 
 
@@ -414,7 +446,221 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         #endregion
 
-        #region Perform layout
+        #region Handle layout
+
+        public Control GetLayout(string name)
+        {
+            if (!GuiLayouts.ContainsKey(name))
+                return null;
+            return GuiLayouts[name];
+        }
+
+        void HandleLayouts(GuiConfigDB conf)
+        {
+            foreach (GuiLayout gl in conf.GuiLayouts)
+            {
+                Control ctl = CreateLayoutRecurse(gl);
+                GuiLayouts[gl.name] = ctl;
+            }
+
+        }
+
+        Control CreateLayoutRecurse(GuiLayout gl)
+        {
+            Control ctl = null;
+            switch (gl.type)
+            {
+                case GuiLayout.LayoutType.Control:
+                    ctl = GetControlOrButton(gl.name);
+                    FillCommonLayoutParameters(gl, ctl);
+                    break;
+
+                case GuiLayout.LayoutType.FlowPanel:
+                    ctl = CreateFlowPanel(gl);
+                    break;
+
+                case GuiLayout.LayoutType.Layout:
+                case GuiLayout.LayoutType.Panel:
+                    ctl = new Panel();
+                    ctl.SuspendLayout();
+                    if (gl.type == GuiLayout.LayoutType.Layout)
+                        ctl.Dock = DockStyle.Fill;
+                    FillCommonLayoutParameters(gl, ctl);
+                    break;
+
+                case GuiLayout.LayoutType.SplitPanel:
+                    ctl = CreateSplitPanel(gl);
+                    break;
+
+                case GuiLayout.LayoutType.TabPanel:
+                    break;
+            }
+
+            if (ctl == null)
+                return null;
+
+            if (gl.type != GuiLayout.LayoutType.Control)
+                Controls[gl.name] = ctl;
+            CreateSublayouts(gl, ctl);
+            ctl.ResumeLayout();
+            return ctl;
+        }
+
+        void CreateSublayouts(GuiLayout gl, Control parent)
+        {
+            foreach (GuiLayout subgl in gl.subLayouts)
+            {
+                Control subctl = CreateLayoutRecurse(subgl);
+                if (subctl != null)
+                {
+                    parent.Controls.Add(subctl);
+                }
+            }
+        }
+
+        FlowLayoutPanel CreateFlowPanel(GuiLayout gl)
+        {
+            FlowLayoutPanel flp = new FlowLayoutPanel();
+            flp.SuspendLayout();
+            flp.FlowDirection = FlowDirection.LeftToRight;
+            if (gl.direction.IsExplicit())
+            {
+                switch (((string)gl.direction).ToUpper())
+                {
+                    case "L2R": flp.FlowDirection = FlowDirection.LeftToRight; break;
+                    case "T2B": flp.FlowDirection = FlowDirection.TopDown; break;
+                    case "R2L": flp.FlowDirection = FlowDirection.RightToLeft; break;
+                    case "B2T": flp.FlowDirection = FlowDirection.BottomUp; break;
+                }
+            }
+            FillCommonLayoutParameters(gl, flp);
+            return flp;
+        }
+
+        SplitContainer CreateSplitPanel(GuiLayout gl)
+        {
+            SplitContainer sc = new SplitContainer();
+            sc.SuspendLayout();
+            sc.Panel1.SuspendLayout();
+            sc.Panel2.SuspendLayout();
+            sc.Orientation = Orientation.Horizontal;
+            if (gl.orientation.IsExplicit() && (((string)gl.orientation).ToLower()[0] == 'v'))
+                sc.Orientation = Orientation.Vertical;
+            if (gl.splitPos.IsExplicit())
+                sc.SplitterDistance = gl.splitPos;
+            foreach (GuiLayout subgl in gl.subLayouts)
+            {
+                SplitterPanel sp;
+                if (subgl.type == GuiLayout.LayoutType.SplitPanel1)
+                    sp = sc.Panel1;
+                else if (subgl.type == GuiLayout.LayoutType.SplitPanel2)
+                    sp = sc.Panel2;
+                else
+                    continue;
+                CreateSublayouts(subgl, sp);
+            }
+            FillCommonLayoutParameters(gl, sc);
+            sc.Panel1.ResumeLayout();
+            sc.Panel2.ResumeLayout();
+            return sc;
+        }
+
+        Panel CreateTabPanel(GuiLayout gl)
+        {
+            Panel pnl = new Panel();
+            pnl.SuspendLayout();
+            pnl.Dock = DockStyle.Fill;
+            FlowLayoutPanel flp = new FlowLayoutPanel();
+            flp.SuspendLayout();
+            flp.Dock = DockStyle.Top;
+            flp.FlowDirection = FlowDirection.LeftToRight;
+            flp.Size = new Size(50, 50);
+            pnl.Controls.Add(flp);
+            foreach (GuiLayout subgl in gl.subLayouts)
+            {
+                Control ctl = null;
+                if (subgl.type == GuiLayout.LayoutType.TabItem)
+                    ctl = CreateTabItem(subgl, flp);
+                if (ctl != null)
+                    pnl.Controls.Add(ctl);
+            }
+            flp.ResumeLayout();
+            return pnl;
+        }
+
+        Control CreateTabItem(GuiLayout gl, FlowLayoutPanel flp)
+        {
+            Control tabctl = null;
+            tabctl = GetControlOrButton(gl.control);
+            if (tabctl == null)
+            {
+                if (!gl.text.IsExplicit())
+                {
+                    // if no text, create image button
+                    AddButton(gl.name, new ctlImageButton());
+                    ctlImageButton butt = Buttons[gl.name];
+                    butt.BringToFront();
+                    if (gl.image.IsExplicit())
+                    {
+                        butt.GLImage = gl.image;
+                        butt.Image = guiConf.GetImage(gl.image, null);
+                    }
+                    tabctl = butt;
+                }
+                else
+                {
+                    // text valid, create title control
+                    ctlTitle ttl = new ctlTitle();
+                    ttl.Image = guiConf.GetImage(gl.image, null);
+                    ttl.Text = gl.text;
+                    Controls[gl.name] = ttl;
+                    tabctl = ttl;
+                }
+            }
+            flp.Controls.Add(tabctl);
+            Control shownControl = null;
+            if (gl.subLayouts.Count == 1)
+            {
+                shownControl = CreateLayoutRecurse(gl.subLayouts[0]);
+            }
+            else
+            {
+                shownControl = new Panel();
+                CreateSublayouts(gl, shownControl);
+            }
+            shownControl.Dock = DockStyle.Fill;
+            shownControl.Visible = gl.isSelected.IsExplicit() && gl.isSelected;
+            return shownControl;
+        }
+
+        void FillCommonLayoutParameters(GuiLayout gl, Control ctl)
+        {
+            if (gl.w.IsExplicit()) ctl.Width = gl.w;
+            if (gl.h.IsExplicit()) ctl.Height = gl.h;
+            if (gl.dock.IsExplicit())
+            {
+                switch (((string)gl.dock).ToLower())
+                {
+                    case "top": ctl.Dock = DockStyle.Top; break;
+                    case "bottom": ctl.Dock = DockStyle.Bottom; break;
+                    case "left": ctl.Dock = DockStyle.Left; break;
+                    case "right": ctl.Dock = DockStyle.Right; break;
+                    case "fill": ctl.Dock = DockStyle.Fill; break;
+                }
+            }
+            int px = ctl.Location.X;
+            int py = ctl.Location.Y;
+            if (gl.px.IsExplicit()) px = gl.px;
+            if (gl.py.IsExplicit()) py = gl.py;
+            if ((px != ctl.Location.X) || (py != ctl.Location.Y))
+            {
+                ctl.Location = new Point(px,py);
+            }
+        }
+
+        #endregion
+
+        #region Perform 3Dlayout
 
         void Draw(List<GuiDecorItem> dlist, C2DGraphics g2d, int w, int h)
         {

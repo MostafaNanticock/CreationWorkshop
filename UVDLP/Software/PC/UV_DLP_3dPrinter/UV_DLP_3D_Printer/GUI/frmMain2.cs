@@ -1074,7 +1074,16 @@ namespace UV_DLP_3D_Printer.GUI
                     GuiConfigDB gconfdb = new GuiConfigDB();
                     gconfdb.LoadConfiguration(text);
                     UVDLPApp.Instance().m_gui_config.ApplyConfiguration(gconfdb);
+                    Control winLayout = UVDLPApp.Instance().m_gui_config.GetLayout("MainLayout");
+                    if (winLayout != null)
+                    {
+                        Form frm = new Form();
+                        frm.Size = new Size(winLayout.Width, winLayout.Height);
+                        frm.Controls.Add(winLayout);
+                        frm.ShowDialog();
+                    }
                     gconfdb.SaveConfiguration("GuiConfigMenuTest");
+                    UVDLPApp.Instance().m_gui_config.DumpDatabase("GuiManagerDatabase.txt");
 #else
                     UVDLPApp.Instance().m_gui_config.LoadConfiguration(text);
 #endif
