@@ -63,10 +63,11 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 SetMachineControls(m_config.MachineControls);
                 labelPressApply.Visible = false;
                 FillConfiguredDisplays();
+                ShowMicron();
             }
-            catch (Exception) 
+            catch (Exception ex) 
             {
-            
+                DebugLogger.Instance().LogError(ex);
             }
         }
 
@@ -104,7 +105,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             return name;
         }
 
-        private bool GetData() 
+        private bool GetData(bool suppresspopup = false) 
         {
             try
             {
@@ -135,8 +136,11 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             }
             catch (Exception ex) 
             {
-                DebugLogger.Instance().LogRecord(ex.Message);
-                MessageBox.Show("Please check input parameters\r\n" + ex.Message, "Input Error");
+                if (!suppresspopup)
+                {
+                    DebugLogger.Instance().LogRecord(ex.Message);
+                    MessageBox.Show("Please check input parameters\r\n" + ex.Message, "Input Error");
+                }
                 return false;
             }
         }
@@ -703,12 +707,36 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     m_config.m_PlatXSize = bsc.calcplatoformsizeX;
                     m_config.m_PlatYSize = bsc.calcplatoformsizeY;
                 }
-                catch (Exception ex)
+                catch (Exception )
                 {
                 
                 }
                 SetData();
             }
+        }
+        private void ShowMicron() 
+        {
+            try
+            {
+                lblMicronX.Text = string.Format("{0:0} microns X",(( m_config.m_PlatXSize / m_config.XRenderSize)*1000));
+                lblMicronY.Text = string.Format("{0:0} microns Y", ((m_config.m_PlatYSize / m_config.YRenderSize) * 1000));
+            }
+            catch (Exception ) 
+            {
+            
+            }
+        }
+
+        private void txtPlatWidth_TextChanged(object sender, EventArgs e)
+        {
+            GetData(true);
+            ShowMicron();
+        }
+
+        private void txtPlatHeight_TextChanged(object sender, EventArgs e)
+        {
+            GetData(true);
+            ShowMicron();
         }
     }
 }
