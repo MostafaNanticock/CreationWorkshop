@@ -75,7 +75,7 @@ namespace UV_DLP_3D_Printer.GUI
                 modelsizeX = float.Parse(txtmodelx.Text);
                 modelsizeY = float.Parse(txtmodely.Text);
             }
-            catch (Exception ex) 
+            catch (Exception ) 
             {
                 //DebugLogger.Instance().LogError(ex);
             }
@@ -102,6 +102,16 @@ namespace UV_DLP_3D_Printer.GUI
         {
             CalcNewSize();
 
+        }
+
+        private void txtmodelx_TextChanged(object sender, EventArgs e)
+        {
+            CalcNewSize();
+        }
+
+        private void txtmodely_TextChanged(object sender, EventArgs e)
+        {
+            CalcNewSize();
         }
     }
 }

@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.cmdOK = new System.Windows.Forms.Button();
-            this.txtmodelx = new System.Windows.Forms.GroupBox();
+            this.modelgroup = new System.Windows.Forms.GroupBox();
             this.txtmodely = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtmodelx = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtmeasuredy = new System.Windows.Forms.TextBox();
@@ -46,7 +46,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lblNewBuildSizeY = new System.Windows.Forms.Label();
             this.lblNewBuildSizeX = new System.Windows.Forms.Label();
-            this.txtmodelx.SuspendLayout();
+            this.modelgroup.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -62,18 +62,18 @@
             this.cmdOK.UseVisualStyleBackColor = true;
             this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
             // 
-            // txtmodelx
+            // modelgroup
             // 
-            this.txtmodelx.Controls.Add(this.txtmodely);
-            this.txtmodelx.Controls.Add(this.label2);
-            this.txtmodelx.Controls.Add(this.textBox1);
-            this.txtmodelx.Controls.Add(this.label1);
-            this.txtmodelx.Location = new System.Drawing.Point(12, 12);
-            this.txtmodelx.Name = "txtmodelx";
-            this.txtmodelx.Size = new System.Drawing.Size(203, 104);
-            this.txtmodelx.TabIndex = 1;
-            this.txtmodelx.TabStop = false;
-            this.txtmodelx.Text = "Model Size (mm)";
+            this.modelgroup.Controls.Add(this.txtmodely);
+            this.modelgroup.Controls.Add(this.label2);
+            this.modelgroup.Controls.Add(this.txtmodelx);
+            this.modelgroup.Controls.Add(this.label1);
+            this.modelgroup.Location = new System.Drawing.Point(12, 12);
+            this.modelgroup.Name = "modelgroup";
+            this.modelgroup.Size = new System.Drawing.Size(203, 104);
+            this.modelgroup.TabIndex = 1;
+            this.modelgroup.TabStop = false;
+            this.modelgroup.Text = "Model Size (mm)";
             // 
             // txtmodely
             // 
@@ -82,6 +82,7 @@
             this.txtmodely.Size = new System.Drawing.Size(100, 22);
             this.txtmodely.TabIndex = 3;
             this.txtmodely.Text = "2.0";
+            this.txtmodely.TextChanged += new System.EventHandler(this.txtmodely_TextChanged);
             // 
             // label2
             // 
@@ -92,13 +93,14 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Y Size";
             // 
-            // textBox1
+            // txtmodelx
             // 
-            this.textBox1.Location = new System.Drawing.Point(72, 33);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 22);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "2.0";
+            this.txtmodelx.Location = new System.Drawing.Point(72, 33);
+            this.txtmodelx.Name = "txtmodelx";
+            this.txtmodelx.Size = new System.Drawing.Size(100, 22);
+            this.txtmodelx.TabIndex = 1;
+            this.txtmodelx.Text = "2.0";
+            this.txtmodelx.TextChanged += new System.EventHandler(this.txtmodelx_TextChanged);
             // 
             // label1
             // 
@@ -235,12 +237,12 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.txtmodelx);
+            this.Controls.Add(this.modelgroup);
             this.Controls.Add(this.cmdOK);
             this.Name = "frmBuildSizeCalib";
             this.Text = "Build Size Calibration";
-            this.txtmodelx.ResumeLayout(false);
-            this.txtmodelx.PerformLayout();
+            this.modelgroup.ResumeLayout(false);
+            this.modelgroup.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -254,10 +256,10 @@
         #endregion
 
         private System.Windows.Forms.Button cmdOK;
-        private System.Windows.Forms.GroupBox txtmodelx;
+        private System.Windows.Forms.GroupBox modelgroup;
         private System.Windows.Forms.TextBox txtmodely;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtmodelx;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox txtmeasuredy;

@@ -31,13 +31,12 @@ namespace UV_DLP_3D_Printer
             public int layer;
         }
         Screen m_dlpscreen = null;
-        static int slcnt = 0; // slice / blank image counter
+       // static int slcnt = 0; // slice / blank image counter
         private string m_screenid;
         Timer m_tmr;
         //float m_l, m_r, m_t, m_b;
         MonitorConfig m_monitorconfig;
         MonitorConfig.MRect m_rect;
-        Bitmap m_old;
         static int mfcount;
         List<bmi> m_lstbmps;
 
@@ -58,7 +57,6 @@ namespace UV_DLP_3D_Printer
             m_tmr.Tick += new EventHandler(m_tmr_Tick);
             m_tmr.Start();
             UVDLPApp.Instance().m_buildmgr.PrintLayer += new delPrinterLayer(PrintLayer);
-            m_old = null;
             m_lstbmps = new List<bmi>();
         }
         

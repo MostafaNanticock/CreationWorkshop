@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.Monitors = new System.Windows.Forms.GroupBox();
-            this.cmdNewMonConfig = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.lblMonInfo = new System.Windows.Forms.Label();
             this.cmdRefreshMonitors = new System.Windows.Forms.Button();
             this.lstMonitors = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmdAdjust = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.txtPlatTall = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -67,7 +67,6 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lblMulti = new System.Windows.Forms.Label();
             this.cmbMultiSel = new System.Windows.Forms.ComboBox();
-            this.cmdRemoveConfigured = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.label8 = new System.Windows.Forms.Label();
             this.lbConfigured = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -75,10 +74,13 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtYRes = new System.Windows.Forms.TextBox();
             this.txtXRes = new System.Windows.Forms.TextBox();
-            this.cmdCreate = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
-            this.cmdRemove = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.cmdAdjust = new System.Windows.Forms.Button();
+            this.lblMicronX = new System.Windows.Forms.Label();
+            this.lblMicronY = new System.Windows.Forms.Label();
+            this.cmdRemove = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.cmdCreate = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.cmdRemoveConfigured = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.cmdNewMonConfig = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.Monitors.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -103,27 +105,6 @@
             this.Monitors.TabIndex = 49;
             this.Monitors.TabStop = false;
             this.Monitors.Text = "Available Displays";
-            // 
-            // cmdNewMonConfig
-            // 
-            this.cmdNewMonConfig.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.cmdNewMonConfig.Checked = false;
-            this.cmdNewMonConfig.CheckImage = null;
-            this.cmdNewMonConfig.Gapx = 5;
-            this.cmdNewMonConfig.Gapy = 5;
-            this.cmdNewMonConfig.GLBackgroundImage = null;
-            this.cmdNewMonConfig.GLImage = null;
-            this.cmdNewMonConfig.GLVisible = false;
-            this.cmdNewMonConfig.GuiAnchor = null;
-            this.cmdNewMonConfig.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.cmdNewMonConfig.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
-            this.cmdNewMonConfig.Location = new System.Drawing.Point(9, 114);
-            this.cmdNewMonConfig.Name = "cmdNewMonConfig";
-            this.cmdNewMonConfig.Size = new System.Drawing.Size(40, 40);
-            this.cmdNewMonConfig.StyleName = null;
-            this.cmdNewMonConfig.TabIndex = 64;
-            this.cmdNewMonConfig.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.cmdNewMonConfig.Click += new System.EventHandler(this.cmdNewMonConfig_Click);
             // 
             // lblMonInfo
             // 
@@ -173,6 +154,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Build Size (mm)";
             // 
+            // cmdAdjust
+            // 
+            this.cmdAdjust.Location = new System.Drawing.Point(110, 44);
+            this.cmdAdjust.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cmdAdjust.Name = "cmdAdjust";
+            this.cmdAdjust.Size = new System.Drawing.Size(78, 31);
+            this.cmdAdjust.TabIndex = 6;
+            this.cmdAdjust.Text = "Adjust";
+            this.cmdAdjust.UseVisualStyleBackColor = true;
+            this.cmdAdjust.Click += new System.EventHandler(this.cmdAdjust_Click);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -217,6 +209,7 @@
             this.txtPlatHeight.Size = new System.Drawing.Size(61, 24);
             this.txtPlatHeight.TabIndex = 1;
             this.txtPlatHeight.Text = "77";
+            this.txtPlatHeight.TextChanged += new System.EventHandler(this.txtPlatHeight_TextChanged);
             // 
             // txtPlatWidth
             // 
@@ -226,6 +219,7 @@
             this.txtPlatWidth.Size = new System.Drawing.Size(61, 24);
             this.txtPlatWidth.TabIndex = 0;
             this.txtPlatWidth.Text = "102";
+            this.txtPlatWidth.TextChanged += new System.EventHandler(this.txtPlatWidth_TextChanged);
             // 
             // cmdOK
             // 
@@ -549,28 +543,6 @@
             this.cmbMultiSel.TabIndex = 66;
             this.cmbMultiSel.SelectedIndexChanged += new System.EventHandler(this.cmbMultiSel_SelectedIndexChanged);
             // 
-            // cmdRemoveConfigured
-            // 
-            this.cmdRemoveConfigured.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.cmdRemoveConfigured.Checked = false;
-            this.cmdRemoveConfigured.CheckImage = null;
-            this.cmdRemoveConfigured.Gapx = 5;
-            this.cmdRemoveConfigured.Gapy = 5;
-            this.cmdRemoveConfigured.GLBackgroundImage = null;
-            this.cmdRemoveConfigured.GLImage = null;
-            this.cmdRemoveConfigured.GLVisible = false;
-            this.cmdRemoveConfigured.GuiAnchor = null;
-            this.cmdRemoveConfigured.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.cmdRemoveConfigured.Image = global::UV_DLP_3D_Printer.Properties.Resources.butMinus;
-            this.cmdRemoveConfigured.Location = new System.Drawing.Point(12, 113);
-            this.cmdRemoveConfigured.Name = "cmdRemoveConfigured";
-            this.cmdRemoveConfigured.Size = new System.Drawing.Size(40, 40);
-            this.cmdRemoveConfigured.StyleName = null;
-            this.cmdRemoveConfigured.TabIndex = 65;
-            this.cmdRemoveConfigured.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.cmdRemoveConfigured.Load += new System.EventHandler(this.cmdRemoveConfigured_Load);
-            this.cmdRemoveConfigured.Click += new System.EventHandler(this.cmdRemoveConfigured_Click);
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -592,6 +564,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.lblMicronY);
+            this.groupBox2.Controls.Add(this.lblMicronX);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.txtYRes);
@@ -608,7 +582,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 64);
+            this.label4.Location = new System.Drawing.Point(9, 57);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 18);
             this.label4.TabIndex = 3;
@@ -625,7 +599,7 @@
             // 
             // txtYRes
             // 
-            this.txtYRes.Location = new System.Drawing.Point(71, 62);
+            this.txtYRes.Location = new System.Drawing.Point(71, 55);
             this.txtYRes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtYRes.Name = "txtYRes";
             this.txtYRes.Size = new System.Drawing.Size(67, 24);
@@ -641,26 +615,27 @@
             this.txtXRes.TabIndex = 0;
             this.txtXRes.Text = "1024";
             // 
-            // cmdCreate
+            // openFileDialog1
             // 
-            this.cmdCreate.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.cmdCreate.Checked = false;
-            this.cmdCreate.CheckImage = null;
-            this.cmdCreate.Gapx = 5;
-            this.cmdCreate.Gapy = 5;
-            this.cmdCreate.GLBackgroundImage = null;
-            this.cmdCreate.GLImage = null;
-            this.cmdCreate.GLVisible = false;
-            this.cmdCreate.GuiAnchor = null;
-            this.cmdCreate.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.cmdCreate.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
-            this.cmdCreate.Location = new System.Drawing.Point(340, 8);
-            this.cmdCreate.Name = "cmdCreate";
-            this.cmdCreate.Size = new System.Drawing.Size(40, 40);
-            this.cmdCreate.StyleName = null;
-            this.cmdCreate.TabIndex = 63;
-            this.cmdCreate.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.cmdCreate.Click += new System.EventHandler(this.cmdNew_Click);
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // lblMicronX
+            // 
+            this.lblMicronX.AutoSize = true;
+            this.lblMicronX.Location = new System.Drawing.Point(12, 84);
+            this.lblMicronX.Name = "lblMicronX";
+            this.lblMicronX.Size = new System.Drawing.Size(46, 18);
+            this.lblMicronX.TabIndex = 4;
+            this.lblMicronX.Text = "label1";
+            // 
+            // lblMicronY
+            // 
+            this.lblMicronY.AutoSize = true;
+            this.lblMicronY.Location = new System.Drawing.Point(12, 112);
+            this.lblMicronY.Name = "lblMicronY";
+            this.lblMicronY.Size = new System.Drawing.Size(46, 18);
+            this.lblMicronY.TabIndex = 5;
+            this.lblMicronY.Text = "label2";
             // 
             // cmdRemove
             // 
@@ -683,20 +658,69 @@
             this.cmdRemove.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.cmdRemove.Click += new System.EventHandler(this.cmdDelete_Click);
             // 
-            // openFileDialog1
+            // cmdCreate
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.cmdCreate.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.cmdCreate.Checked = false;
+            this.cmdCreate.CheckImage = null;
+            this.cmdCreate.Gapx = 5;
+            this.cmdCreate.Gapy = 5;
+            this.cmdCreate.GLBackgroundImage = null;
+            this.cmdCreate.GLImage = null;
+            this.cmdCreate.GLVisible = false;
+            this.cmdCreate.GuiAnchor = null;
+            this.cmdCreate.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdCreate.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
+            this.cmdCreate.Location = new System.Drawing.Point(340, 8);
+            this.cmdCreate.Name = "cmdCreate";
+            this.cmdCreate.Size = new System.Drawing.Size(40, 40);
+            this.cmdCreate.StyleName = null;
+            this.cmdCreate.TabIndex = 63;
+            this.cmdCreate.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdCreate.Click += new System.EventHandler(this.cmdNew_Click);
             // 
-            // cmdAdjust
+            // cmdRemoveConfigured
             // 
-            this.cmdAdjust.Location = new System.Drawing.Point(110, 44);
-            this.cmdAdjust.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.cmdAdjust.Name = "cmdAdjust";
-            this.cmdAdjust.Size = new System.Drawing.Size(78, 31);
-            this.cmdAdjust.TabIndex = 6;
-            this.cmdAdjust.Text = "Adjust";
-            this.cmdAdjust.UseVisualStyleBackColor = true;
-            this.cmdAdjust.Click += new System.EventHandler(this.cmdAdjust_Click);
+            this.cmdRemoveConfigured.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.cmdRemoveConfigured.Checked = false;
+            this.cmdRemoveConfigured.CheckImage = null;
+            this.cmdRemoveConfigured.Gapx = 5;
+            this.cmdRemoveConfigured.Gapy = 5;
+            this.cmdRemoveConfigured.GLBackgroundImage = null;
+            this.cmdRemoveConfigured.GLImage = null;
+            this.cmdRemoveConfigured.GLVisible = false;
+            this.cmdRemoveConfigured.GuiAnchor = null;
+            this.cmdRemoveConfigured.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdRemoveConfigured.Image = global::UV_DLP_3D_Printer.Properties.Resources.butMinus;
+            this.cmdRemoveConfigured.Location = new System.Drawing.Point(12, 113);
+            this.cmdRemoveConfigured.Name = "cmdRemoveConfigured";
+            this.cmdRemoveConfigured.Size = new System.Drawing.Size(40, 40);
+            this.cmdRemoveConfigured.StyleName = null;
+            this.cmdRemoveConfigured.TabIndex = 65;
+            this.cmdRemoveConfigured.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdRemoveConfigured.Load += new System.EventHandler(this.cmdRemoveConfigured_Load);
+            this.cmdRemoveConfigured.Click += new System.EventHandler(this.cmdRemoveConfigured_Click);
+            // 
+            // cmdNewMonConfig
+            // 
+            this.cmdNewMonConfig.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.cmdNewMonConfig.Checked = false;
+            this.cmdNewMonConfig.CheckImage = null;
+            this.cmdNewMonConfig.Gapx = 5;
+            this.cmdNewMonConfig.Gapy = 5;
+            this.cmdNewMonConfig.GLBackgroundImage = null;
+            this.cmdNewMonConfig.GLImage = null;
+            this.cmdNewMonConfig.GLVisible = false;
+            this.cmdNewMonConfig.GuiAnchor = null;
+            this.cmdNewMonConfig.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdNewMonConfig.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
+            this.cmdNewMonConfig.Location = new System.Drawing.Point(9, 114);
+            this.cmdNewMonConfig.Name = "cmdNewMonConfig";
+            this.cmdNewMonConfig.Size = new System.Drawing.Size(40, 40);
+            this.cmdNewMonConfig.StyleName = null;
+            this.cmdNewMonConfig.TabIndex = 64;
+            this.cmdNewMonConfig.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdNewMonConfig.Click += new System.EventHandler(this.cmdNewMonConfig_Click);
             // 
             // ctlMachineConfig
             // 
@@ -784,5 +808,7 @@
         private System.Windows.Forms.Button cmdConfigMask;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button cmdAdjust;
+        private System.Windows.Forms.Label lblMicronY;
+        private System.Windows.Forms.Label lblMicronX;
     }
 }
