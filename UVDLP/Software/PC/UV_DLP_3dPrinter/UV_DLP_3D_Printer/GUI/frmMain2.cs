@@ -117,7 +117,10 @@ namespace UV_DLP_3D_Printer.GUI
             UVDLPApp.Instance().m_gui_config.AddControl("ctlSliceGCodePanel1", ctlSliceGCodePanel1);
 
             UVDLPApp.Instance().m_gui_config.AddControl("ctlMainConfig1", ctlMainConfig1);
-            
+            UVDLPApp.Instance().m_gui_config.AddControl(pnlSliceView);
+            //UVDLPApp.Instance().m_gui_config.AddControl(pnl3dview);
+            UVDLPApp.Instance().m_gui_config.AddControl(txtLog);
+
             //left side controls
             UVDLPApp.Instance().m_gui_config.AddControl("ctlSupports1", ctlSupports1);
             //right side controls
@@ -1064,6 +1067,7 @@ namespace UV_DLP_3D_Printer.GUI
             {
                 // load a new GUIConfig file from disk
                 // this is a debug only function for now.
+                openFileDialog1.Filter = "Gui Config Files (*.xml;*.txt)|*.xml;*.txt|All files (*.*)|*.*";
                 if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) 
                 {
                     StreamReader streamReader = new StreamReader(openFileDialog1.FileName);

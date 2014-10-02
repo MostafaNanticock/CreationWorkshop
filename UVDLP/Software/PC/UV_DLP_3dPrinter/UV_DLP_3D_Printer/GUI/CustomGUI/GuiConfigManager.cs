@@ -63,6 +63,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if ((ctl.Parent == null) && (mTopLevelControl != null))
                 mTopLevelControl.Controls.Add(ctl);
         }
+        public void AddControl(Control ctl)
+        {
+            AddControl(ctl.Name, ctl);
+        }
 
         public void AddButton(string name, ctlImageButton ctl)
         {
@@ -71,22 +75,29 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 mTopLevelControl.Controls.Add(ctl);
         }
 
+        public void AddButton(ctlImageButton ctl)
+        {
+            AddButton(ctl.Name, ctl);
+        }
+
         public Control GetControl(string name)
         {
-            if (!Controls.ContainsKey(name))
+            if ((name == null) || !Controls.ContainsKey(name))
                 return null;
             return Controls[name];
         }
 
         public ctlImageButton GetButton(string name)
         {
-            if (!Buttons.ContainsKey(name))
+            if ((name == null) || !Buttons.ContainsKey(name))
                 return null;
             return Buttons[name];
         }
 
         public Control GetControlOrButton(string name)
         {
+            if (name == null)
+                return null;
             Control ctl = GetButton(name);
             if (ctl == null)
                 return GetControl(name);
@@ -493,6 +504,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     break;
 
                 case GuiLayout.LayoutType.TabPanel:
+                    ctl = CreateTabPanel(gl);
                     break;
             }
 
@@ -575,6 +587,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             flp.Dock = DockStyle.Top;
             flp.FlowDirection = FlowDirection.LeftToRight;
             flp.Size = new Size(50, 50);
+            flp.BackColor = Color.Aqua;
             pnl.Controls.Add(flp);
             foreach (GuiLayout subgl in gl.subLayouts)
             {
@@ -584,14 +597,16 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 if (ctl != null)
                     pnl.Controls.Add(ctl);
             }
+            FillCommonLayoutParameters(gl, pnl);
             flp.ResumeLayout();
+            pnl.BackColor = Color.Bisque;
             return pnl;
         }
 
         Control CreateTabItem(GuiLayout gl, FlowLayoutPanel flp)
         {
             Control tabctl = null;
-            tabctl = GetControlOrButton(gl.control);
+            tabctl = GetControlOrButton(gl.name);
             if (tabctl == null)
             {
                 if (!gl.text.IsExplicit())
@@ -613,6 +628,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     ctlTitle ttl = new ctlTitle();
                     ttl.Image = guiConf.GetImage(gl.image, null);
                     ttl.Text = gl.text;
+                    ttl.Name = gl.name;
                     Controls[gl.name] = ttl;
                     tabctl = ttl;
                 }
@@ -626,6 +642,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             else
             {
                 shownControl = new Panel();
+                shownControl.Name = gl.name + "Content";
                 CreateSublayouts(gl, shownControl);
             }
             shownControl.Dock = DockStyle.Fill;
@@ -635,6 +652,9 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         void FillCommonLayoutParameters(GuiLayout gl, Control ctl)
         {
+            if (ctl == null)
+                return;
+            ctl.Name = gl.name;
             if (gl.w.IsExplicit()) ctl.Width = gl.w;
             if (gl.h.IsExplicit()) ctl.Height = gl.h;
             if (gl.dock.IsExplicit())

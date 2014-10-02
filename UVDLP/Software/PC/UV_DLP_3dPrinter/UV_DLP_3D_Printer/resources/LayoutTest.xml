@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GuiConfig FileVersion="1">
+  <layouts>
+    <layout name="MainLayout" w="1000" h="500">
+      <splitpanel dock="Fill" orientation="H">
+        <splitpanel1>
+          <tabpanel>
+            <tabitem name="ctlTitle3dView" isselected="true">
+              <control name="ctlMainConfig1" />
+            </tabitem>
+            <tabitem name="ctlTitleViewSlice">
+              <control name="pnlSliceView" />
+            </tabitem>
+          </tabpanel>
+        </splitpanel1>
+        <splitpanel2>
+          <control name="txtLog" dock="Fill" />
+        </splitpanel2>
+      </splitpanel>
+      <panel name="PanelTopIconMain" dock="Top" h="65">
+        <flowpanel name="MessagesPanel" direction="T2B" dock="Right" w="500">
+          <control name="mainmsg"/>
+          <control name="timemsg"/>
+        </flowpanel>
+        <flowpanel name="TopIconsFlow" direction="L2R" w="800" dock="Left">
+           <control name="openfile"/>
+           <control name="connect"/>
+           <control name="disconnect"/>
+           <control name="slice"/>
+           <control name="play"/>
+           <control name="pause"/>
+           <control name="stop"/>
+        </flowpanel>
+      </panel>
+    </layout>
+  </layouts>
+</GuiConfig>
