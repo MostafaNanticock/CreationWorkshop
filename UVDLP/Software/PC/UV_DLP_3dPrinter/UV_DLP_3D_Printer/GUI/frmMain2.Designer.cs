@@ -75,13 +75,13 @@
             this.pluginTesterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testMachineControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testNewSlicerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadGUIConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.plugInsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userManualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hardwareGuideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.loadGUIConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlTopIcons.SuspendLayout();
             this.pnl3dview.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -505,7 +505,7 @@
             this.ctlTitle3dView.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttViewModel;
             this.ctlTitle3dView.Location = new System.Drawing.Point(3, 3);
             this.ctlTitle3dView.Name = "ctlTitle3dView";
-            this.ctlTitle3dView.OnClickCallback = "ClickView3d";
+            this.ctlTitle3dView.OnClickCallback = "ClickSwitchTabView";
             this.ctlTitle3dView.Size = new System.Drawing.Size(180, 40);
             this.ctlTitle3dView.StyleName = null;
             this.ctlTitle3dView.TabIndex = 0;
@@ -524,7 +524,7 @@
             this.ctlTitleViewSlice.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttViewSlice;
             this.ctlTitleViewSlice.Location = new System.Drawing.Point(189, 3);
             this.ctlTitleViewSlice.Name = "ctlTitleViewSlice";
-            this.ctlTitleViewSlice.OnClickCallback = "ClickSliceView";
+            this.ctlTitleViewSlice.OnClickCallback = "ClickSwitchTabView";
             this.ctlTitleViewSlice.Size = new System.Drawing.Size(180, 40);
             this.ctlTitleViewSlice.StyleName = null;
             this.ctlTitleViewSlice.TabIndex = 1;
@@ -544,7 +544,7 @@
             this.ctlTitleViewControls.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttMachineControl;
             this.ctlTitleViewControls.Location = new System.Drawing.Point(375, 3);
             this.ctlTitleViewControls.Name = "ctlTitleViewControls";
-            this.ctlTitleViewControls.OnClickCallback = "ClickManualCtlView";
+            this.ctlTitleViewControls.OnClickCallback = "ClickSwitchTabView";
             this.ctlTitleViewControls.Size = new System.Drawing.Size(180, 40);
             this.ctlTitleViewControls.StyleName = null;
             this.ctlTitleViewControls.TabIndex = 2;
@@ -563,7 +563,7 @@
             this.ctlTitleConfigure.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttMachineConfig;
             this.ctlTitleConfigure.Location = new System.Drawing.Point(561, 3);
             this.ctlTitleConfigure.Name = "ctlTitleConfigure";
-            this.ctlTitleConfigure.OnClickCallback = "ClickMainConfigView";
+            this.ctlTitleConfigure.OnClickCallback = "ClickSwitchTabView";
             this.ctlTitleConfigure.Size = new System.Drawing.Size(180, 40);
             this.ctlTitleConfigure.StyleName = null;
             this.ctlTitleConfigure.TabIndex = 3;
@@ -766,6 +766,13 @@
             this.testNewSlicerToolStripMenuItem.Text = "Test new slicer";
             this.testNewSlicerToolStripMenuItem.Click += new System.EventHandler(this.testNewSlicerToolStripMenuItem_Click);
             // 
+            // loadGUIConfigToolStripMenuItem
+            // 
+            this.loadGUIConfigToolStripMenuItem.Name = "loadGUIConfigToolStripMenuItem";
+            this.loadGUIConfigToolStripMenuItem.Size = new System.Drawing.Size(218, 24);
+            this.loadGUIConfigToolStripMenuItem.Text = "Load GUIConfig";
+            this.loadGUIConfigToolStripMenuItem.Click += new System.EventHandler(this.loadGUIConfigToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -804,13 +811,6 @@
             this.hardwareGuideToolStripMenuItem.Size = new System.Drawing.Size(186, 24);
             this.hardwareGuideToolStripMenuItem.Text = "Hardware Guide";
             this.hardwareGuideToolStripMenuItem.Click += new System.EventHandler(this.hardwareGuideToolStripMenuItem_Click);
-            // 
-            // loadGUIConfigToolStripMenuItem
-            // 
-            this.loadGUIConfigToolStripMenuItem.Name = "loadGUIConfigToolStripMenuItem";
-            this.loadGUIConfigToolStripMenuItem.Size = new System.Drawing.Size(218, 24);
-            this.loadGUIConfigToolStripMenuItem.Text = "Load GUIConfig";
-            this.loadGUIConfigToolStripMenuItem.Click += new System.EventHandler(this.loadGUIConfigToolStripMenuItem_Click);
             // 
             // frmMain2
             // 

@@ -87,13 +87,15 @@ namespace UV_DLP_3D_Printer
             t.TripleDESKey = MyOwnKey;
 
             TrialMaker.RunTypes RT = t.ShowDialog();
-            bool is_trial;
+            //bool is_trial;
             if (RT != TrialMaker.RunTypes.Expired)
             {
+                /*
                 if (RT == TrialMaker.RunTypes.Full)
                     is_trial = false;
                 else
                     is_trial = true;
+                 * */
                 return true;
                 //Application.Run(new Form1(is_trial));
             }

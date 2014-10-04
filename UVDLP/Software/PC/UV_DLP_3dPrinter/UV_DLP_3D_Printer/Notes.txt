@@ -62,6 +62,14 @@ Ability to define sequences,
 			perform arithmetic
 			perform and/or/xor...
 
+-Change CW to have the ability to load a list of GUIConfigs on startup.
+-Tie this into the plugin config screen
+- The GUIConfig files can have code that runs on startup/load
+
+-start off the GUI mods with a menu editor
+- Sequence editor:
+- have the ability to define GCode sequences
+		- save sequences in GUIConfig files
 
 - Add the ability to save/load GCode snippets (strings) from XML docs - slicing profile / machine profile
 - Add ability for GUIConfig.txt to be loaded from file
