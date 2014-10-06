@@ -17,6 +17,26 @@ namespace UV_DLP_3D_Printer.GUI
 {
     public partial class frmMain2 : Form
     {
+        
+        // the tabview class is used to display a ctlTitle with a panel object on the pnlTopTabs
+        // I'm adding this small tracker class so we can add new tabs / controls loaded
+        // from plugins or from the guiconfig files.
+        private class tabview 
+        {
+            static int idxgen = 0;
+            public int m_tabidx;
+            public ctlTitle m_title;
+            public Control m_panel;
+            public string m_name;
+            public tabview(string name, ctlTitle title, Control pcontrol) 
+            {
+                m_name = name;
+                m_title = title;
+                m_panel = pcontrol;
+                m_tabidx = idxgen++;
+            }
+        }
+        /*
         private enum eViewTypes
         {
             eV3d,
@@ -25,7 +45,8 @@ namespace UV_DLP_3D_Printer.GUI
             eVConfig,
             eNone
         }
-        private eViewTypes m_viewtype;
+         */ 
+        private int m_viewtype;
         public event delBuildStatus BuildStatusInvoked; // rund the build delegate in Form thread
         public string m_appname = "Creation Workshop";
         //frmDLP m_frmdlp = new frmDLP();
@@ -33,17 +54,15 @@ namespace UV_DLP_3D_Printer.GUI
         public ManualControl m_manctl;
         int rightToolsWidth = 0;
         StringBuilder m_logSB;
-
+        List<tabview> m_lsttabs;
         public frmMain2()
         {
+            m_lsttabs = new List<tabview>();
             m_logSB = new StringBuilder();
             InitializeComponent();
-            m_viewtype = eViewTypes.eNone;
+            
             UVDLPApp.Instance().m_mainform = this;
-            m_manctl = ManualControl.Instance(); // late intialization happens here after the UVDLP app Singleton is initiated.
-
-            ctlTitle3dView.Checked = true; // set it as checked
-            ctlTitle3dView_Click(null, null); // and click the button
+            m_manctl = ManualControl.Instance(); // late intialization happens here after the UVDLP app Singleton is initiated.          
 
             RegisterCallbacks();
             RegisterGUI();
@@ -65,6 +84,12 @@ namespace UV_DLP_3D_Printer.GUI
             //RearrangeGui
             AddButtons();
             AddControls();
+            SetupTabs();
+            //set the default tab
+            m_viewtype = -1;// start with the first tab added
+            ShowView(0);// 3d tab
+
+            
             ctl3DView1.RearrangeGui();
             ctl3DView1.Enable3dView(true);
 #if (DEBUG) // DBG_GUICONF
@@ -106,6 +131,17 @@ namespace UV_DLP_3D_Printer.GUI
             UVDLPApp.Instance().m_gui_config.AddButton("buttExpandLeft", buttExpandLeft);
             
         }
+        public void AddTabView(string name, ctlTitle title, Control view) 
+        {
+            m_lsttabs.Add(new tabview(name, title, view));
+        }
+        private void SetupTabs() 
+        {
+            m_lsttabs.Add(new tabview("3dView",ctlTitle3dView, pnl3dview));
+            m_lsttabs.Add(new tabview("SliceView",ctlTitleViewSlice, pnlSliceView));
+            m_lsttabs.Add(new tabview("ManualControlView",ctlTitleViewControls, ctlMainManual1));
+            m_lsttabs.Add(new tabview("ConfigureView",ctlTitleConfigure, ctlMainConfig1));
+        }
         private void AddControls() 
         {
             // the main title buttons
@@ -134,6 +170,9 @@ namespace UV_DLP_3D_Printer.GUI
             //UVDLPApp.Instance().m_gui_config.AddControl("ctlMirror1", ctlMirror1);
             UVDLPApp.Instance().m_gui_config.AddControl("ctlView1", ctlView1);
             UVDLPApp.Instance().m_gui_config.AddControl("ctlObjectInfo1", ctlObjectInfo1);
+
+            // main form panel
+            UVDLPApp.Instance().m_gui_config.AddControl("pnlMain", splitContainer1.Panel1);
 
             // panels on the main form
             UVDLPApp.Instance().m_gui_config.AddControl("pnlTopIcons", pnlTopIcons);
@@ -550,13 +589,10 @@ namespace UV_DLP_3D_Printer.GUI
         private void RegisterCallbacks() 
         {
             // the main tab buttons
-            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickView3d", ctlTitle3dView_Click, null, "View 3d display");
-            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickSliceView", ctlTitleViewSlice_Click, null, "View Slice display");
-            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickManualCtlView", ClickManualCtlView_Click, null, "View Manual Machine Control");
-            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickMainConfigView", ClickMainConfigView_Click, null, "View Main Configuration");
-            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickExpandLeft", ClickExpandLeft_Click, null, "Expand / retract left panel");
+           // This one callback handler replaces the 4 previous
+            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickSwitchTabView", ClickSwitchTabView_Click, null, "Switch Tab Display");
 
-            
+            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickExpandLeft", ClickExpandLeft_Click, null, "Expand / retract left panel");
             //load model click
             UVDLPApp.Instance().m_callbackhandler.RegisterCallback("LoadSTLModel_Click", LoadSTLModel_Click, null, "Load Model");
 
@@ -578,63 +614,35 @@ namespace UV_DLP_3D_Printer.GUI
 
         private void HideAllViews() 
         {
-
-            pnl3dview.Visible = false;
-            pnl3dview.Dock = DockStyle.None;
-
-            pnlSliceView.Visible = false;
-            pnlSliceView.Dock = DockStyle.None;
-
-            ctlMainManual1.Visible = false;
-            ctlMainManual1.Dock = DockStyle.None;
-
-            ctlMainConfig1.Visible = false;
-            ctlMainConfig1.Dock = DockStyle.None;
             
+            foreach (tabview tv in m_lsttabs) 
+            {
+                tv.m_panel.Visible = false;
+                tv.m_panel.Dock = DockStyle.None;
+                tv.m_title.Checked = false;
+            }
+             
         }
 
-        /// <summary>
-        /// This function unchecks all the main tabs (except for the one specified)
-        /// </summary>
-        private void UncheckTabs(ctlTitle seltitle)         
-        {
-            if (ctlTitle3dView != seltitle) ctlTitle3dView.Checked = false;
-            if (ctlTitleViewSlice != seltitle) ctlTitleViewSlice.Checked = false;
-            if (ctlTitleViewControls != seltitle) ctlTitleViewControls.Checked = false;
-            if (ctlTitleConfigure != seltitle) ctlTitleConfigure.Checked = false;
-            seltitle.Checked = true;
-        
-        }
-        private void ShowView(eViewTypes vt) 
+
+        private void ShowView(int vt) 
         {
             try
             {
-                if (vt == m_viewtype) return; // already there
-                m_viewtype = vt;
+
+                if (vt == m_viewtype) 
+                    return; // already there
                 HideAllViews();
-                switch (m_viewtype)
+                foreach (tabview tv in m_lsttabs) 
                 {
-                    case eViewTypes.eV3d:
-                        pnl3dview.Visible = true;
-                        pnl3dview.Dock = DockStyle.Fill;
-                        
+                    if (vt == tv.m_tabidx) 
+                    {
+                        tv.m_panel.Visible = true;
+                        tv.m_panel.Dock = DockStyle.Fill;
+                        m_viewtype = tv.m_tabidx;
+                        tv.m_title.Checked = true;
                         break;
-                    
-                    case eViewTypes.eVConfig:
-                        ctlMainConfig1.Visible = true;
-                        ctlMainConfig1.Dock = DockStyle.Fill;
-                        
-                        break;
-                    case eViewTypes.eVControl:
-                        ctlMainManual1.Visible = true;
-                        ctlMainManual1.Dock = DockStyle.Fill;
-                        
-                        break;
-                    case eViewTypes.eVSlice:
-                        pnlSliceView.Visible = true;
-                        pnlSliceView.Dock = DockStyle.Fill;
-                        
-                        break;
+                    }
                 }
             }
             catch (Exception ex) 
@@ -965,7 +973,34 @@ namespace UV_DLP_3D_Printer.GUI
                 ctlSupports1.Visible = false;
             }
         }
-
+        private void ClickSwitchTabView_Click(object sender, object e) 
+        {
+            try
+            {
+                //cast sender to be the ctlImageButton of the ctlTitle
+                ctlImageButton button = (ctlImageButton)sender;
+                //find the tab view
+                tabview tabv = null;
+                foreach (tabview tv in m_lsttabs) 
+                {
+                    if (tv.m_title.Button == button) 
+                    {
+                        tabv = tv;
+                        break;
+                    }
+                }
+                if (tabv != null) 
+                {
+                    //UncheckTabs(tabv.m_title);
+                    ShowView(tabv.m_tabidx);
+                }
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
+        }
+        /*
         private void ClickMainConfigView_Click(object sender, object e)
         {
             UncheckTabs(ctlTitleConfigure);
@@ -993,6 +1028,7 @@ namespace UV_DLP_3D_Printer.GUI
 
             ShowView(eViewTypes.eVSlice);
         }
+         * */
         #endregion
 
         public MenuStrip GetMenuStrip() 

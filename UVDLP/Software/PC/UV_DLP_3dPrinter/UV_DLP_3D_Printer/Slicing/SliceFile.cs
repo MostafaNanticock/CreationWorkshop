@@ -122,7 +122,7 @@ namespace UV_DLP_3D_Printer.Slicing
                // {
                     
                 //}
-                return null;
+               // return null;
             }
             catch (Exception ex)
             {

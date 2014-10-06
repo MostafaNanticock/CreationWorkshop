@@ -26,9 +26,24 @@ namespace UV_DLP_3D_Printer.Util.Sequence
             }
             return m_instance;
         }
+        public List<CommandSequence> Sequences 
+        {
+            get { return m_lstsequences; }
+        }
         private SequenceManager() 
         {
             m_lstsequences = new List<CommandSequence>();
+        }
+        public void Remove(CommandSequence seq) 
+        {
+            try
+            {
+                m_lstsequences.Remove(seq);
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
         }
         public void Add(CommandSequence seq) 
         {
