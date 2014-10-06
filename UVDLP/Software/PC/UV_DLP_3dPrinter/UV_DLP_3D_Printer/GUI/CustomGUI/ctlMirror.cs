@@ -64,7 +64,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eReDraw, "");
         }
 
-#if (DEBUG) // DBG_GUICONFIG
         public override void ApplyStyle(GuiControlStyle ct)
         {
             base.ApplyStyle(ct);
@@ -87,30 +86,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
 
         }
-#else
-        public override void ApplyStyle(ControlStyle ct)
-        {
-            base.ApplyStyle(ct);
-            if (ct.ForeColor != ControlStyle.NullColor)
-            {
-                lblX.ForeColor = ct.ForeColor;
-                lblY.ForeColor = ct.ForeColor;
-                lblZ.ForeColor = ct.ForeColor;
-            }
-            if (ct.BackColor != ControlStyle.NullColor)
-            {
-                BackColor = ct.BackColor;
-                lblX.BackColor = ct.BackColor;
-                lblY.BackColor = ct.BackColor;
-                lblZ.BackColor = ct.BackColor;
-            }
-            if (ct.FrameColor != ControlStyle.NullColor)
-            {
-                flowLayoutPanel1.BackColor = ct.FrameColor;
-            }
-
-        }
-#endif
 
         private void ctlMirror_Resize(object sender, EventArgs e)
         {

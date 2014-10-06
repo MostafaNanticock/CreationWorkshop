@@ -41,11 +41,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         private bool firstTime = true;
         float m_savex, m_savey, m_saveh; // m_savez
         C2DGraphics gr2d;
-#if (DEBUG) // DBG_GUICONF
         GuiConfigManager guiconf;
-#else
-        GuiConfig guiconf;
-#endif
         public List<ctlBgnd> ctlBgndList;
         int m_sliceTex;
         int m_sliceViewW, m_sliceViewH;
@@ -176,11 +172,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         }
         */
 
-#if (DEBUG) // DBG_GUICONFIG
         public GuiConfigManager GuiConfig
-#else
-        public GuiConfig GuiConfig
-#endif
         {
             get { return guiconf; }
         }
@@ -1124,15 +1116,11 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     if ((guiconf != null) && (guiconfname != null))
                     {
                         //gc.ClearLayout();
-#if (DEBUG)
                         // test new gui config system
                         GuiConfigDB gconfdb = new GuiConfigDB();
                         gconfdb.LoadConfiguration(guiconfname, plugin);
                         guiconf.ApplyConfiguration(gconfdb);
                         gconfdb.SaveConfiguration("GuiConfigPlugin");
-#else
-                        guiconf.LoadConfiguration(guiconfname, plugin);
-#endif
                         RearrangeGui();
                     }
                 }

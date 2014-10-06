@@ -15,18 +15,18 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             InitializeComponent();
         }
-        public override void ApplyStyle(ControlStyle ct)
+        public override void ApplyStyle(GuiControlStyle ct)
         {
             base.ApplyStyle(ct);
-            if (ct.ForeColor != ControlStyle.NullColor)
+            if (ct.ForeColor.IsValid())
             {
                 lblTitle.ForeColor = ct.ForeColor;
             }
-            if (ct.BackColor != ControlStyle.NullColor)
+            if (ct.BackColor.IsValid())
             {
                 BackColor = ct.BackColor;
             }
-            if (ct.FrameColor != ControlStyle.NullColor)
+            if (ct.FrameColor.IsValid())
             {
                 flowLayoutPanel5.BackColor = ct.FrameColor;
             }

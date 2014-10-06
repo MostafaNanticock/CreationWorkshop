@@ -357,7 +357,6 @@
     <Compile Include="GUI\CustomGUI\frmBmpSplash.Designer.cs">
       <DependentUpon>frmBmpSplash.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\CustomGUI\GuiConfig.cs" />
     <Compile Include="GUI\CustomGUI\GuiConfigDB.cs" />
     <Compile Include="GUI\CustomGUI\GuiConfigManager.cs" />
     <Compile Include="GUI\frmAbout.cs">

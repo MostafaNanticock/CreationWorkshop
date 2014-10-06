@@ -97,7 +97,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI.Expanding
             UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eUpdateSelectedObject, "updateobject");
         }
 
-#if (DEBUG) // DBG_GUICONFIG
         public override void ApplyStyle(GuiControlStyle ct)
         {
             base.ApplyStyle(ct);
@@ -129,39 +128,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI.Expanding
             }
 
         }
-#else
-        public override void ApplyStyle(ControlStyle ct)
-        {
-            base.ApplyStyle(ct);
-            if (ct.ForeColor != ControlStyle.NullColor)
-            {
-                //label8.ForeColor = ct.ForeColor;
-                ctlTitle1.ForeColor = ct.ForeColor;
-                label9.ForeColor = ct.ForeColor;
-                label10.ForeColor = ct.ForeColor;
-                label11.ForeColor = ct.ForeColor;
-                textMoveX.ValidColor = ct.ForeColor;
-                textMoveY.ValidColor = ct.ForeColor;
-                textMoveZ.ValidColor = ct.ForeColor;
-            }
-            if (ct.BackColor != ControlStyle.NullColor)
-            {
-                BackColor = ct.BackColor;
-                flowLayoutPanel2.BackColor = ct.BackColor;
-                textMoveX.BackColor = ct.BackColor;
-                textMoveY.BackColor = ct.BackColor;
-                textMoveZ.BackColor = ct.BackColor;
-            }
-            if (ct.FrameColor != ControlStyle.NullColor)
-            {
-                flowLayoutPanel1.BackColor = ct.FrameColor;
-                flowLayoutPanel7.BackColor = ct.FrameColor;
-                flowLayoutPanel8.BackColor = ct.FrameColor;
-                flowLayoutPanel10.BackColor = ct.FrameColor;
-            }
-
-        }
-#endif
 
         private void ctlTitle1_Click(object sender, EventArgs e)
         {

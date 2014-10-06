@@ -353,10 +353,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
             if ((ctl is ctlUserPanel) || ct.applyWindowsControls)
             {
-                if (ct.BackColor != ControlStyle.NullColor)
+                if (ct.BackColor.IsValid())
                     ctl.BackColor = ct.BackColor;
 
-                if (ct.ForeColor != ControlStyle.NullColor)
+                if (ct.ForeColor.IsValid())
                     ctl.ForeColor = ct.ForeColor;
             }
             if (!ct.applySubControls)

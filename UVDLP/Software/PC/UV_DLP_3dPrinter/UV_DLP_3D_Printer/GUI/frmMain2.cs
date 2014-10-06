@@ -92,15 +92,11 @@ namespace UV_DLP_3D_Printer.GUI
             
             ctl3DView1.RearrangeGui();
             ctl3DView1.Enable3dView(true);
-#if (DEBUG) // DBG_GUICONF
             // test new gui config system
             GuiConfigDB gconfdb = new GuiConfigDB();
             gconfdb.LoadConfiguration(global::UV_DLP_3D_Printer.Properties.Resources.GuiConfig);
             UVDLPApp.Instance().m_gui_config.ApplyConfiguration(gconfdb);
             gconfdb.SaveConfiguration("GuiConfigTest");
-#else
-            UVDLPApp.Instance().m_gui_config.LoadConfiguration(global::UV_DLP_3D_Printer.Properties.Resources.GuiConfig);
-#endif
 
             //ctlSliceGCodePanel1.ctlSliceViewctl.DlpForm = m_frmdlp; // set the dlp form for direct control
             SetMainMessage("");
@@ -153,12 +149,10 @@ namespace UV_DLP_3D_Printer.GUI
             UVDLPApp.Instance().m_gui_config.AddControl("ctlSliceGCodePanel1", ctlSliceGCodePanel1);
 
             UVDLPApp.Instance().m_gui_config.AddControl("ctlMainConfig1", ctlMainConfig1);
-#if (DEBUG) // DBG_GUICONFIG
             UVDLPApp.Instance().m_gui_config.AddControl(pnlSliceView);
             UVDLPApp.Instance().m_gui_config.AddControl(ctl3DView1);
             UVDLPApp.Instance().m_gui_config.AddControl(pnl3dview);
             UVDLPApp.Instance().m_gui_config.AddControl(txtLog);
-#endif
 
             //left side controls
             UVDLPApp.Instance().m_gui_config.AddControl("ctlSupports1", ctlSupports1);
@@ -196,7 +190,7 @@ namespace UV_DLP_3D_Printer.GUI
         /// Need to implement this at mainform level too
         /// </summary>
         /// <param name="ct"></param>
-        public void ApplyStyle(ControlStyle ct)
+        public void ApplyStyle(GuiControlStyle ct)
         {
             /*
             if(ct.BackColor !=null)
@@ -1112,7 +1106,6 @@ namespace UV_DLP_3D_Printer.GUI
                     StreamReader streamReader = new StreamReader(openFileDialog1.FileName);
                     string text = streamReader.ReadToEnd();
                     streamReader.Close();
-#if (DEBUG) // DBG_GUICONF
                         // test new gui config system
                     GuiConfigDB gconfdb = new GuiConfigDB();
                     gconfdb.LoadConfiguration(text);
@@ -1127,9 +1120,6 @@ namespace UV_DLP_3D_Printer.GUI
                     }
                     gconfdb.SaveConfiguration("GuiConfigMenuTest");
                     UVDLPApp.Instance().m_gui_config.DumpDatabase("GuiManagerDatabase.txt");
-#else
-                    UVDLPApp.Instance().m_gui_config.LoadConfiguration(text);
-#endif
                     //UVDLPApp.Instance().m_gui_config.LayoutGui(
                 }
             }catch(Exception ex)

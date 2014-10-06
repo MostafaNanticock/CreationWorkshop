@@ -327,7 +327,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 ValueChanged(this, e);
         }
 
-#if (DEBUG) // DBG_GUICONFIG
         public override void ApplyStyle(GuiControlStyle ct)
         {
             base.ApplyStyle(ct);
@@ -340,19 +339,5 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (ct.BackColor.IsValid())
                 textData.BackColor = ct.BackColor;*/
         }
-#else
-        public override void ApplyStyle(ControlStyle ct)
-        {
-            base.ApplyStyle(ct);
-            textData.ValidColor = Style.ForeColor;
-            textData.BackColor = Style.BackColor;
-            /*if (ct.FrameColor != ControlStyle.NullColor)
-                BackColor = ct.FrameColor;
-            if (ct.ForeColor != ControlStyle.NullColor)
-                textData.ForeColor = ct.ForeColor;
-            if (ct.BackColor != ControlStyle.NullColor)
-                textData.BackColor = ct.BackColor;*/
-        }
-#endif
     }
 }

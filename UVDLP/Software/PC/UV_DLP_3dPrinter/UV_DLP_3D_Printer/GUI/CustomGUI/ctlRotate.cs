@@ -70,7 +70,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             RotateObject(textRotateZ, 0, 0, 1);
         }
 
-#if (DEBUG) // DBG_GUICONFIG
         public override void ApplyStyle(GuiControlStyle ct)
         {
             base.ApplyStyle(ct);
@@ -99,36 +98,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 flowLayoutPanel10.BackColor = ct.FrameColor;
             }
         }
-#else
-        public override void ApplyStyle(ControlStyle ct)
-        {
-            base.ApplyStyle(ct);
-            if (ct.ForeColor != ControlStyle.NullColor)
-            {
-                ctlTitle1.ForeColor = ct.ForeColor;
-                label9.ForeColor = ct.ForeColor;
-                label10.ForeColor = ct.ForeColor;
-                label11.ForeColor = ct.ForeColor;
-                textRotateX.ForeColor = ct.ForeColor;
-                textRotateY.ForeColor = ct.ForeColor;
-                textRotateZ.ForeColor = ct.ForeColor;
-            }
-            if (ct.BackColor != ControlStyle.NullColor)
-            {
-                BackColor = ct.BackColor;
-                flowLayoutPanel2.BackColor = ct.BackColor;
-                textRotateX.BackColor = ct.BackColor;
-                textRotateY.BackColor = ct.BackColor;
-                textRotateZ.BackColor = ct.BackColor;
-            }
-            if (ct.FrameColor != ControlStyle.NullColor)
-            {
-                flowLayoutPanel7.BackColor = ct.FrameColor;
-                flowLayoutPanel8.BackColor = ct.FrameColor;
-                flowLayoutPanel10.BackColor = ct.FrameColor;
-            }
-        }
-#endif
 
         private void ctlTitle1_Click(object sender, EventArgs e)
         {
