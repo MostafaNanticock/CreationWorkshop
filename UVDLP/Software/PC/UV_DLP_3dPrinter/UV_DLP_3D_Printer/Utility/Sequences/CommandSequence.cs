@@ -10,10 +10,21 @@ namespace UV_DLP_3D_Printer.Util.Sequence
     /// </summary>
     public class CommandSequence
     {
+
+        public const int COMMAND_TYPE_SCRIPT = 0; // script sequence
         public const int COMMAND_TYPE_GCODE = 1; // gcode sequence
         public string m_name; // the name of the sequence
         public int m_seqtype; // type of sequence
         public string m_seq; // the raw stringified sequence as read from the xml
+        public string Seqtype2string() 
+        {
+            switch (m_seqtype) 
+            {
+                case COMMAND_TYPE_GCODE: return "GCode Sequence";
+                case COMMAND_TYPE_SCRIPT: return "Script Sequence";
+            }
+            return "Unknown Sequence";
+        }
     }
 
     public class GCodeSequence : CommandSequence
