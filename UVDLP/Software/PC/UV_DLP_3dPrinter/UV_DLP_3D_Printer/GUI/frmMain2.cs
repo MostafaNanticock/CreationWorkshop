@@ -117,9 +117,12 @@ namespace UV_DLP_3D_Printer.GUI
             UVDLPApp.Instance().m_gui_config.AddControl("ctlSliceGCodePanel1", ctlSliceGCodePanel1);
 
             UVDLPApp.Instance().m_gui_config.AddControl("ctlMainConfig1", ctlMainConfig1);
+#if (DEBUG) // DBG_GUICONFIG
             UVDLPApp.Instance().m_gui_config.AddControl(pnlSliceView);
-            //UVDLPApp.Instance().m_gui_config.AddControl(pnl3dview);
+            UVDLPApp.Instance().m_gui_config.AddControl(ctl3DView1);
+            UVDLPApp.Instance().m_gui_config.AddControl(pnl3dview);
             UVDLPApp.Instance().m_gui_config.AddControl(txtLog);
+#endif
 
             //left side controls
             UVDLPApp.Instance().m_gui_config.AddControl("ctlSupports1", ctlSupports1);

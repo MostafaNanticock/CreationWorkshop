@@ -14,7 +14,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public ctlRotate()
         {
             InitializeComponent();
-            UVDLPApp.Instance().m_gui_config.AddButton("rotate", ctlTitle1.Button);
+            //UVDLPApp.Instance().m_gui_config.AddButton("rotate", ctlTitle1.Button); // get style from control
         }
 
         protected void RotateObject(ctlTextBox var, float x, float y, float z)

@@ -271,6 +271,15 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if ((ctl.Parent == null) && (mTopLevelControl != null))
                 mTopLevelControl.Controls.Add(ctl);
         }
+
+        public void AddControl(Control ctl)
+        {
+            if ((ctl == null) || (ctl.Name == null))
+                return;
+            Controls[ctl.Name] = ctl;
+            if ((ctl.Parent == null) && (mTopLevelControl != null))
+                mTopLevelControl.Controls.Add(ctl);
+        }
         public void AddButton(string name, ctlImageButton ctl)
         {
             Buttons[name] = ctl;
@@ -557,6 +566,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (bstl != null)
             {
                 butt.GLVisible = bstl.glMode;
+                butt.ApplyStyle(bstl);
             }
             //butt.GLVisible = GetBoolParam(buttnode, "gl", butt.GLVisible);
             string imgname = GetStrParam(buttnode, "image", null);

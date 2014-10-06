@@ -16,7 +16,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI.Expanding
         {
             InitializeComponent();
             //register our button so it can be skinned
-            UVDLPApp.Instance().m_gui_config.AddButton("move", ctlTitle1.Button);
+            //UVDLPApp.Instance().m_gui_config.AddButton("move", ctlTitle1.Button); gets style from control
         }
         protected void MoveObject(ctlTextBox var, float x, float y, float z)
         {

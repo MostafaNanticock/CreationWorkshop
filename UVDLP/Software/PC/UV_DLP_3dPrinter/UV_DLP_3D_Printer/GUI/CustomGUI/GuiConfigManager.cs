@@ -32,6 +32,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public GuiControlStyle DefaultControlStyle;
         public GuiControlStyle DefaultButtonStyle;
         GuiConfigDB guiConf;
+        bool firstTime;
         
 
 
@@ -49,6 +50,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             DefaultControlStyle.SetDefault();
             DefaultButtonStyle = new GuiControlStyle("DefaultButton");
             DefaultButtonStyle.SetDefault();
+            firstTime = true;
         }
 
         public Control TopLevelControl
@@ -139,6 +141,11 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public void ApplyConfiguration(GuiConfigDB conf)
         {
             guiConf = conf;
+            if (firstTime)
+            {
+                UVDLPApp.Instance().m_callbackhandler.RegisterCallback("GMActivateTab", ActivateTab, "GUI Tab Activation <ctlTabItem> <ctlTabContent>");
+                firstTime = false;
+            }
             try
             {
                 // read and store all styles
@@ -146,9 +153,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     GuiControlStylesDict[pair.Key] = pair.Value;
 
                 HandleDecals(conf);
-                HandleButtons(conf);
+                HandleButtonCreation(conf);
                 HandleLayouts(conf);
                 HandleControls(conf);
+                HandleButtons(conf);
                 HandleSequences(conf);
 
             }
@@ -229,14 +237,26 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 HandleButton(conf, pair.Value);
         }
 
+        void HandleButtonCreation(GuiConfigDB conf)
+        {
+            foreach (KeyValuePair<string, GuiButton> pair in conf.GuiButtonsDict)
+            {
+                GuiButton gbtn = pair.Value;
+                if (!Buttons.ContainsKey(gbtn.name))
+                {
+                    // create a new empty button
+                    ctlImageButton btn = new ctlImageButton();
+                    btn.Name = gbtn.name;
+                    AddButton(btn);
+                    btn.BringToFront();
+                }
+            }
+        }
+
         void HandleButton(GuiConfigDB conf, GuiButton gbtn)
         {
             if (!Buttons.ContainsKey(gbtn.name))
-            {
-                // create a new empty button
-                AddButton(gbtn.name, new ctlImageButton());
-                Buttons[gbtn.name].BringToFront();
-            }
+                return; // should not happen!
             ctlImageButton butt = Buttons[gbtn.name];
 //            butt.Visible = true;
             butt.Visible = gbtn.visible.GetIfExplicit(true);
@@ -588,7 +608,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             flp.FlowDirection = FlowDirection.LeftToRight;
             flp.Size = new Size(50, 50);
             flp.BackColor = Color.Aqua;
-            pnl.Controls.Add(flp);
             foreach (GuiLayout subgl in gl.subLayouts)
             {
                 Control ctl = null;
@@ -598,6 +617,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     pnl.Controls.Add(ctl);
             }
             FillCommonLayoutParameters(gl, pnl);
+            pnl.Controls.Add(flp);
             flp.ResumeLayout();
             pnl.BackColor = Color.Bisque;
             return pnl;
@@ -605,10 +625,29 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         Control CreateTabItem(GuiLayout gl, FlowLayoutPanel flp)
         {
+            Control shownControl = null;
+            if (gl.subLayouts.Count == 1)
+            {
+                shownControl = CreateLayoutRecurse(gl.subLayouts[0]);
+            }
+            else
+            {
+                shownControl = new Panel();
+                shownControl.Name = gl.name + "Content";
+                AddControl(shownControl);
+                CreateSublayouts(gl, shownControl);
+            }
+            if (shownControl == null)
+                return null;
+
+            shownControl.Dock = DockStyle.Fill;
+            shownControl.Visible = gl.isSelected.IsExplicit() && gl.isSelected;
+
             Control tabctl = null;
             tabctl = GetControlOrButton(gl.name);
             if (tabctl == null)
             {
+                string cmd = String.Format("GMActivateTab {0} {1}", gl.name, shownControl.Name); 
                 if (!gl.text.IsExplicit())
                 {
                     // if no text, create image button
@@ -620,6 +659,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                         butt.GLImage = gl.image;
                         butt.Image = guiConf.GetImage(gl.image, null);
                     }
+                    butt.OnClickCallback = cmd;
                     tabctl = butt;
                 }
                 else
@@ -629,24 +669,17 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     ttl.Image = guiConf.GetImage(gl.image, null);
                     ttl.Text = gl.text;
                     ttl.Name = gl.name;
+                    ttl.OnClickCallback = cmd;
+                    ttl.CheckImage = guiConf.GetImage("buttChecked", null);
+                    ttl.Size = new Size(180, 40);
                     Controls[gl.name] = ttl;
                     tabctl = ttl;
+
                 }
+                CheckTab(tabctl, gl.isSelected.IsExplicit() && gl.isSelected);
+
             }
             flp.Controls.Add(tabctl);
-            Control shownControl = null;
-            if (gl.subLayouts.Count == 1)
-            {
-                shownControl = CreateLayoutRecurse(gl.subLayouts[0]);
-            }
-            else
-            {
-                shownControl = new Panel();
-                shownControl.Name = gl.name + "Content";
-                CreateSublayouts(gl, shownControl);
-            }
-            shownControl.Dock = DockStyle.Fill;
-            shownControl.Visible = gl.isSelected.IsExplicit() && gl.isSelected;
             return shownControl;
         }
 
@@ -760,6 +793,58 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             {
                 Control ctl = pair.Value;
                 ctl.Visible = false;
+            }
+        }
+
+        #endregion
+        #region Tab handling
+
+        void ActivateTab(Object sender, Object varsobj)
+        {
+            string[] vars = (string[])varsobj;
+            if (vars.Length != 2)
+            {
+                DebugLogger.Instance().LogError("Wrong number of arguments calling ActivateTab");
+                return;
+            }
+            Control tabCtl = GetControlOrButton(vars[0]);
+            Control contentCtl = GetControl(vars[1]);
+            if ((tabCtl == null) || !(tabCtl is ctlUserPanel) || (contentCtl == null))
+            {
+                DebugLogger.Instance().LogError("Unknown/wrong controls calling ActivateTab");
+                return;
+            }
+            ActivateTab(tabCtl.Parent, tabCtl, contentCtl);
+        }
+
+        void CheckTab(Control tabItem, bool isCheck)
+        {
+            if (tabItem is ctlImageButton)
+                ((ctlImageButton)tabItem).Checked = isCheck;
+            else if (tabItem is ctlTitle)
+                ((ctlTitle)tabItem).Checked = isCheck;
+        }
+
+        public void ActivateTab(Control tabParent, Control tabItem, Control tabContent)
+        {
+            foreach (Control ctl in tabParent.Controls)
+            {
+                CheckTab(ctl, Object.ReferenceEquals(ctl, tabItem));
+            }
+            foreach (Control ctl in tabParent.Parent.Controls)
+            {
+                if (Object.ReferenceEquals(ctl, tabParent))
+                    continue;
+                if (Object.ReferenceEquals(ctl, tabContent))
+                {
+                    ctl.Dock = DockStyle.Fill;
+                    ctl.Visible = true;
+                }
+                else
+                {
+                    ctl.Visible = false;
+                    ctl.Dock = DockStyle.None;
+                }
             }
         }
 

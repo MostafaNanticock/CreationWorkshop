@@ -296,9 +296,9 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
             float scale = 1;
             if (mCtlState == CtlState.Hover)
-                scale = stl.HoverSize / 100;
+                scale = (float)stl.HoverSize / 100f;
             if (mCtlState == CtlState.Pressed)
-                scale = stl.PressedSize / 100;
+                scale = (float)stl.PressedSize / 100f;
 
 
             if ((scale < 0.999f) || (scale > 1.001f))

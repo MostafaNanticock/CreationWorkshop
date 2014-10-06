@@ -53,7 +53,14 @@ namespace UV_DLP_3D_Printer
             cb.retType = "void";
             cb.Callback += new CallbackType(func);
         }
- 
+
+        // if var type not specified, array of string args is assumed 
+        public void RegisterCallback(String cmdname, CallbackType func, String desc)
+        {
+            RegisterCallback(cmdname, func, typeof(string[]), desc);
+        }
+
+
         public void RegisterRetCallback(String cmdname, RetCallbackType func, Type vartype, Type rettype, String desc)
         {
             CallbackItem cb;
@@ -104,12 +111,19 @@ namespace UV_DLP_3D_Printer
 
         public Object Activate(String cmdname, Object sender)
         {
+            string [] compoundCmd = cmdname.Split(new char [] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            if (compoundCmd.Length > 1)
+            {
+                List<string> varlist = compoundCmd.ToList();
+                varlist.RemoveAt(0);
+                return Activate(compoundCmd[0], sender, varlist.ToArray());
+            }
             return Activate(cmdname, sender, null);
         }
 
         public Object Activate(String cmdname)
         {
-            return Activate(cmdname, null, null);
+            return Activate(cmdname, null);
         }
 
         public void DumpCommands(String filename)
