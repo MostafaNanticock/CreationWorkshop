@@ -304,7 +304,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                         if (Controls.ContainsKey(parentname))
                         {
                             Control ctlParent = Controls[parentname];
-                            ctlParent.Controls.Add(butt);
+                            AddControlToParent(butt, ctlParent);
                         }
                         else
                         {
@@ -433,7 +433,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                         if (Controls.ContainsKey(parentname))
                         {
                             Control ctlParent = Controls[parentname];
-                            ctlParent.Controls.Add(ct);
+                            AddControlToParent(ct, ctlParent);
                         }
                         else
                         {
@@ -496,6 +496,14 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         }
 
+        void AddControlToParent(Control ctl, Control parent)
+        {
+            if (parent is ctlCollapse)
+                ((ctlCollapse)parent).AddControl(ctl);
+            else
+                parent.Controls.Add(ctl);
+        }
+
         Control CreateLayoutRecurse(GuiLayout gl)
         {
             Control ctl = null;
@@ -534,6 +542,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (gl.type != GuiLayout.LayoutType.Control)
                 Controls[gl.name] = ctl;
             CreateSublayouts(gl, ctl);
+            if (ctl is ctlCollapse)
+                ((ctlCollapse)ctl).InnerControl.ResumeLayout();
             ctl.ResumeLayout();
             return ctl;
         }
@@ -545,15 +555,35 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 Control subctl = CreateLayoutRecurse(subgl);
                 if (subctl != null)
                 {
-                    parent.Controls.Add(subctl);
+                    AddControlToParent(subctl, parent);
                 }
             }
         }
 
-        FlowLayoutPanel CreateFlowPanel(GuiLayout gl)
+        Control WrapInCollapsible(GuiLayout gl, Control ctl)
+        {
+            Control retCtl = ctl;
+            if (gl.collapsible.IsExplicit() && gl.collapsible)
+            {
+                ctlCollapse colCtl = new ctlCollapse();
+                colCtl.SuspendLayout();
+                colCtl.Name = ctl.Name + "Parent";
+                colCtl.Dock = ctl.Dock;
+                colCtl.InnerControl = ctl;
+                if (gl.isCollapsed.IsExplicit())
+                    colCtl.Collapsed = gl.isCollapsed;
+                retCtl = colCtl;
+            }
+            return retCtl;
+        }
+
+        Control CreateFlowPanel(GuiLayout gl)
         {
             FlowLayoutPanel flp = new FlowLayoutPanel();
             flp.SuspendLayout();
+            flp.AutoScroll = true;
+            flp.AutoScrollMargin = new System.Drawing.Size(100, 1000);
+            flp.WrapContents = false;
             flp.FlowDirection = FlowDirection.LeftToRight;
             if (gl.direction.IsExplicit())
             {
@@ -566,7 +596,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 }
             }
             FillCommonLayoutParameters(gl, flp);
-            return flp;
+            return WrapInCollapsible(gl,flp);
         }
 
         SplitContainer CreateSplitPanel(GuiLayout gl)
@@ -634,7 +664,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             {
                 shownControl = new Panel();
                 shownControl.Name = gl.name + "Content";
-                AddControl(shownControl);
+                //AddControl(shownControl);
+                Controls[shownControl.Name] = shownControl;
                 CreateSublayouts(gl, shownControl);
             }
             if (shownControl == null)
@@ -688,6 +719,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (ctl == null)
                 return;
             ctl.Name = gl.name;
+            ctl.Visible = true;
             if (gl.w.IsExplicit()) ctl.Width = gl.w;
             if (gl.h.IsExplicit()) ctl.Height = gl.h;
             if (gl.dock.IsExplicit())
@@ -797,21 +829,32 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         }
 
         #endregion
-        #region Tab handling
+        #region Gui Layout text commands handling
 
+        string[]  VerifyArgs(Object varsobj, int count, string funcname)
+        {
+             string[] vars = (string[])varsobj;
+            if (vars.Length != count)
+            {
+                DebugLogger.Instance().LogError("Wrong number of arguments calling" + funcname);
+                return null;
+            }
+            return vars;
+       }
+
+        #region GuiActivateTab command
+
+        // GuiActivateTab <ctlTabItem> <ctlTabContent>
         void ActivateTab(Object sender, Object varsobj)
         {
-            string[] vars = (string[])varsobj;
-            if (vars.Length != 2)
-            {
-                DebugLogger.Instance().LogError("Wrong number of arguments calling ActivateTab");
+            string[] vars = VerifyArgs(varsobj, 2, "ActivateTab");
+            if (vars == null)
                 return;
-            }
             Control tabCtl = GetControlOrButton(vars[0]);
             Control contentCtl = GetControl(vars[1]);
             if ((tabCtl == null) || !(tabCtl is ctlUserPanel) || (contentCtl == null))
             {
-                DebugLogger.Instance().LogError("Unknown/wrong controls calling ActivateTab");
+                DebugLogger.Instance().LogError("Unknown/wrong controls calling GuiActivateTab");
                 return;
             }
             ActivateTab(tabCtl.Parent, tabCtl, contentCtl);
@@ -846,6 +889,46 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     ctl.Dock = DockStyle.None;
                 }
             }
+        }
+
+        #endregion
+
+        bool GetToggleState(string type, Control button, bool curstate)
+        {
+            if (type.ToLower() == "false")
+                return false;
+            if (type.ToLower() != "toggle")
+                return true;
+            if (button is ctlImageButton)
+                return ((ctlImageButton)button).Checked;
+            return !curstate;
+        }
+
+        // GuiShowControl <control> <true/false/toggle>
+        public void ShowControl(Object sender, Object varsobj)
+        {
+            string[] vars = VerifyArgs(varsobj, 2, "GuiShowControl");
+            if (vars == null)
+                return;
+
+            Control ctl = GetControlOrButton(vars[0]);
+            if (ctl == null)
+            {
+                DebugLogger.Instance().LogError("Unknown/wrong control calling GuiShowControl");
+                return;
+            }
+            ctl.Visible = GetToggleState(vars[2], (Control)sender, ctl.Visible);
+        }
+
+        // GuiCollapse <ctlCollapseButt> <true/false>
+        // will collapse a control to the size of ctlCollapseButt that should be inside it.
+        // the control must be either docked to one of the sides, and must be parent of ctlCollapseButt
+        public void CollapseControl(Object sender, Object varsobj)
+        {
+            string[] vars = VerifyArgs(varsobj, 2, "GuiCollapse");
+            if (vars == null)
+                return;
+
         }
 
         #endregion

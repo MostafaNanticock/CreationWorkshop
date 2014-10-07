@@ -161,7 +161,7 @@ namespace UV_DLP_3D_Printer.GUI
             UVDLPApp.Instance().m_gui_config.AddControl("ctlMoveExpand1", ctlMoveExpand1);
             UVDLPApp.Instance().m_gui_config.AddControl("ctlScale1", ctlScale1);
             UVDLPApp.Instance().m_gui_config.AddControl("ctlRotate1", ctlRotate1);
-            //UVDLPApp.Instance().m_gui_config.AddControl("ctlMirror1", ctlMirror1);
+            UVDLPApp.Instance().m_gui_config.AddControl("ctlMirror1", ctlMirror1);
             UVDLPApp.Instance().m_gui_config.AddControl("ctlView1", ctlView1);
             UVDLPApp.Instance().m_gui_config.AddControl("ctlObjectInfo1", ctlObjectInfo1);
 

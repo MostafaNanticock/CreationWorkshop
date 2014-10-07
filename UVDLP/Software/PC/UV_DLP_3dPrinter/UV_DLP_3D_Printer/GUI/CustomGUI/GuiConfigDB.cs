@@ -470,6 +470,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public GuiParam<string> dock;
         public GuiParam<string> control;
         public GuiParam<bool> isCollapsed;
+        public GuiParam<bool> collapsible;
         public GuiParam<bool> isSelected;
         public GuiParam<string> image;
         public GuiParam<string> orientation;
@@ -490,6 +491,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             dock = new GuiParam<string>();
             control = new GuiParam<string>();
             isCollapsed = new GuiParam<bool>();
+            collapsible = new GuiParam<bool>();
             isSelected = new GuiParam<bool>();
             image = new GuiParam<string>();
             orientation = new GuiParam<string>();
@@ -1137,6 +1139,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             gl.h = GetIntParam(lnode, "h", 0);
             gl.splitPos = GetIntParam(lnode, "splitpos", 0);
             gl.isCollapsed = GetBoolParam(lnode, "iscollapsed", false);
+            gl.collapsible = GetBoolParam(lnode, "collapsible", false);
             gl.isSelected = GetBoolParam(lnode, "isselected", false);
             foreach (XmlNode subnode in lnode.ChildNodes)
             {
@@ -1674,6 +1677,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             gl.h.Save(xd, glNode, "h");
             gl.splitPos.Save(xd, glNode, "splitpos");
             gl.isCollapsed.Save(xd, glNode, "iscollapsed");
+            gl.collapsible.Save(xd, glNode, "collapsible");
             gl.isSelected.Save(xd, glNode, "isselected");
             foreach (GuiLayout subgl in gl.subLayouts)
             {

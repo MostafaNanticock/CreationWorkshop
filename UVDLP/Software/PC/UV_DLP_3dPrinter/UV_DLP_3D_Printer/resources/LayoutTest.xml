@@ -6,10 +6,35 @@
         <splitpanel1>
           <tabpanel>
             <tabitem name="ctlTitle3dView" isselected="true">
-              <control name="ctlMainConfig1" />
+              <control name="ctl3DView1" />
+              <flowpanel name="3DViewLeftTools" direction="T2B" dock="Left" collapsible="true">
+                <control name="ctlSupports1" />
+              </flowpanel>
+              <flowpanel name="3DViewRightTools" direction="T2B" dock="Right" collapsible="true" iscollapsed="false">
+                <control name="ctlScene1" />
+                <control name="ctlObjectInfo1" />
+                <control name="ctlMoveExpand1" />
+                <control name="ctlMirror1" />
+                <control name="ctlScale1" />
+                <control name="ctlRotate1" />
+                <control name="ctlView1" />
+              </flowpanel>
             </tabitem>
             <tabitem name="ctlTitleViewSlice">
               <control name="pnlSliceView" />
+            </tabitem>
+            <tabitem name="ctlTitleViewControls">
+              <control name="ctlMainManual" />
+            </tabitem>
+            <tabitem name="ctlTitleConf" image="buttMachineConfig" text="Configure">
+              <tabpanel>
+                <tabitem name="ctlTitleMachineConfig" isselected="true">
+                  <control name="guimachineconfigparent" />
+                </tabitem>
+                <tabitem name="ctlTitleSliceProfile">
+                  <control name="pnlToolpathGenConfig" />
+                </tabitem>
+              </tabpanel>
             </tabitem>
           </tabpanel>
         </splitpanel1>
@@ -34,4 +59,7 @@
       </panel>
     </layout>
   </layouts>
+  <controls>		
+    <style bgndimage="cwpanel" panelpad="2" backcolor="Navy" framecolor="RoyalBlue" hovercolor="White" forecolor="#DCDCDC" checkcolor="#DCDCDC" presscolor="White" nimages="1" pressscale="92" gl="false"/>
+  </controls>
 </GuiConfig>

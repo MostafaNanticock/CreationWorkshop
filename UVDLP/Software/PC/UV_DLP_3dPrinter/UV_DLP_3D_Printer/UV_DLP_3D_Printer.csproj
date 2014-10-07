@@ -207,6 +207,12 @@
     <Compile Include="GUI\Controls\ctlGL.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="GUI\CustomGUI\ctlCollapse.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\CustomGUI\ctlCollapse.Designer.cs">
+      <DependentUpon>ctlCollapse.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\CustomGUI\ctlConfig.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -532,6 +538,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Controls\ManualControls\ctlProjectorControl.resx">
       <DependentUpon>ctlProjectorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CustomGUI\ctlCollapse.resx">
+      <DependentUpon>ctlCollapse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\CustomGUI\ctlConfig.resx">
       <DependentUpon>ctlConfig.cs</DependentUpon>
