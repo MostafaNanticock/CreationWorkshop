@@ -30,25 +30,30 @@
         {
             this.tabOptions = new System.Windows.Forms.TabControl();
             this.tbOptions = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.chkExport = new System.Windows.Forms.CheckBox();
+            this.chkExportPNG = new System.Windows.Forms.CheckBox();
             this.comboExportSvg = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
-            this.chkExportPNG = new System.Windows.Forms.CheckBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtFirstLayerTime = new System.Windows.Forms.TextBox();
+            this.txtZThick = new System.Windows.Forms.TextBox();
+            this.lblLayerTime = new System.Windows.Forms.Label();
+            this.txtLayerTime = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtAAVal = new System.Windows.Forms.TextBox();
+            this.txtnumbottom = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.chkantialiasing = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.buttResinCalib = new System.Windows.Forms.Button();
+            this.cmdDelResin = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.cmdNewResin = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.comboResin = new System.Windows.Forms.ComboBox();
             this.label18 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.txtResinPriceL = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            this.txtnumbottom = new System.Windows.Forms.TextBox();
-            this.txtLayerTime = new System.Windows.Forms.TextBox();
-            this.lblLayerTime = new System.Windows.Forms.Label();
-            this.txtZThick = new System.Windows.Forms.TextBox();
-            this.txtFirstLayerTime = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtAAVal = new System.Windows.Forms.TextBox();
-            this.chkExport = new System.Windows.Forms.CheckBox();
             this.lblProfName = new System.Windows.Forms.Label();
             this.txtNotes = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -70,7 +75,6 @@
             this.cmbBuildDirection = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtBlankTime = new System.Windows.Forms.TextBox();
-            this.chkantialiasing = new System.Windows.Forms.CheckBox();
             this.cmdApply = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtYOffset = new System.Windows.Forms.TextBox();
@@ -90,20 +94,16 @@
             this.lstSliceProfiles = new System.Windows.Forms.ListBox();
             this.cmdDelete = new System.Windows.Forms.Button();
             this.cmdNew = new System.Windows.Forms.Button();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.cmdDelResin = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
-            this.cmdNewResin = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.tabOptions.SuspendLayout();
             this.tbOptions.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.grpLift.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tbGCode.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabOptions
@@ -115,7 +115,7 @@
             this.tabOptions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabOptions.Name = "tabOptions";
             this.tabOptions.SelectedIndex = 0;
-            this.tabOptions.Size = new System.Drawing.Size(779, 534);
+            this.tabOptions.Size = new System.Drawing.Size(943, 534);
             this.tabOptions.TabIndex = 46;
             // 
             // tbOptions
@@ -135,10 +135,46 @@
             this.tbOptions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbOptions.Name = "tbOptions";
             this.tbOptions.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tbOptions.Size = new System.Drawing.Size(771, 503);
+            this.tbOptions.Size = new System.Drawing.Size(935, 503);
             this.tbOptions.TabIndex = 0;
             this.tbOptions.Text = "Options";
             this.tbOptions.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.chkExport);
+            this.groupBox6.Controls.Add(this.chkExportPNG);
+            this.groupBox6.Controls.Add(this.comboExportSvg);
+            this.groupBox6.Controls.Add(this.label19);
+            this.groupBox6.Location = new System.Drawing.Point(288, 342);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(271, 143);
+            this.groupBox6.TabIndex = 69;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Export Options";
+            // 
+            // chkExport
+            // 
+            this.chkExport.AutoSize = true;
+            this.chkExport.Location = new System.Drawing.Point(6, 28);
+            this.chkExport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chkExport.Name = "chkExport";
+            this.chkExport.Size = new System.Drawing.Size(174, 22);
+            this.chkExport.TabIndex = 59;
+            this.chkExport.Text = "Export Slices to CWS";
+            this.chkExport.UseVisualStyleBackColor = true;
+            this.chkExport.CheckedChanged += new System.EventHandler(this.chkExport_CheckedChanged);
+            // 
+            // chkExportPNG
+            // 
+            this.chkExportPNG.AutoSize = true;
+            this.chkExportPNG.Location = new System.Drawing.Point(6, 54);
+            this.chkExportPNG.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chkExportPNG.Name = "chkExportPNG";
+            this.chkExportPNG.Size = new System.Drawing.Size(168, 22);
+            this.chkExportPNG.TabIndex = 65;
+            this.chkExportPNG.Text = "Export Slices to Disk";
+            this.chkExportPNG.UseVisualStyleBackColor = true;
             // 
             // comboExportSvg
             // 
@@ -164,16 +200,125 @@
             this.label19.TabIndex = 66;
             this.label19.Text = "Export SVG:";
             // 
-            // chkExportPNG
+            // groupBox5
             // 
-            this.chkExportPNG.AutoSize = true;
-            this.chkExportPNG.Location = new System.Drawing.Point(6, 54);
-            this.chkExportPNG.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.chkExportPNG.Name = "chkExportPNG";
-            this.chkExportPNG.Size = new System.Drawing.Size(168, 22);
-            this.chkExportPNG.TabIndex = 65;
-            this.chkExportPNG.Text = "Export Slices to Disk";
-            this.chkExportPNG.UseVisualStyleBackColor = true;
+            this.groupBox5.Controls.Add(this.label2);
+            this.groupBox5.Controls.Add(this.txtFirstLayerTime);
+            this.groupBox5.Controls.Add(this.txtZThick);
+            this.groupBox5.Controls.Add(this.lblLayerTime);
+            this.groupBox5.Controls.Add(this.txtLayerTime);
+            this.groupBox5.Controls.Add(this.label1);
+            this.groupBox5.Controls.Add(this.txtAAVal);
+            this.groupBox5.Controls.Add(this.txtnumbottom);
+            this.groupBox5.Controls.Add(this.label8);
+            this.groupBox5.Controls.Add(this.chkantialiasing);
+            this.groupBox5.Location = new System.Drawing.Point(18, 232);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox5.Size = new System.Drawing.Size(259, 190);
+            this.groupBox5.TabIndex = 68;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Exposure Settings";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 84);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(159, 18);
+            this.label2.TabIndex = 33;
+            this.label2.Text = "Bottom Exposure (ms)";
+            // 
+            // txtFirstLayerTime
+            // 
+            this.txtFirstLayerTime.Location = new System.Drawing.Point(183, 81);
+            this.txtFirstLayerTime.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtFirstLayerTime.Name = "txtFirstLayerTime";
+            this.txtFirstLayerTime.Size = new System.Drawing.Size(64, 24);
+            this.txtFirstLayerTime.TabIndex = 32;
+            this.txtFirstLayerTime.Text = "5000";
+            this.txtFirstLayerTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // txtZThick
+            // 
+            this.txtZThick.Location = new System.Drawing.Point(183, 23);
+            this.txtZThick.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtZThick.Name = "txtZThick";
+            this.txtZThick.Size = new System.Drawing.Size(64, 24);
+            this.txtZThick.TabIndex = 29;
+            this.txtZThick.Text = ".05";
+            this.txtZThick.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // lblLayerTime
+            // 
+            this.lblLayerTime.AutoSize = true;
+            this.lblLayerTime.Location = new System.Drawing.Point(8, 54);
+            this.lblLayerTime.Name = "lblLayerTime";
+            this.lblLayerTime.Size = new System.Drawing.Size(143, 18);
+            this.lblLayerTime.TabIndex = 27;
+            this.lblLayerTime.Text = "Exposure Time (ms)";
+            // 
+            // txtLayerTime
+            // 
+            this.txtLayerTime.Location = new System.Drawing.Point(183, 51);
+            this.txtLayerTime.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtLayerTime.Name = "txtLayerTime";
+            this.txtLayerTime.Size = new System.Drawing.Size(64, 24);
+            this.txtLayerTime.TabIndex = 26;
+            this.txtLayerTime.Text = "5000";
+            this.txtLayerTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 26);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(152, 18);
+            this.label1.TabIndex = 28;
+            this.label1.Text = "Slice Thickness (mm)";
+            // 
+            // txtAAVal
+            // 
+            this.txtAAVal.Location = new System.Drawing.Point(183, 147);
+            this.txtAAVal.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtAAVal.Name = "txtAAVal";
+            this.txtAAVal.Size = new System.Drawing.Size(64, 24);
+            this.txtAAVal.TabIndex = 60;
+            this.txtAAVal.Text = "1.5";
+            this.txtAAVal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtAAVal.TextChanged += new System.EventHandler(this.txtAAVal_TextChanged);
+            // 
+            // txtnumbottom
+            // 
+            this.txtnumbottom.Location = new System.Drawing.Point(183, 113);
+            this.txtnumbottom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtnumbottom.Name = "txtnumbottom";
+            this.txtnumbottom.Size = new System.Drawing.Size(66, 24);
+            this.txtnumbottom.TabIndex = 41;
+            this.txtnumbottom.Text = "3";
+            this.txtnumbottom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(8, 116);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(117, 18);
+            this.label8.TabIndex = 42;
+            this.label8.Text = "# Bottom Layers";
+            // 
+            // chkantialiasing
+            // 
+            this.chkantialiasing.AutoSize = true;
+            this.chkantialiasing.Location = new System.Drawing.Point(8, 147);
+            this.chkantialiasing.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chkantialiasing.Name = "chkantialiasing";
+            this.chkantialiasing.Size = new System.Drawing.Size(158, 22);
+            this.chkantialiasing.TabIndex = 45;
+            this.chkantialiasing.Text = "Enable Anti-Aliasing";
+            this.chkantialiasing.UseVisualStyleBackColor = true;
+            this.chkantialiasing.CheckedChanged += new System.EventHandler(this.chkantialiasing_CheckedChanged);
             // 
             // groupBox2
             // 
@@ -189,7 +334,7 @@
             this.groupBox2.Size = new System.Drawing.Size(258, 118);
             this.groupBox2.TabIndex = 63;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Resin";
+            this.groupBox2.Text = "Resin Profiles";
             // 
             // buttResinCalib
             // 
@@ -200,6 +345,48 @@
             this.buttResinCalib.Text = "Calibrate";
             this.buttResinCalib.UseVisualStyleBackColor = true;
             this.buttResinCalib.Click += new System.EventHandler(this.buttResinCalib_Click);
+            // 
+            // cmdDelResin
+            // 
+            this.cmdDelResin.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.cmdDelResin.Checked = false;
+            this.cmdDelResin.CheckImage = null;
+            this.cmdDelResin.Gapx = 5;
+            this.cmdDelResin.Gapy = 5;
+            this.cmdDelResin.GLBackgroundImage = null;
+            this.cmdDelResin.GLImage = null;
+            this.cmdDelResin.GLVisible = false;
+            this.cmdDelResin.GuiAnchor = null;
+            this.cmdDelResin.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdDelResin.Image = global::UV_DLP_3D_Printer.Properties.Resources.butMinus;
+            this.cmdDelResin.Location = new System.Drawing.Point(226, 23);
+            this.cmdDelResin.Name = "cmdDelResin";
+            this.cmdDelResin.Size = new System.Drawing.Size(26, 26);
+            this.cmdDelResin.StyleName = null;
+            this.cmdDelResin.TabIndex = 65;
+            this.cmdDelResin.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdDelResin.Click += new System.EventHandler(this.cmdDelResin_Click);
+            // 
+            // cmdNewResin
+            // 
+            this.cmdNewResin.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.cmdNewResin.Checked = false;
+            this.cmdNewResin.CheckImage = null;
+            this.cmdNewResin.Gapx = 5;
+            this.cmdNewResin.Gapy = 5;
+            this.cmdNewResin.GLBackgroundImage = null;
+            this.cmdNewResin.GLImage = null;
+            this.cmdNewResin.GLVisible = false;
+            this.cmdNewResin.GuiAnchor = null;
+            this.cmdNewResin.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdNewResin.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
+            this.cmdNewResin.Location = new System.Drawing.Point(195, 23);
+            this.cmdNewResin.Name = "cmdNewResin";
+            this.cmdNewResin.Size = new System.Drawing.Size(26, 26);
+            this.cmdNewResin.StyleName = null;
+            this.cmdNewResin.TabIndex = 64;
+            this.cmdNewResin.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdNewResin.Click += new System.EventHandler(this.cmdNewResin_Click);
             // 
             // comboResin
             // 
@@ -220,15 +407,6 @@
             this.label18.TabIndex = 61;
             this.label18.Text = "Resin:";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 26);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(152, 18);
-            this.label1.TabIndex = 28;
-            this.label1.Text = "Slice Thickness (mm)";
-            // 
             // txtResinPriceL
             // 
             this.txtResinPriceL.Location = new System.Drawing.Point(183, 89);
@@ -239,15 +417,6 @@
             this.txtResinPriceL.Text = "50";
             this.txtResinPriceL.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 116);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(117, 18);
-            this.label8.TabIndex = 42;
-            this.label8.Text = "# Bottom Layers";
-            // 
             // label17
             // 
             this.label17.AutoSize = true;
@@ -256,87 +425,6 @@
             this.label17.Size = new System.Drawing.Size(98, 18);
             this.label17.TabIndex = 57;
             this.label17.Text = "Price per liter:";
-            // 
-            // txtnumbottom
-            // 
-            this.txtnumbottom.Location = new System.Drawing.Point(183, 113);
-            this.txtnumbottom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtnumbottom.Name = "txtnumbottom";
-            this.txtnumbottom.Size = new System.Drawing.Size(66, 24);
-            this.txtnumbottom.TabIndex = 41;
-            this.txtnumbottom.Text = "3";
-            this.txtnumbottom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtLayerTime
-            // 
-            this.txtLayerTime.Location = new System.Drawing.Point(183, 51);
-            this.txtLayerTime.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtLayerTime.Name = "txtLayerTime";
-            this.txtLayerTime.Size = new System.Drawing.Size(64, 24);
-            this.txtLayerTime.TabIndex = 26;
-            this.txtLayerTime.Text = "5000";
-            this.txtLayerTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblLayerTime
-            // 
-            this.lblLayerTime.AutoSize = true;
-            this.lblLayerTime.Location = new System.Drawing.Point(8, 54);
-            this.lblLayerTime.Name = "lblLayerTime";
-            this.lblLayerTime.Size = new System.Drawing.Size(143, 18);
-            this.lblLayerTime.TabIndex = 27;
-            this.lblLayerTime.Text = "Exposure Time (ms)";
-            // 
-            // txtZThick
-            // 
-            this.txtZThick.Location = new System.Drawing.Point(183, 23);
-            this.txtZThick.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtZThick.Name = "txtZThick";
-            this.txtZThick.Size = new System.Drawing.Size(64, 24);
-            this.txtZThick.TabIndex = 29;
-            this.txtZThick.Text = ".05";
-            this.txtZThick.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtFirstLayerTime
-            // 
-            this.txtFirstLayerTime.Location = new System.Drawing.Point(183, 81);
-            this.txtFirstLayerTime.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtFirstLayerTime.Name = "txtFirstLayerTime";
-            this.txtFirstLayerTime.Size = new System.Drawing.Size(64, 24);
-            this.txtFirstLayerTime.TabIndex = 32;
-            this.txtFirstLayerTime.Text = "5000";
-            this.txtFirstLayerTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 84);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(159, 18);
-            this.label2.TabIndex = 33;
-            this.label2.Text = "Bottom Exposure (ms)";
-            // 
-            // txtAAVal
-            // 
-            this.txtAAVal.Location = new System.Drawing.Point(183, 147);
-            this.txtAAVal.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtAAVal.Name = "txtAAVal";
-            this.txtAAVal.Size = new System.Drawing.Size(64, 24);
-            this.txtAAVal.TabIndex = 60;
-            this.txtAAVal.Text = "1.5";
-            this.txtAAVal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtAAVal.TextChanged += new System.EventHandler(this.txtAAVal_TextChanged);
-            // 
-            // chkExport
-            // 
-            this.chkExport.AutoSize = true;
-            this.chkExport.Location = new System.Drawing.Point(6, 28);
-            this.chkExport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.chkExport.Name = "chkExport";
-            this.chkExport.Size = new System.Drawing.Size(174, 22);
-            this.chkExport.TabIndex = 59;
-            this.chkExport.Text = "Export Slices to CWS";
-            this.chkExport.UseVisualStyleBackColor = true;
-            this.chkExport.CheckedChanged += new System.EventHandler(this.chkExport_CheckedChanged);
             // 
             // lblProfName
             // 
@@ -553,18 +641,6 @@
             this.txtBlankTime.Text = "5000";
             this.txtBlankTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // chkantialiasing
-            // 
-            this.chkantialiasing.AutoSize = true;
-            this.chkantialiasing.Location = new System.Drawing.Point(8, 147);
-            this.chkantialiasing.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.chkantialiasing.Name = "chkantialiasing";
-            this.chkantialiasing.Size = new System.Drawing.Size(158, 22);
-            this.chkantialiasing.TabIndex = 45;
-            this.chkantialiasing.Text = "Enable Anti-Aliasing";
-            this.chkantialiasing.UseVisualStyleBackColor = true;
-            this.chkantialiasing.CheckedChanged += new System.EventHandler(this.chkantialiasing_CheckedChanged);
-            // 
             // cmdApply
             // 
             this.cmdApply.Location = new System.Drawing.Point(63, 439);
@@ -582,7 +658,7 @@
             this.groupBox1.Controls.Add(this.txtXOffset);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(565, 54);
+            this.groupBox1.Location = new System.Drawing.Point(565, 47);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -637,7 +713,7 @@
             this.tbGCode.Controls.Add(this.txtGCode);
             this.tbGCode.Location = new System.Drawing.Point(4, 27);
             this.tbGCode.Name = "tbGCode";
-            this.tbGCode.Size = new System.Drawing.Size(771, 503);
+            this.tbGCode.Size = new System.Drawing.Size(935, 503);
             this.tbGCode.TabIndex = 7;
             this.tbGCode.Text = "GCode";
             this.tbGCode.UseVisualStyleBackColor = true;
@@ -769,82 +845,6 @@
             this.cmdNew.UseVisualStyleBackColor = true;
             this.cmdNew.Click += new System.EventHandler(this.cmdNew_Click);
             // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.label2);
-            this.groupBox5.Controls.Add(this.txtFirstLayerTime);
-            this.groupBox5.Controls.Add(this.txtZThick);
-            this.groupBox5.Controls.Add(this.lblLayerTime);
-            this.groupBox5.Controls.Add(this.txtLayerTime);
-            this.groupBox5.Controls.Add(this.label1);
-            this.groupBox5.Controls.Add(this.txtAAVal);
-            this.groupBox5.Controls.Add(this.txtnumbottom);
-            this.groupBox5.Controls.Add(this.label8);
-            this.groupBox5.Controls.Add(this.chkantialiasing);
-            this.groupBox5.Location = new System.Drawing.Point(18, 232);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox5.Size = new System.Drawing.Size(259, 190);
-            this.groupBox5.TabIndex = 68;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Exposure Settings";
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.chkExport);
-            this.groupBox6.Controls.Add(this.chkExportPNG);
-            this.groupBox6.Controls.Add(this.comboExportSvg);
-            this.groupBox6.Controls.Add(this.label19);
-            this.groupBox6.Location = new System.Drawing.Point(288, 342);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(271, 143);
-            this.groupBox6.TabIndex = 69;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Export Options";
-            // 
-            // cmdDelResin
-            // 
-            this.cmdDelResin.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.cmdDelResin.Checked = false;
-            this.cmdDelResin.CheckImage = null;
-            this.cmdDelResin.Gapx = 5;
-            this.cmdDelResin.Gapy = 5;
-            this.cmdDelResin.GLBackgroundImage = null;
-            this.cmdDelResin.GLImage = null;
-            this.cmdDelResin.GLVisible = false;
-            this.cmdDelResin.GuiAnchor = null;
-            this.cmdDelResin.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.cmdDelResin.Image = global::UV_DLP_3D_Printer.Properties.Resources.butMinus;
-            this.cmdDelResin.Location = new System.Drawing.Point(226, 23);
-            this.cmdDelResin.Name = "cmdDelResin";
-            this.cmdDelResin.Size = new System.Drawing.Size(26, 26);
-            this.cmdDelResin.StyleName = null;
-            this.cmdDelResin.TabIndex = 65;
-            this.cmdDelResin.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.cmdDelResin.Click += new System.EventHandler(this.cmdDelResin_Click);
-            // 
-            // cmdNewResin
-            // 
-            this.cmdNewResin.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.cmdNewResin.Checked = false;
-            this.cmdNewResin.CheckImage = null;
-            this.cmdNewResin.Gapx = 5;
-            this.cmdNewResin.Gapy = 5;
-            this.cmdNewResin.GLBackgroundImage = null;
-            this.cmdNewResin.GLImage = null;
-            this.cmdNewResin.GLVisible = false;
-            this.cmdNewResin.GuiAnchor = null;
-            this.cmdNewResin.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.cmdNewResin.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
-            this.cmdNewResin.Location = new System.Drawing.Point(195, 23);
-            this.cmdNewResin.Name = "cmdNewResin";
-            this.cmdNewResin.Size = new System.Drawing.Size(26, 26);
-            this.cmdNewResin.StyleName = null;
-            this.cmdNewResin.TabIndex = 64;
-            this.cmdNewResin.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.cmdNewResin.Click += new System.EventHandler(this.cmdNewResin_Click);
-            // 
             // ctlToolpathGenConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -859,6 +859,10 @@
             this.tabOptions.ResumeLayout(false);
             this.tbOptions.ResumeLayout(false);
             this.tbOptions.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -871,10 +875,6 @@
             this.tbGCode.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

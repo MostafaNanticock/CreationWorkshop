@@ -70,13 +70,13 @@
             this.label8 = new System.Windows.Forms.Label();
             this.lbConfigured = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lblMicronY = new System.Windows.Forms.Label();
+            this.lblMicronX = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txtYRes = new System.Windows.Forms.TextBox();
             this.txtXRes = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.lblMicronX = new System.Windows.Forms.Label();
-            this.lblMicronY = new System.Windows.Forms.Label();
             this.cmdRemove = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.cmdCreate = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.cmdRemoveConfigured = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
@@ -156,10 +156,10 @@
             // 
             // cmdAdjust
             // 
-            this.cmdAdjust.Location = new System.Drawing.Point(110, 44);
+            this.cmdAdjust.Location = new System.Drawing.Point(110, 38);
             this.cmdAdjust.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmdAdjust.Name = "cmdAdjust";
-            this.cmdAdjust.Size = new System.Drawing.Size(78, 31);
+            this.cmdAdjust.Size = new System.Drawing.Size(78, 32);
             this.cmdAdjust.TabIndex = 6;
             this.cmdAdjust.Text = "Adjust";
             this.cmdAdjust.UseVisualStyleBackColor = true;
@@ -579,6 +579,24 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Output Resolution (px)";
             // 
+            // lblMicronY
+            // 
+            this.lblMicronY.AutoSize = true;
+            this.lblMicronY.Location = new System.Drawing.Point(12, 112);
+            this.lblMicronY.Name = "lblMicronY";
+            this.lblMicronY.Size = new System.Drawing.Size(46, 18);
+            this.lblMicronY.TabIndex = 5;
+            this.lblMicronY.Text = "label2";
+            // 
+            // lblMicronX
+            // 
+            this.lblMicronX.AutoSize = true;
+            this.lblMicronX.Location = new System.Drawing.Point(12, 84);
+            this.lblMicronX.Name = "lblMicronX";
+            this.lblMicronX.Size = new System.Drawing.Size(46, 18);
+            this.lblMicronX.TabIndex = 4;
+            this.lblMicronX.Text = "label1";
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -599,6 +617,7 @@
             // 
             // txtYRes
             // 
+            this.txtYRes.Enabled = false;
             this.txtYRes.Location = new System.Drawing.Point(71, 55);
             this.txtYRes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtYRes.Name = "txtYRes";
@@ -608,6 +627,7 @@
             // 
             // txtXRes
             // 
+            this.txtXRes.Enabled = false;
             this.txtXRes.Location = new System.Drawing.Point(71, 27);
             this.txtXRes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtXRes.Name = "txtXRes";
@@ -618,24 +638,6 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // lblMicronX
-            // 
-            this.lblMicronX.AutoSize = true;
-            this.lblMicronX.Location = new System.Drawing.Point(12, 84);
-            this.lblMicronX.Name = "lblMicronX";
-            this.lblMicronX.Size = new System.Drawing.Size(46, 18);
-            this.lblMicronX.TabIndex = 4;
-            this.lblMicronX.Text = "label1";
-            // 
-            // lblMicronY
-            // 
-            this.lblMicronY.AutoSize = true;
-            this.lblMicronY.Location = new System.Drawing.Point(12, 112);
-            this.lblMicronY.Name = "lblMicronY";
-            this.lblMicronY.Size = new System.Drawing.Size(46, 18);
-            this.lblMicronY.TabIndex = 5;
-            this.lblMicronY.Text = "label2";
             // 
             // cmdRemove
             // 
