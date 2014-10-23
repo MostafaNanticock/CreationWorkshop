@@ -515,8 +515,15 @@ namespace UV_DLP_3D_Printer._3DEngine
             gr.DrawPath(pen, path);
         }
 
+        public static void FillRoundRectangle(Graphics gr, Brush br, float x, float y, float width, float height, float radius)
+        {
+            RectangleF rectangle = new RectangleF(x, y, width, height);
+            GraphicsPath path = GetRoundedRect(rectangle, radius);
+            gr.FillPath(br, path);
+        }
 
-        private static GraphicsPath GetRoundedRect(RectangleF baseRect,
+
+        public static GraphicsPath GetRoundedRect(RectangleF baseRect,
            float radius)
         {
             if (radius <= 0.0F)
