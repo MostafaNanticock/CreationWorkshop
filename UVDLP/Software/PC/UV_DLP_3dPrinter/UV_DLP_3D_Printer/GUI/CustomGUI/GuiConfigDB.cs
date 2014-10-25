@@ -18,7 +18,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
     public enum GuiParamState
     {
-        Unset,
+        Unset = 0,
         Default,
         Inherited,
         Explicit
@@ -94,11 +94,16 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 GuiConfigDB.AddParameter(xd, parent, name, var);
         }
 
+        public void SetValue(T t)
+        {
+            var = t;
+            state = GuiParamState.Explicit;
+        }
+
         public static implicit operator GuiParam<T>(T t)
         {
             GuiParam<T> temp = new GuiParam<T>();
-            temp.var = t;
-            temp.state = GuiParamState.Explicit;
+            temp.SetValue(t);
             return temp;
         }
         public static implicit operator T(GuiParam<T> t)
@@ -1231,15 +1236,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             try
             {
                 string sres = xnode.Attributes[paramName].Value;
-                if (sres[0] == '#')
-                {
-                    sres = sres.Substring(1);
-                    if (sres.Length > 7)
-                        res = Color.FromArgb(int.Parse(sres, System.Globalization.NumberStyles.HexNumber));
-                    else
-                        res = Color.FromArgb((int)(long.Parse(sres, System.Globalization.NumberStyles.HexNumber) | 0xFF000000));
-                }
-                else if (sres == "null")
+                if (sres == "null")
                 {
                     res.state = GuiParamState.Unset;
                 }
@@ -1249,10 +1246,30 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 }
                 else
                 {
-                    res = Color.FromName(sres);
+                    res = ParseColor(sres);
                 }
             }
             catch (Exception) { }
+            return res;
+        }
+
+        public static Color ParseColor(string cname)
+        {
+            Color res;
+            if (cname[0] == '#')
+            {
+                cname = cname.Substring(1);
+                if (cname.Length > 7)
+                    res = Color.FromArgb(int.Parse(cname, System.Globalization.NumberStyles.HexNumber));
+                else
+                    res = Color.FromArgb((int)(long.Parse(cname, System.Globalization.NumberStyles.HexNumber) | 0xFF000000));
+            }
+            else
+            {
+                res = Color.FromName(cname);
+                if (res.ToArgb() == 0)
+                    throw new Exception("Bad color name");
+            }
             return res;
         }
 
@@ -1693,14 +1710,17 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             XmlAttribute xa = xd.CreateAttribute(name);
             xa.Value = data.ToString();
             if (data is Color)
-            {
-                string colval = xa.Value.Substring(7, xa.Value.IndexOf(']') - 7);
-                if (colval[1] == '=')
-                    xa.Value = "#" + ((Color)data).ToArgb().ToString("x");
-                else
-                    xa.Value = colval;
-            }
+                xa.Value = ColorToString((Color)data);
             parent.Attributes.Append(xa);
+        }
+
+        public static string ColorToString(Color col)
+        {
+            string colstr = col.ToString();
+            string colval = colstr.Substring(7, colstr.IndexOf(']') - 7);
+            if (colval[1] == '=')
+                colval = "#" + col.ToArgb().ToString("x");
+            return colval;
         }
         #endregion
     }
