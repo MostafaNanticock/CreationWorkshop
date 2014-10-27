@@ -210,7 +210,7 @@ namespace UV_DLP_3D_Printer
                 List<Object3d> lstsupports = new List<Object3d>(); // final list of supports
 
                 int numslices = UVDLPApp.Instance().m_slicer.GetNumberOfSlices(config);
-                float zlev = 0.0f;
+                float zlev = (float)(config.ZThick / 2.0);
                 Slice curslice = null;
                 Slice prevslice = null;
                 int hxres = config.xres / 2;
@@ -786,7 +786,7 @@ namespace UV_DLP_3D_Printer
                 List<SupportLocation> supLocs = new List<SupportLocation>(); // temporary list of support locations.
 
                 int numslices = UVDLPApp.Instance().m_slicer.GetNumberOfSlices(config);
-                float zlev = 0.0f;
+                float zlev = (float)(config.ZThick + 0.5);
                 int hxres = config.xres / 2;
                 int hyres = config.yres / 2;
                 int npix = config.xres * config.yres;

@@ -115,7 +115,7 @@ namespace UV_DLP_3D_Printer.Slicing
                 //if (m_mode == SFMode.eImmediate)
                 {
                     // we're rendering slices immediately here
-                    float zlev = (float)(layer * m_config.ZThick);
+                    float zlev = (float)(((double)layer + 0.5) * m_config.ZThick);
                     return UVDLPApp.Instance().m_slicer.GetSliceImmediate(zlev);
                 }
                 //else
@@ -145,7 +145,7 @@ namespace UV_DLP_3D_Printer.Slicing
                     if (m_modeltype == ModelType.eResinTest1)
                         return UVDLPApp.Instance().m_slicer.GetTestModelV1Slice(layer);
                     else {
-                        float zlev = (float)(layer * m_config.ZThick);
+                        float zlev = (float)(((double)layer + 0.5) * m_config.ZThick);
                         return UVDLPApp.Instance().m_slicer.SliceImmediate(zlev);;
                     }
                 }

@@ -84,7 +84,7 @@ namespace UV_DLP_3D_Printer
                 MinMax mm = UVDLPApp.Instance().Engine3D.CalcSceneExtents(); // get the scene min/max
                 //int numslices = (int)((UVDLPApp.Instance().Scene.m_max.z - UVDLPApp.Instance().Scene.m_min.z) / sp.ZThick);
                 //int numslices = (int)((mm.m_max - mm.m_min) / sp.ZThick);
-                int numslices = (int)(mm.m_max / sp.ZThick) + 1; // height of whole scene
+                int numslices = CalcNumSlices(mm.m_max, sp.ZThick); // height of whole scene
                 return numslices;
             }
             catch (Exception) 
@@ -304,13 +304,21 @@ namespace UV_DLP_3D_Printer
         }
 
 
+        int CalcNumSlices(double height, double zThick)
+        {
+            int numslices = (int)(height / zThick);
+            if ((((double)numslices + 0.5) * zThick) <= height)
+                numslices++;
+            return numslices;
+        }
+
          private void slicefunc()
         {
             try
             {
                 MinMax mm = UVDLPApp.Instance().Engine3D.CalcSceneExtents();
-                int numslices = (int)((mm.m_max) / m_sf.m_config.ZThick) + 1;
-                float curz = 0; // start at Wz0               
+                int numslices = CalcNumSlices(mm.m_max, m_sf.m_config.ZThick);
+                float curz = (float)(m_sf.m_config.ZThick / 2.0); // start at Wz0               
                 int c = 0;
                 string scenename = UVDLPApp.Instance().SceneFileName;
                 // a little housework here...
@@ -394,7 +402,7 @@ namespace UV_DLP_3D_Printer
                 }
 
                 MinMax mm = UVDLPApp.Instance().Engine3D.CalcSceneExtents();
-                int numslices = (int)((mm.m_max) / m_sf.m_config.ZThick) + 1;
+                int numslices = CalcNumSlices(mm.m_max, m_sf.m_config.ZThick);
                 float curz = 0; // start at Wz0               
                 int c = 0;
                 string scenename = UVDLPApp.Instance().SceneFileName;
