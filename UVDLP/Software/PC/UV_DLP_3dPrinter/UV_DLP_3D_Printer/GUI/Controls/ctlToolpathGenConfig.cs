@@ -32,19 +32,34 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         /// </summary>
         public void LockAllButExposure() 
         {
-            grpLift.Hide();
-            groupBox3.Hide(); // image reflection
-            groupBox6.Hide();
-            groupBox4.Hide();
+            try
+            {
+                grpLift.Hide();
+                groupBox3.Hide(); // image reflection
+                groupBox6.Hide();
+                groupBox4.Hide();
+                tabOptions.TabPages["tbGCode"].Hide();
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
         }
 
         public void UnlockAll() 
         {
-            grpLift.Show();
-            groupBox3.Show(); // image reflection
-            groupBox6.Show();
-            groupBox4.Show();
-        
+            try
+            {
+                grpLift.Show();
+                groupBox3.Show(); // image reflection
+                groupBox6.Show();
+                groupBox4.Show();
+                tabOptions.TabPages["tbGCode"].Show();
+            }
+            catch (Exception ex)                       
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
         }
        private SliceBuildConfig m_config = null;
         // this populates the profile in use and the combo 
