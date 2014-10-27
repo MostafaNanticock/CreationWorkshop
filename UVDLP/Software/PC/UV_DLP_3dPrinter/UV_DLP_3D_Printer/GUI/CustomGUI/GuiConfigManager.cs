@@ -191,9 +191,9 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             foreach (CommandSequence cmdseq in conf.CmdSequenceList)
             {
-                if (cmdseq.type == CommandSequence.CSType.gcode)
+                if (cmdseq.m_seqtype  == CommandSequence.COMMAND_TYPE_GCODE)
                 {
-                    GCodeSequence gcseq = new GCodeSequence(cmdseq.name, cmdseq.sequence);
+                    GCodeSequence gcseq = new GCodeSequence(cmdseq.m_name, cmdseq.m_seq);
                     SequenceManager.Instance().Add(gcseq);
                 }
             }

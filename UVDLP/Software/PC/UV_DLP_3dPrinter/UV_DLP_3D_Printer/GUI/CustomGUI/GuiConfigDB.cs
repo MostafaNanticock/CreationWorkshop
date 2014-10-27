@@ -427,7 +427,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             onClickCmd = new GuiParam<string>();
         }
     }
-
+    /*
     public class CommandSequence
     {
         public enum CSType
@@ -446,7 +446,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             this.sequence = sequence;
         }
     }
-
+    */
     public class GuiLayout
     {
         public enum LayoutType
@@ -673,7 +673,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             string seqtype = GetStrParam(seqnode, "seqtype", "");
             if (seqtype.ToLower().Equals("gcode"))
             {
-                CmdSequenceList.Add(new CommandSequence(name, CommandSequence.CSType.gcode, seq));
+                //smhzc gotta fix this
+                CommandSequence gcs = new GCodeSequence(name, seq);
+                CmdSequenceList.Add(gcs);
+                //CmdSequenceList.Add(new CommandSequence(name, CommandSequence.COMMAND_TYPE_GCODE, seq));
                 /* move to manager
                 GCodeSequence gcseq = new GCodeSequence(name, seq);
                 SequenceManager.Instance().Add(gcseq);
@@ -1654,15 +1657,16 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         
         void SaveSequences(XmlDocument xd, XmlNode parent)
         {
-            XmlNode decNode = xd.CreateElement("sequences");
+            XmlNode decNode = xd.CreateElement("sequences");            
             parent.AppendChild(decNode);
             foreach (CommandSequence cs in CmdSequenceList)
             {
+                
                 XmlNode csnode = xd.CreateElement("sequence");
                 parent.AppendChild(csnode);
-                AddParameter(xd, csnode, "name", cs.name);
-                AddParameter(xd, csnode, "seqdata", cs.sequence);
-                AddParameter(xd, csnode, "seqtype", cs.type.ToString());
+                AddParameter(xd, csnode, "name", cs.m_name);
+                AddParameter(xd, csnode, "seqdata", cs.m_seq);
+                AddParameter(xd, csnode, "seqtype", cs.m_seqtype);
             }
         }
 
