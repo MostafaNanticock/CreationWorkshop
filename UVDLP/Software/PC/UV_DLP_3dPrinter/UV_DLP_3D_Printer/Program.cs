@@ -47,6 +47,10 @@ namespace UV_DLP_3D_Printer
                         {
                             //disable the plug-in
                             pe.m_enabled = false;
+                            //exit?
+                            Application.Exit();
+                            return;
+                            
                         }
                     }
                 }
@@ -75,7 +79,7 @@ namespace UV_DLP_3D_Printer
         static bool CheckTrial(PluginEntry pe) 
         {
             
-            TrialMaker t = new TrialMaker("TT3", Application.StartupPath + "\\RegFile.reg",
+            TrialMaker t = new TrialMaker("TT4", Application.StartupPath + "\\RegFile.reg",
                 //Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\TMSetp.dbf",
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TMSetp.dbf",
                 "",
@@ -100,6 +104,7 @@ namespace UV_DLP_3D_Printer
                 //Application.Run(new Form1(is_trial));
             }
             return false;
+            //return true;
         }
         /*Set up a methoid to use reflection to set the culture information*/
         static void SetDefaultCulture(CultureInfo culture)

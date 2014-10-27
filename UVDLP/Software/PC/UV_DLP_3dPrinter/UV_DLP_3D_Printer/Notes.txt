@@ -51,6 +51,25 @@ Common machine sequences:
 	Shutdown
 	Goto home position
 	Build/Print position 
+Sequences can be defined in the following files:
+	Machine profile config files	
+		Some sequence examples:
+			Machine Connect
+			Machine Disconnect
+			Special Homing sequnces?
+			Set/Recall build home / marker position?
+				
+	Slicing profile config files
+		Some sequences can be:
+			Special move / slice sequences
+	GUI Config files
+
+	The machine config will have additional controls with the pro version to add /edit seqeunces
+	There should be a sequence editor control that can either pop up or be embedded as a control in another composite control
+	Sequences should maintain namespaces
+
+
+
 
 General GUI editor
 Ability to define sequences, 

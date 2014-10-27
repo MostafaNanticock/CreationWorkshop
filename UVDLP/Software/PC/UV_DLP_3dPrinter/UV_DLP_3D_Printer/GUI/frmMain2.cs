@@ -55,8 +55,10 @@ namespace UV_DLP_3D_Printer.GUI
         int rightToolsWidth = 0;
         StringBuilder m_logSB;
         List<tabview> m_lsttabs;
+        private string SceneFileExt;
         public frmMain2()
         {
+            SceneFileExt = "cws";// default to creation workshop CWS files
             m_lsttabs = new List<tabview>();
             m_logSB = new StringBuilder();
             InitializeComponent();
@@ -112,6 +114,10 @@ namespace UV_DLP_3D_Printer.GUI
             #endif
                 SetTitle();
             UVDLPApp.Instance().PerformPluginCommand("MainFormLoadedCommand", true);
+        }
+        public void SetFileExt(string ext) 
+        {
+            SceneFileExt = ext;
         }
         /// <summary>
         /// This adds buttons to the GUI config for later skinning
@@ -915,12 +921,13 @@ namespace UV_DLP_3D_Printer.GUI
         public void LoadSTLModel_Click(object sender, object e)
         {
             openFileDialog1.FileName = "";
-            openFileDialog1.Filter = "3D Model Files (*.stl;*.obj;*.3ds;*.amf)|*.stl;*.obj;*.3ds;*.amf|Scene files (*.cws)|*.cws";
+            //openFileDialog1.Filter = "3D Model Files (*.stl;*.obj;*.3ds;*.amf)|*.stl;*.obj;*.3ds;*.amf|Scene files (*.cws)|*.cws";
+            openFileDialog1.Filter = "3D Model Files (*.stl;*.obj;*.3ds;*.amf)|*.stl;*.obj;*.3ds;*.amf|Scene files (*." + SceneFileExt + ")|*." + SceneFileExt;
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 foreach (string filename in openFileDialog1.FileNames)
                 {
-                    if (filename.Contains(".cws"))
+                    if (filename.Contains("." + SceneFileExt ))
                     {
                         //scene file
                         if (SceneFile.Instance().LoadSceneFile(filename))
@@ -1043,7 +1050,8 @@ namespace UV_DLP_3D_Printer.GUI
             }
             else
             {
-                saveFileDialog1.Filter = "Scene files (*.cws)|*.cws|STL File (*.stl)|*.stl";
+                //saveFileDialog1.Filter = "Scene files (*.cws)|*.cws|STL File (*.stl)|*.stl";
+                saveFileDialog1.Filter = "Scene files (*." + SceneFileExt + ")|*." + SceneFileExt + "|STL File (*.stl)|*.stl";
                 saveFileDialog1.FilterIndex = 0;
                 if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {

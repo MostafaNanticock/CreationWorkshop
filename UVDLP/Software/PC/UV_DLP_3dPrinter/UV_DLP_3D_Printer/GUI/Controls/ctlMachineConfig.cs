@@ -19,10 +19,12 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         private eDriverType m_saved;
         private MachineConfig m_config = new MachineConfig(); // just so it's not blank
         Configs.MonitorConfig curmc = null;
+        bool settingup;
 
         public ctlMachineConfig()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            settingup = false;
         }
         private void FillMultiMon() 
         {
@@ -32,6 +34,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         }
         private void SetData() 
         {
+            settingup = true;
             try
             {
                 //lblMachineName.Text = m_config.m_name;
@@ -69,6 +72,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             {
                 DebugLogger.Instance().LogError(ex);
             }
+            settingup = false;
         }
 
         void SetMachineControls(string mctl)
@@ -508,17 +512,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             mc.m_displayconnectionenabled = checkConDispEnable.Checked;
 
         }
-        /*public override void ApplyStyle(ControlStyle ct)
-        {
-            //base.ApplyStyle(ct);
-            cmdCreate.ApplyStyle(ct);
-            cmdRemove.ApplyStyle(ct);
-            this.BackColor = Control.DefaultBackColor;
-            this.ForeColor = Control.DefaultForeColor;
-            if (ct.ForeColor != ControlStyle.NullColor)
-            {
-            }
-        }*/
+        
 
         private void lbConfigured_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -729,12 +723,14 @@ namespace UV_DLP_3D_Printer.GUI.Controls
 
         private void txtPlatWidth_TextChanged(object sender, EventArgs e)
         {
+            if (settingup) return;
             GetData(true);
             ShowMicron();
         }
 
         private void txtPlatHeight_TextChanged(object sender, EventArgs e)
         {
+            if (settingup) return;
             GetData(true);
             ShowMicron();
         }

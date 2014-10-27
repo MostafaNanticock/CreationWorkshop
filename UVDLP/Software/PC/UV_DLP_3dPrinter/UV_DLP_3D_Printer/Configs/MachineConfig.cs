@@ -160,7 +160,19 @@ namespace UV_DLP_3D_Printer
             return retval;
         }
 
+        private void LoadSequences(XmlHelper xh) 
+        {
+            XmlNode mc = xh.m_toplevel;
+            List<XmlNode> sequencesnodes = xh.FindAllChildElement(mc, "Sequences"); // should only be one of these
+            List<XmlNode> sequencenodes = xh.FindAllChildElement(mc, "Sequence"); //can be multiple sequence definitions
 
+            foreach (XmlNode node in sequencenodes)
+            {
+               // MonitorConfig monc = new MonitorConfig();
+               // monc.Load(xh, node);
+               // m_lstMonitorconfigs.Add(monc);
+            }
+        }
         public bool Save(string filename)
         {
             bool retval = false;

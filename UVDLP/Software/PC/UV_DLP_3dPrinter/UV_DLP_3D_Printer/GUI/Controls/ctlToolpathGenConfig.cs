@@ -26,7 +26,26 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             
             }
         }
+        /// <summary>
+        /// This lock/unlock pair is for plugin that wish to restrict user's ability
+        /// to change too much on the slicing profile screen
+        /// </summary>
+        public void LockAllButExposure() 
+        {
+            grpLift.Hide();
+            groupBox3.Hide(); // image reflection
+            groupBox6.Hide();
+            groupBox4.Hide();
+        }
 
+        public void UnlockAll() 
+        {
+            grpLift.Show();
+            groupBox3.Show(); // image reflection
+            groupBox6.Show();
+            groupBox4.Show();
+        
+        }
        private SliceBuildConfig m_config = null;
         // this populates the profile in use and the combo 
        private void PopulateProfiles() 
