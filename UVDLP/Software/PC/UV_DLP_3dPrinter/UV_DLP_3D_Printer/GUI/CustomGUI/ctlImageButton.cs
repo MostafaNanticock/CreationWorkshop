@@ -147,7 +147,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         
         protected override void OnPaint(PaintEventArgs pevent)
         {
-            if (mGLVisible)
+            if (GLDisplay)
             {
                 base.OnPaint(pevent);
                 return;

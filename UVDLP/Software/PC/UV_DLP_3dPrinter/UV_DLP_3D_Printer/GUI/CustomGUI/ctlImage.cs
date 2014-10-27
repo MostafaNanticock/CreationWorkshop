@@ -45,7 +45,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            if (mGLVisible)
+            if (GLDisplay)
                 return;
             BackColor = Style.BackColor;
             base.OnPaintBackground(e);
@@ -53,7 +53,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         
         protected override void OnPaint(PaintEventArgs pevent)
         {
-            if (mGLVisible)
+            if (GLDisplay)
             {
                 base.OnPaint(pevent);
                 return;

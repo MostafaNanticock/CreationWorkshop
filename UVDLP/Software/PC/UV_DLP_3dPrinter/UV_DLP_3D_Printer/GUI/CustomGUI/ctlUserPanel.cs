@@ -26,6 +26,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         protected GuiControlStyle mStyle;
         protected int mGapx, mGapy;
         protected bool mGLVisible;
+        protected bool mWinPlatform;
 
 
         public ctlUserPanel()
@@ -35,6 +36,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             bgndPanel.imageName = null;
             mGLVisible = false;
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            mWinPlatform = UVDLPApp.RunningPlatform() == UVDLPApp.Platform.Windows;
         }
 
         protected override CreateParams CreateParams
@@ -42,7 +44,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             get
             {
                 CreateParams cp = base.CreateParams;
-                if (mGLVisible)
+                if (GLDisplay)
                     cp.ExStyle |= 0x20; // WS_EX_TRANSPARENT
                 return cp;
             }
@@ -77,10 +79,18 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 if (mGLVisible != value)
                 {
                     mGLVisible = value;
-                    DoubleBuffered = !mGLVisible;
-                    RecreateHandle();
+                    if (mWinPlatform)
+                    {
+                        DoubleBuffered = !mGLVisible;
+                        RecreateHandle();
+                    }
                 }
             }
+        }
+
+        protected bool GLDisplay
+        {
+            get { return mGLVisible && mWinPlatform; }
         }
 
         [Description("GL background image name"), Category("Data")]
@@ -213,9 +223,12 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            if (GLVisible)
+            if (GLDisplay)
                 return;
-            Brush br = new SolidBrush(Style.BackColor);
+            Color col = Style.BackColor;
+            if (!mWinPlatform)
+                col = Color.FromArgb(255, col.R, col.G, col.B);
+            Brush br = new SolidBrush(col);
             e.Graphics.FillRectangle(br, 0, 0, Width, Height);
             //base.OnPaintBackground(e);
         }
@@ -236,7 +249,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         protected override void OnInvalidated(InvalidateEventArgs e)
         {
-            if (mGLVisible)
+            if (GLDisplay)
             {
                 UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eReDraw2D, "");
                 return;
