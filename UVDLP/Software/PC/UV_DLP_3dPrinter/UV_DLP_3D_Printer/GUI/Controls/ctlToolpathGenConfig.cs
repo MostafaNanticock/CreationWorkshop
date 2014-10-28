@@ -14,6 +14,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
 {
     public partial class ctlToolpathGenConfig : UserControl //ctlUserPanel// 
     {
+        System.Windows.Forms.TabPage m_gcodetab;
         public ctlToolpathGenConfig()
         {
             try
@@ -21,9 +22,10 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 InitializeComponent();
                 PopulateProfiles();
                 lbGCodeSection.SelectedIndex = 0;
-            }catch(Exception)
+                m_gcodetab = tabOptions.TabPages["tbGCode"];
+            }catch(Exception ex)
             {
-            
+                DebugLogger.Instance().LogError(ex);
             }
         }
         /// <summary>
@@ -38,7 +40,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 groupBox3.Hide(); // image reflection
                 groupBox6.Hide();
                 groupBox4.Hide();
-                tabOptions.TabPages["tbGCode"].Hide();
+                tabOptions.TabPages.Remove(m_gcodetab);
+                //TabControl
             }
             catch (Exception ex)
             {
@@ -54,7 +57,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 groupBox3.Show(); // image reflection
                 groupBox6.Show();
                 groupBox4.Show();
-                tabOptions.TabPages["tbGCode"].Show();
+                //tabOptions.TabPages["tbGCode"].Show();
+                tabOptions.TabPages.Add(m_gcodetab);
             }
             catch (Exception ex)                       
             {
@@ -340,7 +344,20 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 //set this profile to be the active one for the program                
                 string shortname = cmbSliceProfiles.SelectedItem.ToString();
                 string fname = GetSlicingFilename(shortname);
-                UVDLPApp.Instance().LoadBuildSliceProfile(fname);                 
+                UVDLPApp.Instance().LoadBuildSliceProfile(fname);
+                try
+                {
+                    if (groupBox4.Visible == false)
+                    {
+                        //if the list of all profiles is hidden, then make sure we make the 
+                        // selected all profile item the same as the selected in-use profile
+                        lstSliceProfiles.SelectedIndex = cmbSliceProfiles.SelectedIndex;
+                    }
+                }
+                catch (Exception ex) 
+                {
+                    DebugLogger.Instance().LogError(ex);
+                }
             }
         }
 

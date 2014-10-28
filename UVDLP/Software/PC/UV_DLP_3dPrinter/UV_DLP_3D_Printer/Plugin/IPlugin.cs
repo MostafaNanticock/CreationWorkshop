@@ -24,6 +24,8 @@ namespace UV_DLP_3D_Printer.Plugin
         HWDriver,   // this plugin can comunicate with a HW device. (Sending/Translating GCode to HW)
         Slicer,     // this plugin can convert objects to GCode,
         GCodePostProcess, // this plugin can post-process sliced GCode
+        MachineProfile, // this plugin supports creating a new custom machine profile
+        SliceBuildProfile, // This profile supports creating a new slicing / building profile
 
     }
     /// 
