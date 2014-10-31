@@ -475,6 +475,11 @@ namespace UV_DLP_3D_Printer
                         m_engine3d.AddObject(obj);
                         m_undoer.SaveAddition(obj);
                         SelectedObject = obj;
+                        //test code to create a preview, this should definitely go somewhere else
+                        PreviewGenerator pg = new PreviewGenerator();
+                        Bitmap preview = pg.GeneratePreview(512, 512, obj);
+                        preview.Save(UVDLPApp.Instance().m_apppath + "\\testpreview.png");
+
                     }
                     UVDLPApp.Instance().m_engine3d.UpdateLists();
                     m_slicefile = null; // the slice file is not longer current

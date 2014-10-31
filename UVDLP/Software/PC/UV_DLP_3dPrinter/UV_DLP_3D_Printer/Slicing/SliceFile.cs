@@ -15,7 +15,8 @@ namespace UV_DLP_3D_Printer.Slicing
      * It contains the initial build and slicing parameters used to create the file
      * This file should be all that is necessary (along with GCode) to display slices
      * or to build the object
-     * This class should serve image slices, either generated on the fly, or pre-rendered and loaded
+     * This class should serve image slices to the rest of the program
+     *  either generated on the fly, or pre-rendered and loaded from a zip fiel, or directory
      */
     public class SliceFile
     {
@@ -40,17 +41,9 @@ namespace UV_DLP_3D_Printer.Slicing
         public SFMode m_mode;
         public static String m_sliceext = ".slice";
         public ModelType m_modeltype = ModelType.eScene;
-        // for test models
-        //Bitmap m_cachedslice;
-        //int m_cachedsliceidx;
 
         ZipFile m_zip;
-        /*
-        public SliceFile() 
-        {
-            m_config = new SliceBuildConfig(); // going to be loaded         
-        }
-         */ 
+
         public int XRes 
         {
             get { return m_xres; }
@@ -164,23 +157,12 @@ namespace UV_DLP_3D_Printer.Slicing
                         ze.Extract(stream);
                         Bitmap bmp = new Bitmap(stream);                        
                         m_zip.Dispose();
-                        return bmp;
+                        return bmp; // memory for the bitmap is created here, it's disposed of in the dlp forms...
                     }
-                    catch (Exception)
+                    catch (Exception ex )
                     {
-
+                        DebugLogger.Instance().LogError(ex);
                     }
-                    /*
-                    try
-                    {
-                        //try to read bitmap from disk
-                        path += UVDLPApp.m_pathsep;
-                        path += Path.GetFileNameWithoutExtension(modelname) + String.Format("{0:0000}", layer) + ".png";
-                        Bitmap bmp = (Bitmap)FromFile(path);
-                        return bmp;
-                    }
-                    catch (Exception) { }
-                     * */
                 }
                 return null;
             }

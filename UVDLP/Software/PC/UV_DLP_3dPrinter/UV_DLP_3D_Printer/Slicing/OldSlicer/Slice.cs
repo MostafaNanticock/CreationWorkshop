@@ -175,6 +175,7 @@ namespace UV_DLP_3D_Printer
         /// This function will iterate through the optimized loops
         /// and determine if they are interior or exterior and tag them appropriately
         /// </summary>
+        /*
         public void DetermineInteriorExterior(SliceBuildConfig config) 
         {
             List<PolyLine3d> allsegments = new List<PolyLine3d>();
@@ -216,6 +217,7 @@ namespace UV_DLP_3D_Printer
                 }
             }// for y = startminY to endY            
         }
+         */ 
         /// <summary>
         /// This function trys to join together the short line segments into 
         /// a set of longer 3d polyines

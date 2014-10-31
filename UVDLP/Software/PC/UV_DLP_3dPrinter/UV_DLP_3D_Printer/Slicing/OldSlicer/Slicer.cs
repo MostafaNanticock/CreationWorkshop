@@ -376,126 +376,7 @@ namespace UV_DLP_3D_Printer
                 m_cancel = true;
             }
         }
-        /// <summary>
-        /// Not used....
-        /// </summary>
-        private void oldslicefunc()
-        {
-            try
-            {
-                //first take care of scaling up the output bitmap paramters size, so we can re-sample later
-                double scaler = 1.5; // specify the scale factor
-                m_saved.CopyFrom(m_sf.m_config); // save the original
-                if (m_sf.m_config.antialiasing == true)
-                {
-                    scaler = m_sf.m_config.aaval;
-                    //  scale them up.
-                    m_sf.m_config.dpmmX *= scaler;
-                    m_sf.m_config.dpmmY *= scaler;
-                    m_sf.m_config.xres = (int)(m_sf.m_config.xres * scaler);
-                    m_sf.m_config.yres = (int)(m_sf.m_config.yres * scaler);
-
-                }
-                else
-                {
-                    scaler = 1.0; // no scaling
-                }
-
-                MinMax mm = UVDLPApp.Instance().Engine3D.CalcSceneExtents();
-                int numslices = CalcNumSlices(mm.m_max, m_sf.m_config.ZThick);
-                float curz = 0; // start at Wz0               
-                int c = 0;
-                string scenename = UVDLPApp.Instance().SceneFileName;
-                // a little housework here...
-                foreach (Object3d obj in UVDLPApp.Instance().Engine3D.m_objects)
-                {
-                    obj.CalcMinMaxes();
-                }
-
-                m_sf.NumSlices = numslices;
-                SliceStarted(scenename, numslices);
-                DebugLogger.Instance().LogRecord("Slicing started");
-
-                if (m_sf.m_config.export == false)
-                {
-                    // if we're not actually exporting slices right now, then 
-                    // raise the completed event and exit
-                    SliceCompleted(scenename, 0, numslices);
-                    m_sf.m_config.CopyFrom(m_saved);
-                    isslicing = false;
-                    return; // exit slicing, nothing more to do...
-                }
-                // if we're actually exporting something here, iterate through slices
-                for (c = 0; c < numslices; c++)
-                {
-                    Bitmap bmp = new Bitmap(m_sf.m_config.xres, m_sf.m_config.yres); // create a new bitmap on a per-slice basis
-                    //clear the image for rendering
-                    Graphics graph = Graphics.FromImage(bmp);
-                    graph.Clear(UVDLPApp.Instance().m_appconfig.m_backgroundcolor);
-
-                    //convert all to 2d lines
-                    Bitmap savebm = null;
-                    // check for cancelation
-                    if (m_cancel)
-                    {
-                        isslicing = false;
-                        m_cancel = false;
-                        //restore the original sizes 
-                        m_sf.m_config.CopyFrom(m_saved);
-                        RaiseSliceEvent(eSliceEvent.eSliceCancelled, c, numslices);
-                        return;
-                    }
-
-                    foreach (Object3d obj in UVDLPApp.Instance().Engine3D.m_objects)
-                    {
-                        savebm = bmp; // need to set this here in case it's not rendered
-                        if (curz >= obj.m_min.z && curz <= obj.m_max.z) // only slice from the bottom to the top of the objects
-                        {
-                            //obj.ClearCached();
-                            List<Polygon> lstply = GetZPolys(obj, curz);//get a list of polygons at this slice z height that potentially intersect
-                            List<PolyLine3d> lstintersections = GetZIntersections(lstply, curz);//iterate through all the polygons and generate x/y line segments at this 3d z level
-
-                            Slice sl = new Slice();//create a new slice
-                            sl.m_segments = lstintersections;// Set the list of intersections 
-                            // m_sf.m_slices.Add(sl);// add the slice to slicefile        
-                            // now render the slice into the scaled, pre-allocated bitmap
-                            sl.RenderSlice(m_sf.m_config, ref bmp);
-                            savebm = bmp;
-                        }
-                    }
-
-                    if (m_sf.m_config.antialiasing == true) // we're using anti-aliasing here, so resize the image
-                    {
-                        savebm = ResizeImage(bmp, new Size(m_saved.xres, m_saved.yres));
-                    }
-                    if (m_sf.m_config.m_flipX == true)
-                    {
-                        savebm = ReflectX(savebm);
-                    }
-                    if (m_sf.m_config.m_flipY == true)
-                    {
-                        savebm = ReflectY(savebm);
-                    }
-                    curz += (float)m_sf.m_config.ZThick;// move the slice for the next layer
-                    //raise an event to say we've finished a slice
-                    LayerSliced(scenename, c, numslices, savebm);
-                }
-                // restore the original
-                m_sf.m_config.CopyFrom(m_saved);
-                SliceCompleted(scenename, c, numslices);
-                DebugLogger.Instance().LogRecord("Slicing Completed");
-                isslicing = false;
-
-            }
-            catch (Exception ex)
-            {
-                string s = ex.StackTrace;
-                DebugLogger.Instance().LogRecord(ex.Message);
-                //RaiseSliceEvent(eSliceEvent.eSliceCancelled,0,0);
-                m_cancel = true;
-            }
-        }
-
+        
         private void SliceStarted(string scenename, int numslices) 
         {
             if ( m_sf.m_config.export == true) // if we're exporting
@@ -518,7 +399,9 @@ namespace UV_DLP_3D_Printer
                         {
                             //create the directory to export images into
                             Directory.CreateDirectory(exportdirname);
+                            //create the /preview directory here?
                         }
+
                     }
                     catch (Exception ex) 
                     {
@@ -528,13 +411,11 @@ namespace UV_DLP_3D_Printer
                 if (UVDLPApp.Instance().SceneFileName.Length != 0) // check again to make sure we've really got a name
                 {
                     //remove all the previous images first
-                   // SceneFile.Instance().RemoveExistingSlices(UVDLPApp.Instance().SceneFileName);
                     //remove the png slices
                     SceneFile.Instance().RemoveResourcesFromFile(UVDLPApp.Instance().SceneFileName, "Slices", ".png");
                     //remove the vector slices
                     SceneFile.Instance().RemoveResourcesFromFile(UVDLPApp.Instance().SceneFileName, "VectorSlices", ".svg");
                     //remove any slice profile in the scene file
-                    //SceneFile.Instance().RemoveExistingSliceProfile(UVDLPApp.Instance().SceneFileName);
                     SceneFile.Instance().RemoveResourcesFromFile(UVDLPApp.Instance().SceneFileName, "SliceProfile", ".slicing");
                     //create a memory stream to hold the slicing profile in memory
                     MemoryStream ms = new MemoryStream();
@@ -545,7 +426,6 @@ namespace UV_DLP_3D_Printer
                     //save the stream to the scene cws zip file
                     SceneFile.Instance().AddSliceProfileToFile(UVDLPApp.Instance().SceneFileName, ms, sliceprofilename);
                     // if we've saved this scene before, then we can save the images into it. Open it up for add
-                   // SceneFile.Instance().OpenSceneFile(UVDLPApp.Instance().SceneFileName);
                 }
                 else 
                 {
@@ -728,15 +608,6 @@ namespace UV_DLP_3D_Printer
 
         private void SliceCompleted(string scenename, int layer, int numslices) 
         {
-            /* // no need to close scene file anymore, all operations are atomic
-            if (m_sf.m_config.export == true) // if we're exporting image slices
-            {
-                //if (m_sf.m_config.m_exportopt.ToUpper().Contains("ZIP"))
-                {
-                    SceneFile.Instance().CloseSceneFile(false);
-                }
-            }
-             */ 
             RaiseSliceEvent(eSliceEvent.eSliceCompleted, layer, numslices);
         }
 

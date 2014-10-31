@@ -56,7 +56,7 @@ namespace UV_DLP_3D_Printer
         public String selectedInk;
         public int minExposure; // for resin test model
         public int exposureStep; // for resin test model
-        
+        public bool exportpreview; // generate a preview file and image
         //need some parms here for auto support
 
         private String[] m_defheader = 
@@ -203,6 +203,7 @@ namespace UV_DLP_3D_Printer
             }
             minExposure = source.minExposure;
             exposureStep = source.exposureStep;
+            exportpreview = source.exportpreview;
         }
         public SliceBuildConfig() 
         {           
@@ -275,6 +276,7 @@ namespace UV_DLP_3D_Printer
             inks[selectedInk] = new InkConfig(selectedInk);
             minExposure = 500;
             exposureStep = 200;
+            exportpreview = false;
         }
 
         public bool SetCurrentInk(string inkname)
@@ -369,6 +371,7 @@ namespace UV_DLP_3D_Printer
             SetCurrentInk(selectedInk);
             minExposure = xh.GetInt(sbc, "MinTestExposure", 500);
             exposureStep = xh.GetInt(sbc, "TestExposureStep", 200);
+            exportpreview = xh.GetBool(sbc,"ExportPreview",false);
         }
         /// <summary>
         /// This allows for retrieve arbitrary variables from the slice XML configuration
@@ -422,14 +425,7 @@ namespace UV_DLP_3D_Printer
             XmlHelper xh = new XmlHelper();
             bool fileExist = xh.LoadFromStream(stream, "SliceBuildConfig");
             LoadInternal(ref xh);
-            /*
-            if (!fileExist)
-            {
-                return xh.Save(FILE_VERSION);
-            }
-            */
-            return true;
-            
+            return true;            
         }
 
         public bool Load(String filename) 
@@ -494,6 +490,8 @@ namespace UV_DLP_3D_Printer
             }
             xh.SetParameter(sbc, "MinTestExposure", minExposure);
             xh.SetParameter(sbc, "TestExposureStep", exposureStep);
+            xh.SetParameter(sbc, "ExportPreview", exportpreview);
+            
         }
 
         public bool Save(String filename) 
@@ -532,8 +530,8 @@ namespace UV_DLP_3D_Printer
             sb.Append(";(Pix per mm Y            = " + String.Format("{0:0.00000}", dpmmY) + " px/mm )\r\n");
             sb.Append(";(X Resolution            = " + xres + " )\r\n");
             sb.Append(";(Y Resolution            = " + yres + " )\r\n");
-            sb.Append(";(X Pixel Offset          = " + XOffset + " px )\r\n");
-            sb.Append(";(Y Pixel Offset          = " + YOffset + " px )\r\n");
+           // sb.Append(";(X Pixel Offset          = " + XOffset + " px )\r\n");
+           // sb.Append(";(Y Pixel Offset          = " + YOffset + " px )\r\n");
             sb.Append(";(Layer Thickness         = " + String.Format("{0:0.00000}", ZThick) + " mm )\r\n");
             sb.Append(";(Layer Time              = " + layertime_ms + " ms )\r\n");
             sb.Append(";(Bottom Layers Time        = " + firstlayertime_ms + " ms )\r\n");
