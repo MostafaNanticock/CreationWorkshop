@@ -1111,12 +1111,9 @@ namespace UV_DLP_3D_Printer.GUI
                 openFileDialog1.Filter = "Gui Config Files (*.xml;*.txt)|*.xml;*.txt|All files (*.*)|*.*";
                 if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) 
                 {
-                    StreamReader streamReader = new StreamReader(openFileDialog1.FileName);
-                    string text = streamReader.ReadToEnd();
-                    streamReader.Close();
-                        // test new gui config system
+                    // test new gui config system
                     GuiConfigDB gconfdb = new GuiConfigDB();
-                    gconfdb.LoadConfiguration(text);
+                    gconfdb.LoadConfigFromFile(openFileDialog1.FileName);
                     UVDLPApp.Instance().m_gui_config.ApplyConfiguration(gconfdb);
                     Control winLayout = UVDLPApp.Instance().m_gui_config.GetLayout("MainLayout");
                     if (winLayout != null)

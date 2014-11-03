@@ -636,6 +636,14 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             LoadConfiguration(xmlConf, null);
         }
+
+        public void LoadConfigFromFile(string fname)
+        {
+            StreamReader streamReader = new StreamReader(fname);
+            string text = streamReader.ReadToEnd();
+            streamReader.Close();
+            LoadConfiguration(text);
+        }
         #region Sequences
         // sequences are command sequences that can be used
         // to send gcode (or other) commmands.
@@ -687,6 +695,15 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 DebugLogger.Instance().LogWarning("Unknown sequence type " + seqtype + " in GUIConfig");
             }
         }
+
+        public List<string> GetCmdSequenceNames()
+        {
+            List<string> res = new List<string>();
+            foreach (CommandSequence gcs in CmdSequenceList)
+                res.Add(gcs.m_name);
+            return res;
+        }
+
         #endregion
 
         #region Decals
@@ -897,6 +914,22 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
              */
         }
 
+        public List<string> GetButtonNames()
+        {
+            List<string> res = new List<string>();
+            foreach (KeyValuePair<string, GuiButton> pair in GuiButtonsDict)
+                res.Add(pair.Key);
+            return res;
+        }
+
+        public List<string> GetButtonStyleNames()
+        {
+            List<string> res = new List<string>();
+            foreach (GuiControlStyle gcs in GuiButtonStyles)
+                res.Add(gcs.Name);
+            return res;
+        }
+
         #endregion
 
         #region Controls
@@ -1094,6 +1127,21 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
              * */
         }
 
+        public List<string> GetControlNames()
+        {
+            List<string> res = new List<string>();
+            foreach (KeyValuePair<string, GuiControl> pair in GuiControlsDict)
+                res.Add(pair.Key);
+            return res;
+        }
+
+        public List<string> GetControlStyleNames()
+        {
+            List<string> res = new List<string>();
+            foreach (GuiControlStyle gcs in GuiControlStyles)
+                res.Add(gcs.Name);
+            return res;
+        }
         #endregion
 
         #region Layouts
