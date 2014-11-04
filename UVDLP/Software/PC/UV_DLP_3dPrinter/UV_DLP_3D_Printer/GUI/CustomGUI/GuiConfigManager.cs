@@ -315,6 +315,14 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
         }
 
+        public List<string> GetButtonNames()
+        {
+            List<string> res = new List<string>();
+            foreach (KeyValuePair<string, ctlImageButton> pair in Buttons)
+                res.Add(pair.Key);
+            return res;
+        }
+
         #endregion
 
         #region Controls
@@ -473,6 +481,14 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     ApplyStyleRecurse(ct, style);
                 }
             }
+        }
+
+        public List<string> GetControlNames()
+        {
+            List<string> res = new List<string>();
+            foreach (KeyValuePair<string, Control> pair in Controls)
+                res.Add(pair.Key);
+            return res;
         }
 
         #endregion
