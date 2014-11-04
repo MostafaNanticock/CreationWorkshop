@@ -17,6 +17,13 @@ namespace UV_DLP_3D_Printer._3DEngine
     /// </summary>
     public class PreviewGenerator
     {
+        public enum ePreview 
+        {
+            eTop,
+            eFront,
+            eRight,
+            eIso // isometric
+        }
         public PreviewGenerator() 
         {
         
@@ -28,70 +35,89 @@ namespace UV_DLP_3D_Printer._3DEngine
         /// <param name="ysize"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public Bitmap GeneratePreview(int xsize, int ysize, Object3d obj) 
+        public Bitmap GeneratePreview(int xsize, int ysize, Object3d obj,ePreview epreview = ePreview.eFront) 
         {
-            // taken from http://www.opentk.com/doc/graphics/frame-buffer-objects
-            // more good examples here: http://www.opentk.com/node/1642?page=1
-            int FboWidth = xsize;
-            int FboHeight = ysize;
+            try
+            {
+                // taken from http://www.opentk.com/doc/graphics/frame-buffer-objects
+                // more good examples here: http://www.opentk.com/node/1642?page=1
+                int FboWidth = xsize;
+                int FboHeight = ysize;
 
-            uint FboHandle;
-            uint ColorTexture;
-            uint DepthRenderbuffer;
-            GLCamera previewcamera = new GLCamera();
+                uint FboHandle;
+                uint ColorTexture;
+                uint DepthRenderbuffer;
+                GLCamera previewcamera = new GLCamera();
 
-            // Create Color Texture
-            GL.GenTextures(1, out ColorTexture);
-            GL.BindTexture(TextureTarget.Texture2D, ColorTexture);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Clamp);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Clamp);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, FboWidth, FboHeight, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+                // Create Color Texture
+                GL.GenTextures(1, out ColorTexture);
+                GL.BindTexture(TextureTarget.Texture2D, ColorTexture);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Clamp);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Clamp);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, FboWidth, FboHeight, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
 
-            // test for GL Error here (might be unsupported format)
+                // test for GL Error here (might be unsupported format)
 
-            GL.BindTexture(TextureTarget.Texture2D, 0); // prevent feedback, reading and writing to the same image is a bad idea
+                GL.BindTexture(TextureTarget.Texture2D, 0); // prevent feedback, reading and writing to the same image is a bad idea
 
-            // Create Depth Renderbuffer
-            GL.Ext.GenRenderbuffers(1, out DepthRenderbuffer);
-            GL.Ext.BindRenderbuffer(RenderbufferTarget.RenderbufferExt, DepthRenderbuffer);
-            GL.Ext.RenderbufferStorage(RenderbufferTarget.RenderbufferExt, (RenderbufferStorage)All.DepthComponent32, FboWidth, FboHeight);
+                // Create Depth Renderbuffer
+                GL.Ext.GenRenderbuffers(1, out DepthRenderbuffer);
+                GL.Ext.BindRenderbuffer(RenderbufferTarget.RenderbufferExt, DepthRenderbuffer);
+                GL.Ext.RenderbufferStorage(RenderbufferTarget.RenderbufferExt, (RenderbufferStorage)All.DepthComponent32, FboWidth, FboHeight);
 
-            // test for GL Error here (might be unsupported format)
+                // test for GL Error here (might be unsupported format)
 
-            // Create a FBO and attach the textures
-            GL.Ext.GenFramebuffers(1, out FboHandle);
-            GL.Ext.BindFramebuffer(FramebufferTarget.FramebufferExt, FboHandle);
-            GL.Ext.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.ColorAttachment0Ext, TextureTarget.Texture2D, ColorTexture, 0);
-            GL.Ext.FramebufferRenderbuffer(FramebufferTarget.FramebufferExt, FramebufferAttachment.DepthAttachmentExt, RenderbufferTarget.RenderbufferExt, DepthRenderbuffer);
+                // Create a FBO and attach the textures
+                GL.Ext.GenFramebuffers(1, out FboHandle);
+                GL.Ext.BindFramebuffer(FramebufferTarget.FramebufferExt, FboHandle);
+                GL.Ext.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.ColorAttachment0Ext, TextureTarget.Texture2D, ColorTexture, 0);
+                GL.Ext.FramebufferRenderbuffer(FramebufferTarget.FramebufferExt, FramebufferAttachment.DepthAttachmentExt, RenderbufferTarget.RenderbufferExt, DepthRenderbuffer);
 
-            // now GL.Ext.CheckFramebufferStatus( FramebufferTarget.FramebufferExt ) can be called, check the end of this page for a snippet.
+                // now GL.Ext.CheckFramebufferStatus( FramebufferTarget.FramebufferExt ) can be called, check the end of this page for a snippet.
 
-            // since there's only 1 Color buffer attached this is not explicitly required
-            GL.DrawBuffer((DrawBufferMode)FramebufferAttachment.ColorAttachment0Ext);
+                // since there's only 1 Color buffer attached this is not explicitly required
+                GL.DrawBuffer((DrawBufferMode)FramebufferAttachment.ColorAttachment0Ext);
 
-            GL.PushAttrib(AttribMask.ViewportBit); // stores GL.Viewport() parameters
-            GL.Viewport(0, 0, FboWidth, FboHeight);
+                GL.PushAttrib(AttribMask.ViewportBit); // stores GL.Viewport() parameters
+                GL.Viewport(0, 0, FboWidth, FboHeight);
 
-            // render whatever your heart desires, when done ...
-            // clear buffer
-            //GL.ClearColor(Color.White);
-            // clear the screen, to make it very obvious what the clear affected. only the FBO, not the real framebuffer
-            GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit );
-            //set up camera
-           // previewcamera.UpdateView();
-            previewcamera.ResetView(0, -200, 0, 20, 20);
-            previewcamera.SetViewGL();
-            //render scene
-            obj.RenderGL(false, false, false, Color.Green);
-            //copy the framebuffer to a bitmap
-            Bitmap bmppreview = GetBitmap(xsize, ysize);
-            GL.PopAttrib(); // restores GL.Viewport() parameters
-            GL.Ext.BindFramebuffer(FramebufferTarget.FramebufferExt, 0); // return to visible framebuffer
-            GL.DrawBuffer(DrawBufferMode.Back);
-            return bmppreview;
+                // render whatever your heart desires, when done ...
+                // clear buffer
+                //GL.ClearColor(Color.White);
+                // clear the screen, to make it very obvious what the clear affected. only the FBO, not the real framebuffer
+                GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                //set up camera for the specified view
+                switch (epreview)
+                {
+                    case ePreview.eFront:
+                        break;
+                    case ePreview.eTop:
+                        break;
+                    case ePreview.eRight:
+                        break;
+                    case ePreview.eIso:
+                        break;
+                }
+                previewcamera.ResetView(0, -200, 0, 20, 20);
+                //previewcamera.ResetView(0, -200, obj.m_radius/2, 0, 00);
+                previewcamera.SetViewGL();
+                //render scene
+                obj.RenderGL(false, false, false, Color.Green);
+                //copy the framebuffer to a bitmap
+                Bitmap bmppreview = GetBitmap(xsize, ysize);
+                GL.PopAttrib(); // restores GL.Viewport() parameters
+                GL.Ext.BindFramebuffer(FramebufferTarget.FramebufferExt, 0); // return to visible framebuffer
+                GL.DrawBuffer(DrawBufferMode.Back);
+                return bmppreview;
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogError(ex);
+                return null;
+            }
         }
 
 
