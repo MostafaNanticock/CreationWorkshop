@@ -279,6 +279,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         // misc
         public GuiParam<bool> applySubControls;
         public GuiParam<bool> applyWindowsControls;
+        public GuiParam<string> inheritFrom;
         public GuiControlStyle parent; 
 
 
@@ -298,6 +299,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             BackImage = new GuiParam<string>();
             CheckedImage = new GuiParam<string>();
             BorderShape = new GuiParam<string>();
+            inheritFrom = new GuiParam<string>();
             PanelPad = new GuiControlPad(10,10,10,10);
             applySubControls = new GuiParam<bool>(true);
             applyWindowsControls = new GuiParam<bool>(false);
@@ -331,6 +333,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             applyWindowsControls = sctl.applyWindowsControls;
             CheckedImage = sctl.CheckedImage;
             BorderShape = sctl.BorderShape;
+            inheritFrom = sctl.inheritFrom;
         }
  
         public void InheritFrom(GuiControlStyle sctl)
@@ -1368,9 +1371,14 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         void UpdateStyle(XmlNode xnode, GuiControlStyle ct)
         {
-            GuiControlStyle copyFromStyle = GetControlStyle(GetStrParam(xnode, "copyfrom", null));
-            if (copyFromStyle != null)
-                ct.InheritFrom(copyFromStyle);
+            ct.inheritFrom = GetStrParam(xnode, "copyfrom", null);
+            if (ct.inheritFrom.IsExplicit())
+            {
+                GuiControlStyle inheritFromStyle = GetControlStyle(ct.inheritFrom);
+                if (inheritFromStyle != null)
+                    ct.InheritFrom(inheritFromStyle);
+            }
+        
             ct.ForeColor = GetColorParam(xnode, "forecolor", ct.ForeColor);
             ct.BackColor = GetColorParam(xnode, "backcolor", ct.BackColor);
             ct.FrameColor = GetColorParam(xnode, "framecolor", ct.FrameColor);
@@ -1524,9 +1532,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         void SaveStyle(XmlDocument xd, XmlNode xnode, GuiControlStyle stl)
         {
-            if (stl.parent != null)
-                AddParameter(xd, xnode, "copyfrom", stl.parent.Name);
-
+            stl.inheritFrom.Save(xd, xnode, "copyfrom");
             stl.ForeColor.Save(xd, xnode, "forecolor");
             stl.BackColor.Save(xd, xnode, "backcolor");
             stl.FrameColor.Save(xd, xnode, "framecolor");
