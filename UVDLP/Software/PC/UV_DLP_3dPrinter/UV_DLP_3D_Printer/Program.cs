@@ -79,7 +79,7 @@ namespace UV_DLP_3D_Printer
         static bool CheckTrial(PluginEntry pe) 
         {
             
-            TrialMaker t = new TrialMaker("TT4", Application.StartupPath + "\\RegFile.reg",
+            TrialMaker t = new TrialMaker("TT5", Application.StartupPath + "\\RegFile.reg",
                 //Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\TMSetp.dbf",
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TMSetp.dbf",
                 "",

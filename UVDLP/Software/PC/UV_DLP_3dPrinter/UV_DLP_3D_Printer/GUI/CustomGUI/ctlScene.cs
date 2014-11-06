@@ -242,5 +242,18 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
         }
 
+        private void cmdDelete_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmdNewScene_Click(object sender, EventArgs e)
+        {
+            UVDLPApp.Instance().Engine3D.RemoveAllObjects();
+            SetupSceneTree();
+            //refresh the 3d view
+            UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eModelRemoved, "");
+        }
+
     }
 }
