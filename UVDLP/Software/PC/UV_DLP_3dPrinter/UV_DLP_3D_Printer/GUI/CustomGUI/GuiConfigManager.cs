@@ -691,7 +691,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             shownControl.Visible = gl.isSelected.IsExplicit() && gl.isSelected;
 
             Control tabctl = null;
-            tabctl = GetControlOrButton(gl.name);
+            if (gl.control.IsExplicit())
+                tabctl = GetControlOrButton(gl.control);
             if (tabctl == null)
             {
                 string cmd = String.Format("GMActivateTab {0} {1}", gl.name, shownControl.Name); 
