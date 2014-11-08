@@ -255,7 +255,7 @@ namespace UV_DLP_3D_Printer
                 {
                     gfx.FillRectangle(brush, 0, 0, xres, yres);
                     int xpos = 0, ypos = 0;
-                    Pen pen = new Pen(new SolidBrush(Color.Red));
+                    Pen pen = new Pen(new SolidBrush(Color.DarkRed));
                     for(xpos = 0; xpos < xres; xpos += (int)(sc.dpmmX*10.0))
                     {
                         Point p1 = new Point(xpos,0);

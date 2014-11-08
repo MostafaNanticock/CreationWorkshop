@@ -37,6 +37,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.cmdCopy = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.cmdDelete = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.cmdNewScene = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.contextMenuObject.SuspendLayout();
             this.manipObject.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -93,12 +94,6 @@
             this.treeScene.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.treeScene.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.treeScene.ForeColor = System.Drawing.Color.White;
-            this.treeScene.Location = new System.Drawing.Point(5, 54);
-            this.treeScene.Name = "treeScene";
-            this.treeScene.Size = new System.Drawing.Size(222, 256);
-            this.treeScene.TabIndex = 1;
-            this.treeScene.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeScene_NodeMouseClick);
-            // 
             this.treeScene.Location = new System.Drawing.Point(3, 54);
             this.treeScene.Name = "treeScene";
             this.treeScene.Size = new System.Drawing.Size(243, 240);
@@ -109,6 +104,7 @@
             // 
             this.flowLayoutPanel1.Controls.Add(this.cmdCopy);
             this.flowLayoutPanel1.Controls.Add(this.cmdDelete);
+            this.flowLayoutPanel1.Controls.Add(this.cmdNewScene);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 300);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(243, 48);
@@ -154,7 +150,29 @@
             this.cmdDelete.StyleName = null;
             this.cmdDelete.TabIndex = 66;
             this.cmdDelete.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdDelete.Load += new System.EventHandler(this.cmdDelete_Load);
             this.cmdDelete.Click += new System.EventHandler(this.cmdDelete_Click);
+            // 
+            // cmdNewScene
+            // 
+            this.cmdNewScene.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.cmdNewScene.Checked = false;
+            this.cmdNewScene.CheckImage = null;
+            this.cmdNewScene.Gapx = 5;
+            this.cmdNewScene.Gapy = 5;
+            this.cmdNewScene.GLBackgroundImage = null;
+            this.cmdNewScene.GLImage = null;
+            this.cmdNewScene.GLVisible = false;
+            this.cmdNewScene.GuiAnchor = null;
+            this.cmdNewScene.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdNewScene.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttX;
+            this.cmdNewScene.Location = new System.Drawing.Point(95, 3);
+            this.cmdNewScene.Name = "cmdNewScene";
+            this.cmdNewScene.Size = new System.Drawing.Size(40, 40);
+            this.cmdNewScene.StyleName = null;
+            this.cmdNewScene.TabIndex = 67;
+            this.cmdNewScene.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdNewScene.Click += new System.EventHandler(this.cmdNewScene_Click);
             // 
             // ctlScene
             // 
@@ -180,6 +198,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private ctlImageButton cmdCopy;
         private ctlImageButton cmdDelete;
+        private ctlImageButton cmdNewScene;
 
     }
 }
