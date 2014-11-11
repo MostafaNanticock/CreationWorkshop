@@ -17,16 +17,29 @@ namespace UV_DLP_3D_Printer._3DEngine
     /// </summary>
     public class PreviewGenerator
     {
+        Color BackColor;
+        Color SceneColor;
+        ePreview ViewAngle;
+        float Scale;
+        OpenTK.Matrix4 projection;
+
         public enum ePreview 
         {
             eTop,
+            eBottom,
             eFront,
+            eBack,
             eRight,
+            eLeft,
             eIso // isometric
         }
+
         public PreviewGenerator() 
         {
-        
+            BackColor = Color.White;
+            SceneColor = Color.Gray;
+            ViewAngle = ePreview.eIso;
+            Scale = 0.2f;
         }
         /// <summary>
         /// This function will take an object, move the camera a distance away and generate the preview
@@ -35,12 +48,26 @@ namespace UV_DLP_3D_Printer._3DEngine
         /// <param name="ysize"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public Bitmap GeneratePreview(int xsize, int ysize, Object3d obj,ePreview epreview = ePreview.eFront) 
+        public Bitmap GeneratePreview(int xsize, int ysize, List<Object3d> objs) 
         {
             try
             {
                 // taken from http://www.opentk.com/doc/graphics/frame-buffer-objects
                 // more good examples here: http://www.opentk.com/node/1642?page=1
+
+                // find scene extents
+                Point3d minext = new Point3d(999999,999999,999999);
+                Point3d maxext = new Point3d(-999999,-999999,-999999);
+                foreach (Object3d obj in objs)
+                {
+                    minext.x = Math.Min(obj.m_min.x, minext.x);
+                    minext.y = Math.Min(obj.m_min.y, minext.y);
+                    minext.z = Math.Min(obj.m_min.z, minext.z);
+                    maxext.x = Math.Max(obj.m_max.x, maxext.x);
+                    maxext.y = Math.Max(obj.m_max.y, maxext.y);
+                    maxext.z = Math.Max(obj.m_max.z, maxext.z);
+                }
+
                 int FboWidth = xsize;
                 int FboHeight = ysize;
 
@@ -48,6 +75,10 @@ namespace UV_DLP_3D_Printer._3DEngine
                 uint ColorTexture;
                 uint DepthRenderbuffer;
                 GLCamera previewcamera = new GLCamera();
+
+                
+                //OpenTK.Matrix4 projection = OpenTK.Matrix4.CreatePerspectiveFieldOfView(0.55f, (float)xsize / (float)ysize, 1, 2000);
+
 
                 // Create Color Texture
                 GL.GenTextures(1, out ColorTexture);
@@ -87,25 +118,60 @@ namespace UV_DLP_3D_Printer._3DEngine
                 // clear buffer
                 //GL.ClearColor(Color.White);
                 // clear the screen, to make it very obvious what the clear affected. only the FBO, not the real framebuffer
-                GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+                GL.ClearColor(BackColor);
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
                 //set up camera for the specified view
-                switch (epreview)
+                float bmpaspect = (float)xsize / (float)ysize;
+                switch (ViewAngle)
                 {
                     case ePreview.eFront:
+                        SetProjection(bmpaspect, minext.x, maxext.x, minext.z, maxext.z);
+                        previewcamera.ResetView(0, -50, 0, 0, 0);
+                        break;
+                    case ePreview.eBack:
+                        SetProjection(bmpaspect, -maxext.x, -minext.x, minext.z, maxext.z);
+                        previewcamera.ResetView(0, 50, 0, 0, 0);
                         break;
                     case ePreview.eTop:
+                        SetProjection(bmpaspect, minext.x, maxext.x, minext.y, maxext.y);
+                        previewcamera.ResetView(0, -50, 0, 90, 0);
+                        break;
+                    case ePreview.eBottom:
+                        SetProjection(bmpaspect, minext.x, maxext.x, -maxext.y, -minext.y);
+                        previewcamera.ResetView(0, -50, 0, -90, 0);
                         break;
                     case ePreview.eRight:
+                        SetProjection(bmpaspect, minext.y, maxext.y, minext.z, maxext.z);
+                        previewcamera.ResetView(50, 0, 0, 0, 0);
                         break;
+                    case ePreview.eLeft:
+                        SetProjection(bmpaspect, -maxext.y, -minext.y, minext.z, maxext.z);
+                        previewcamera.ResetView(-50,0 , 0, 0, 0);
+                       break;
                     case ePreview.eIso:
+                        float oldscale = Scale;
+                        Scale = ((Scale +1f) * 1.4f) - 1f;
+                        SetProjection(bmpaspect, minext.x, maxext.x, minext.z, maxext.z);
+                        Scale = oldscale;
+                        previewcamera.ResetView(50, -50, 0, 30, 0);
                         break;
                 }
-                previewcamera.ResetView(0, -200, 0, 20, 20);
+
+
+                //previewcamera.ResetView(0, -200, 0, 20, 20);
+                
                 //previewcamera.ResetView(0, -200, obj.m_radius/2, 0, 00);
+                // setup projection matrix
+                GL.MatrixMode(MatrixMode.Projection);
+                GL.LoadMatrix(ref projection);
+                GL.MatrixMode(MatrixMode.Modelview);
                 previewcamera.SetViewGL();
                 //render scene
-                obj.RenderGL(false, false, false, Color.Green);
+                foreach (Object3d obj in objs)
+                {
+                    obj.RenderGL(false, false, false, SceneColor);
+                }
                 //copy the framebuffer to a bitmap
                 Bitmap bmppreview = GetBitmap(xsize, ysize);
                 GL.PopAttrib(); // restores GL.Viewport() parameters
@@ -120,6 +186,45 @@ namespace UV_DLP_3D_Printer._3DEngine
             }
         }
 
+        public Bitmap GeneratePreview(int xsize, int ysize, Object3d obj)
+        {
+            List<Object3d> objs = new List<Object3d>();
+            objs.Add(obj);
+            return GeneratePreview(xsize, ysize, objs);
+        }
+
+        void SetProjection(float bmpaspect, float minx, float maxx, float miny, float maxy)
+        {
+            float width = maxx - minx;
+            float height = maxy - miny;
+            maxx += width * Scale;
+            minx -= width * Scale;
+            maxy += height * Scale;
+            miny -= height * Scale;
+            float sceneaspect = width / height;
+            if (sceneaspect < bmpaspect)
+            {
+                // tall image
+                width = ((maxy - miny) * bmpaspect - (maxx - minx)) / 2;
+                minx -= width;
+                maxx += width;
+                
+                /*float scale2 = bmpaspect / sceneaspect;
+                minx *= scale2;
+                maxx *= scale2;*/
+            }
+            else
+            {
+                // wide image
+                height = ((maxx - minx) / bmpaspect - (maxy - miny)) / 2;
+                miny -= height;
+                maxy += height;
+                /*float scale2 = sceneaspect / bmpaspect;
+                miny *= scale2;
+                maxy *= scale2;*/
+            }
+            projection = OpenTK.Matrix4.CreateOrthographicOffCenter(minx, maxx, miny, maxy, 1, 2000);
+       }
 
         private Bitmap GetBitmap(int width, int height)
         {
