@@ -1060,6 +1060,18 @@ namespace UV_DLP_3D_Printer.GUI
                     {
                         case 1:
                             SceneFile.Instance().SaveModelsIntoScene(saveFileDialog1.FileName);
+                            if (UVDLPApp.Instance().m_buildparms.exportpreview != PreviewGenerator.ePreview.None)
+                            {
+                                PreviewGenerator pg = new PreviewGenerator();
+                                pg.ViewAngle = UVDLPApp.Instance().m_buildparms.exportpreview;
+                                Bitmap preview = pg.GeneratePreview(512, 512);
+                                if (preview != null)
+                                {
+                                    preview.Save(UVDLPApp.Instance().m_apppath + "\\testprev2.png");
+                                    SceneFile.Instance().AddPreviewImage(UVDLPApp.Instance().SceneFileName, preview, "Default", "ScenePreview.png");
+                                }
+                            }
+
                             break;
                         case 2:
                             //stl file

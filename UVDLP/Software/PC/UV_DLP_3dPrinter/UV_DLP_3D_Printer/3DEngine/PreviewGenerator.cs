@@ -17,28 +17,29 @@ namespace UV_DLP_3D_Printer._3DEngine
     /// </summary>
     public class PreviewGenerator
     {
-        Color BackColor;
-        Color SceneColor;
-        ePreview ViewAngle;
-        float Scale;
+        public Color BackColor;
+        public Color SceneColor;
+        public ePreview ViewAngle;
+        public float Scale;
         OpenTK.Matrix4 projection;
 
         public enum ePreview 
         {
-            eTop,
-            eBottom,
-            eFront,
-            eBack,
-            eRight,
-            eLeft,
-            eIso // isometric
+            None,
+            Top,
+            Bottom,
+            Front,
+            Back,
+            Right,
+            Left,
+            Isometric
         }
 
         public PreviewGenerator() 
         {
             BackColor = Color.White;
-            SceneColor = Color.Gray;
-            ViewAngle = ePreview.eIso;
+            SceneColor = Color.FromArgb(129,129,129);
+            ViewAngle = ePreview.Front;
             Scale = 0.2f;
         }
         /// <summary>
@@ -50,6 +51,9 @@ namespace UV_DLP_3D_Printer._3DEngine
         /// <returns></returns>
         public Bitmap GeneratePreview(int xsize, int ysize, List<Object3d> objs) 
         {
+            if (ViewAngle == ePreview.None)
+                return null;
+
             try
             {
                 // taken from http://www.opentk.com/doc/graphics/frame-buffer-objects
@@ -125,31 +129,31 @@ namespace UV_DLP_3D_Printer._3DEngine
                 float bmpaspect = (float)xsize / (float)ysize;
                 switch (ViewAngle)
                 {
-                    case ePreview.eFront:
+                    case ePreview.Front:
                         SetProjection(bmpaspect, minext.x, maxext.x, minext.z, maxext.z);
                         previewcamera.ResetView(0, -50, 0, 0, 0);
                         break;
-                    case ePreview.eBack:
+                    case ePreview.Back:
                         SetProjection(bmpaspect, -maxext.x, -minext.x, minext.z, maxext.z);
                         previewcamera.ResetView(0, 50, 0, 0, 0);
                         break;
-                    case ePreview.eTop:
+                    case ePreview.Top:
                         SetProjection(bmpaspect, minext.x, maxext.x, minext.y, maxext.y);
                         previewcamera.ResetView(0, -50, 0, 90, 0);
                         break;
-                    case ePreview.eBottom:
+                    case ePreview.Bottom:
                         SetProjection(bmpaspect, minext.x, maxext.x, -maxext.y, -minext.y);
                         previewcamera.ResetView(0, -50, 0, -90, 0);
                         break;
-                    case ePreview.eRight:
+                    case ePreview.Right:
                         SetProjection(bmpaspect, minext.y, maxext.y, minext.z, maxext.z);
                         previewcamera.ResetView(50, 0, 0, 0, 0);
                         break;
-                    case ePreview.eLeft:
+                    case ePreview.Left:
                         SetProjection(bmpaspect, -maxext.y, -minext.y, minext.z, maxext.z);
                         previewcamera.ResetView(-50,0 , 0, 0, 0);
                        break;
-                    case ePreview.eIso:
+                    case ePreview.Isometric:
                         float oldscale = Scale;
                         Scale = ((Scale +1f) * 1.4f) - 1f;
                         SetProjection(bmpaspect, minext.x, maxext.x, minext.z, maxext.z);
@@ -170,7 +174,9 @@ namespace UV_DLP_3D_Printer._3DEngine
                 //render scene
                 foreach (Object3d obj in objs)
                 {
+                    obj.InvalidateList();
                     obj.RenderGL(false, false, false, SceneColor);
+                    obj.InvalidateList();
                 }
                 //copy the framebuffer to a bitmap
                 Bitmap bmppreview = GetBitmap(xsize, ysize);
@@ -192,6 +198,19 @@ namespace UV_DLP_3D_Printer._3DEngine
             objs.Add(obj);
             return GeneratePreview(xsize, ysize, objs);
         }
+
+        // generate preview from scene excluding supports
+        public Bitmap GeneratePreview(int xsize, int ysize)
+        {
+            List<Object3d> objs = new List<Object3d>();
+            foreach (Object3d obj in UVDLPApp.Instance().m_engine3d.m_objects)
+            {
+                if (obj.tag == Object3d.OBJ_NORMAL)
+                    objs.Add(obj);
+            }
+            return GeneratePreview(xsize, ysize, objs);
+        }
+       
 
         void SetProjection(float bmpaspect, float minx, float maxx, float miny, float maxy)
         {

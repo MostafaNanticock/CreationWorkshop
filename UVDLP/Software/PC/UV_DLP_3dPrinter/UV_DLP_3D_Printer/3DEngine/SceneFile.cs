@@ -260,6 +260,40 @@ namespace UV_DLP_3D_Printer._3DEngine
             return false;
         }
 
+        public bool AddPreviewImage(string scenefilename, Image img, string prevtype, string imname)
+        {
+            try
+            {
+                RemoveResourcesFromFile(scenefilename, "ScenePreview", imname);
+                LoadManifest(scenefilename);
+                using (ZipFile mZip = ZipFile.Read(scenefilename))
+                {
+                    MemoryStream ms = new MemoryStream();
+                    img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    // store the slice file into the zip
+                    mZip.AddEntry(imname, ms);
+                    mZip.Save();
+                }
+                //add to the manifest
+                // find the slices node in the top level
+                XmlNode sprev = mManifest.FindSection(mManifest.m_toplevel, "ScenePreview");
+                if (sprev == null)  // no gcode node
+                {
+                    //create one
+                    sprev = mManifest.AddSection(mManifest.m_toplevel, "ScenePreview");
+                }
+                //add the gcode file name into the manifest
+                mManifest.SetParameter(sprev, prevtype, imname);
+                UpdateManifest(scenefilename);
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
+            return false;
+        }
+
         public static SceneFile Instance() 
         {
             if (m_instance == null) 

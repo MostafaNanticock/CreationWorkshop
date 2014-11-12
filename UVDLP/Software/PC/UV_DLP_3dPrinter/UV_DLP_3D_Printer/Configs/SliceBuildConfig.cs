@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.IO;
 using UV_DLP_3D_Printer.Configs;
+using UV_DLP_3D_Printer._3DEngine;
 
 namespace UV_DLP_3D_Printer
 {
@@ -56,7 +57,7 @@ namespace UV_DLP_3D_Printer
         public String selectedInk;
         public int minExposure; // for resin test model
         public int exposureStep; // for resin test model
-        public bool exportpreview; // generate a preview file and image
+        public PreviewGenerator.ePreview exportpreview; // generate a preview file and image
         //need some parms here for auto support
 
         private String[] m_defheader = 
@@ -276,7 +277,7 @@ namespace UV_DLP_3D_Printer
             inks[selectedInk] = new InkConfig(selectedInk);
             minExposure = 500;
             exposureStep = 200;
-            exportpreview = false;
+            exportpreview = PreviewGenerator.ePreview.None;
         }
 
         public bool SetCurrentInk(string inkname)
@@ -371,7 +372,7 @@ namespace UV_DLP_3D_Printer
             SetCurrentInk(selectedInk);
             minExposure = xh.GetInt(sbc, "MinTestExposure", 500);
             exposureStep = xh.GetInt(sbc, "TestExposureStep", 200);
-            exportpreview = xh.GetBool(sbc,"ExportPreview",false);
+            exportpreview = (PreviewGenerator.ePreview)xh.GetEnum(sbc, "ExportPreview", typeof(PreviewGenerator.ePreview), PreviewGenerator.ePreview.None);
         }
         /// <summary>
         /// This allows for retrieve arbitrary variables from the slice XML configuration

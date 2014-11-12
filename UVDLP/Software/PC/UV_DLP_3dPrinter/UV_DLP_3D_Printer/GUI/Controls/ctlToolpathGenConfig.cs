@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using UV_DLP_3D_Printer.GUI.CustomGUI;
 using UV_DLP_3D_Printer.Configs;
+using UV_DLP_3D_Printer._3DEngine;
 
 namespace UV_DLP_3D_Printer.GUI.Controls
 {
@@ -149,10 +150,10 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         {
             lblProfName.Text = lstSliceProfiles.SelectedItem.ToString();
             chkExport.Checked = m_config.export;
-            comboExportSvg.Enabled = chkExport.Checked;
             comboExportSvg.SelectedIndex = m_config.exportsvg;
-            chkExportPNG.Enabled = chkExport.Checked;
+            comboExportPreview.SelectedItem = m_config.exportpreview.ToString();
             chkExportPNG.Checked = m_config.exportpng;
+            chkExport_CheckedChanged(null, null);
            // groupBox2.Enabled = chkExport.Checked;
            // chkgengcode.Checked = m_config.exportgcode;
            // chkExportSlices.Checked = m_config.exportimages;
@@ -249,6 +250,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 m_config.export = chkExport.Checked;
                 m_config.exportsvg = comboExportSvg.SelectedIndex;
                 m_config.exportpng = chkExportPNG.Checked;
+                m_config.exportpreview = (PreviewGenerator.ePreview)Enum.Parse(typeof(PreviewGenerator.ePreview), comboExportPreview.SelectedItem.ToString());
                 // resin
                 m_config.ZThick = Single.Parse(txtZThick.Text);
                 m_config.layertime_ms = int.Parse(txtLayerTime.Text);
@@ -510,6 +512,9 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             //groupBox2.Enabled = chkExport.Checked;
             comboExportSvg.Enabled = chkExport.Checked;
             chkExportPNG.Enabled = chkExport.Checked;
+            comboExportPreview.Enabled = chkExport.Checked;
+            labelExportSvg.Enabled = chkExport.Checked;
+            labelExportPreview.Enabled = chkExport.Checked;
         }
 
 
