@@ -512,9 +512,9 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             //groupBox2.Enabled = chkExport.Checked;
             comboExportSvg.Enabled = chkExport.Checked;
             chkExportPNG.Enabled = chkExport.Checked;
-            comboExportPreview.Enabled = chkExport.Checked;
+            //comboExportPreview.Enabled = chkExport.Checked;
             labelExportSvg.Enabled = chkExport.Checked;
-            labelExportPreview.Enabled = chkExport.Checked;
+            //labelExportPreview.Enabled = chkExport.Checked;
         }
 
 
