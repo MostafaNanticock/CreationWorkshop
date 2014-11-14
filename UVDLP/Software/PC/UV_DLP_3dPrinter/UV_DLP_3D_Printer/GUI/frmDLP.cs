@@ -76,6 +76,8 @@ namespace UV_DLP_3D_Printer
         /// <param name="layer"></param>
         private void AddtoRemoveList(Bitmap bmp, int layer) 
         {
+            if (bmp.Tag == null)  // tag not set
+                return; 
             // only add layer slices
             if ((int)bmp.Tag != BuildManager.SLICE_NORMAL)
                 return;
@@ -265,22 +267,6 @@ namespace UV_DLP_3D_Printer
                 else
                 {
 
-                    try
-                    {  
-                        /*
-                        //don't release the blank, calibration or special
-                        if (picDLP.Image != null  && (int)picDLP.Image.Tag == BuildManager.SLICE_NORMAL)
-                        {
-                            //get rid of the old image to release memory, this will release the slices
-                            picDLP.Image.Dispose();
-                            picDLP.Image = null;
-                        }
-                          */  
-                    }
-                    catch (Exception ex)
-                    {
-                        DebugLogger.Instance().LogError(ex);
-                    }
                     AddtoRemoveList(cropped, layer); // add the image to the remove list
                     //Check to see if we're adjusting the brightness of the mask image here
                     if (m_monitorconfig.m_usemask == true && m_monitorconfig.m_mask != null && layertype != BuildManager.SLICE_BLANK)
