@@ -24,23 +24,104 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         Explicit
     }
 
-    public class GuiParam<T>
+    public abstract class CWParameter
+    {
+        public string paramName;
+        public GuiParamState state;
+        public bool defaultSet;
+        public abstract Type ParamType { get; }
+        public abstract void SaveUser(XmlDocument xd, XmlNode xnode);
+        public static CWParameter LoadUser(XmlDocument xd, XmlNode xnode)
+        {
+            CWParameter newPar = null;
+            try
+            {
+                string defVal = null;
+                try { defVal = xnode.Attributes["default"].Value; }
+                catch { }
+                string value = xnode.InnerText;
+                switch (xnode.Attributes["type"].Value)
+                {
+                    case "Int32": newPar = CreateIntParam(defVal, value); break;
+                    case "Color": newPar = CreateColorParam(defVal, value); break;
+                    case "Boolean": newPar = CreateBoolParam(defVal, value); break;
+                    case "String": newPar = CreateStringParam(defVal, value); break;
+                }
+                newPar.paramName = xnode.Name;
+            }
+            catch
+            {
+                return null;
+            }
+
+            return newPar;
+        }
+
+        public static GuiParam<string> CreateStringParam(string defValue, string value)
+        {
+            GuiParam<string> par = new GuiParam<string>();
+            if ((defValue != null) && (defValue.Length > 0))
+                par.SetDefault(defValue);
+            if ((value != null) && (value.Length > 0))
+                par.SetValue(value);
+            return par;
+        }
+
+        public static GuiParam<int> CreateIntParam(string defValue, string value)
+        {
+            GuiParam<int> par = new GuiParam<int>();
+            if ((defValue != null) && (defValue.Length > 0))
+                par.SetDefault(int.Parse(defValue));
+            if ((value != null) && (value.Length > 0))
+                par.SetValue(int.Parse(value));
+            return par;
+        }
+
+        public static GuiParam<bool> CreateBoolParam(string defValue, string value)
+        {
+            GuiParam<bool> par = new GuiParam<bool>();
+            if ((defValue != null) && (defValue.Length > 0))
+                par.SetDefault(bool.Parse(defValue));
+            if ((value != null) && (value.Length > 0))
+                par.SetValue(bool.Parse(value));
+            return par;
+        }
+
+        public static GuiParam<Color> CreateColorParam(string defValue, string value)
+        {
+            GuiParam<Color> par = new GuiParam<Color>();
+            if ((defValue != null) && (defValue.Length > 0))
+                par.SetDefault(GuiConfigDB.ParseColor(defValue));
+            if ((value != null) && (value.Length > 0))
+                par.SetValue(GuiConfigDB.ParseColor(value));
+            return par;
+        }
+    }
+
+    public class GuiParam<T> : CWParameter
     {
         T var;
         T defVal;
-        public GuiParamState state;
         public GuiParam<T> parrent;
 
         public GuiParam()
         {
             state = GuiParamState.Unset;
             parrent = null;
+            paramName = null;
+            defaultSet = false;
+        }
+
+        public override Type ParamType
+        {
+            get { return typeof(T); }
         }
 
         public void SetDefault(T defval)
         {
             state = GuiParamState.Default;
             defVal = defval;
+            defaultSet = true;
             parrent = null;
         }
 
@@ -92,6 +173,32 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             if (state == GuiParamState.Explicit)
                 GuiConfigDB.AddParameter(xd, parent, name, var);
+        }
+
+        // save general purpose user parameters
+        public override void SaveUser(XmlDocument xd, XmlNode xnode)
+        {
+            XmlAttribute xa = xd.CreateAttribute("type");
+            xa.Value = ParamType.Name;
+            xnode.Attributes.Append(xa);
+
+            if (defaultSet)
+            {
+                xa = xd.CreateAttribute("default");
+                if (defVal is Color)
+                    xa.Value = GuiConfigDB.ColorToString((Color)(Object)defVal);
+                else
+                    xa.Value = defVal.ToString();
+                xnode.Attributes.Append(xa);
+            }
+
+            if (IsExplicit())
+            {
+                if (var is Color)
+                    xnode.InnerText = GuiConfigDB.ColorToString((Color)(Object)var);
+                else
+                    xnode.InnerText = var.ToString();
+            }
         }
 
         public void SetValue(T t)

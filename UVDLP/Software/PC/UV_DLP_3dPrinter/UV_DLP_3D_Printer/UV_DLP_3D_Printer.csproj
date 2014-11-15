@@ -119,6 +119,7 @@
     <Compile Include="Configs\MonitorConfig.cs" />
     <Compile Include="Configs\ParmList.cs" />
     <Compile Include="Configs\SupportConfig.cs" />
+    <Compile Include="Configs\UserParameterList.cs" />
     <Compile Include="Configs\XmlHelper.cs" />
     <Compile Include="Device_Interface\AutoDetect\ConnectionTester.cs" />
     <Compile Include="Device_Interface\AutoDetect\SerialAutodetect.cs" />

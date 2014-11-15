@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Drawing;
 using UV_DLP_3D_Printer.Configs;
 using UV_DLP_3D_Printer._3DEngine;
 
@@ -59,6 +60,8 @@ namespace UV_DLP_3D_Printer
         public int exposureStep; // for resin test model
         public PreviewGenerator.ePreview exportpreview; // generate a preview file and image
         //need some parms here for auto support
+
+        public UserParameterList userParams;
 
         private String[] m_defheader = 
         {
@@ -205,6 +208,8 @@ namespace UV_DLP_3D_Printer
             minExposure = source.minExposure;
             exposureStep = source.exposureStep;
             exportpreview = source.exportpreview;
+
+            userParams = source.userParams;
         }
         public SliceBuildConfig() 
         {           
@@ -278,6 +283,7 @@ namespace UV_DLP_3D_Printer
             minExposure = 500;
             exposureStep = 200;
             exportpreview = PreviewGenerator.ePreview.None;
+            userParams = new UserParameterList();
         }
 
         public bool SetCurrentInk(string inkname)
@@ -373,6 +379,11 @@ namespace UV_DLP_3D_Printer
             minExposure = xh.GetInt(sbc, "MinTestExposure", 500);
             exposureStep = xh.GetInt(sbc, "TestExposureStep", 200);
             exportpreview = (PreviewGenerator.ePreview)xh.GetEnum(sbc, "ExportPreview", typeof(PreviewGenerator.ePreview), PreviewGenerator.ePreview.None);
+            xh.LoadUserParamList(userParams);
+            userParams.GetParameter("testuser1", Color.Red);
+            userParams.GetParameter("testuser2", 10);
+            userParams.GetParameter("testuser3", true);
+            userParams.GetParameter("testuser4", "string");
         }
         /// <summary>
         /// This allows for retrieve arbitrary variables from the slice XML configuration
@@ -492,7 +503,8 @@ namespace UV_DLP_3D_Printer
             xh.SetParameter(sbc, "MinTestExposure", minExposure);
             xh.SetParameter(sbc, "TestExposureStep", exposureStep);
             xh.SetParameter(sbc, "ExportPreview", exportpreview);
-            
+
+            xh.SaveUserParamList(userParams);
         }
 
         public bool Save(String filename) 

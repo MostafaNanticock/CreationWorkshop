@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Drawing;
 using System.IO;
+using UV_DLP_3D_Printer.GUI.CustomGUI;
 
 // Xml Helper class for new configuration system -SHS
 namespace UV_DLP_3D_Printer.Configs
@@ -396,6 +397,57 @@ namespace UV_DLP_3D_Printer.Configs
         public void SetParameter(XmlNode parentNode, String id, Object val)
         {
             SetString(parentNode, id, val.ToString());
+        }
+
+        // save general purpuse user parameter
+        public void SetParameter(XmlNode parentNode, CWParameter param)
+        {
+            if (param.paramName == null)
+                return; // parameter must have a name
+            XmlNode nd = FindChildElement(parentNode, param.paramName);
+            if (nd == null)
+            {
+                nd = m_xdoc.CreateElement(param.paramName);
+                parentNode.AppendChild(nd);
+            }
+            param.SaveUser(m_xdoc, nd);
+        }
+
+        public void SaveUserParamList(XmlNode parentNode, UserParameterList parList)
+        {
+            foreach (KeyValuePair<string, CWParameter> pair in parList.paramDict)
+            {
+                SetParameter(parentNode, pair.Value);
+            }
+        }
+
+        public void SaveUserParamList(UserParameterList parList)
+        {
+            XmlNode nd = FindChildElement(m_toplevel, "UserParameters");
+            if (nd == null)
+            {
+                nd = m_xdoc.CreateElement("UserParameters");
+                m_toplevel.AppendChild(nd);
+            }
+            SaveUserParamList(nd, parList);
+        }
+
+        public void LoadUserParamList(XmlNode parentNode, UserParameterList parList)
+        {
+            foreach (XmlNode xnode in parentNode.ChildNodes)
+            {
+                CWParameter par = CWParameter.LoadUser(m_xdoc, xnode);
+                if (par != null)
+                    parList.paramDict[par.paramName] = par;
+            }
+        }
+
+        public void LoadUserParamList(UserParameterList parList)
+        {
+            XmlNode nd = FindChildElement(m_toplevel, "UserParameters");
+            if (nd == null)
+                return;
+            LoadUserParamList(nd, parList);
         }
 
         public bool Save(int version)
