@@ -10,9 +10,11 @@ namespace UV_DLP_3D_Printer.Configs
     public class UserParameterList
     {
         public Dictionary<string, CWParameter> paramDict;
+        public bool ConfigChanged;
         public UserParameterList()
         {
             paramDict = new Dictionary<string, CWParameter>();
+            ConfigChanged = false;
         }
 
         public CWParameter GetParameter(string name, object defaultVal)
@@ -32,6 +34,7 @@ namespace UV_DLP_3D_Printer.Configs
             {
                 par.paramName = name;
                 paramDict[name] = par;
+                ConfigChanged = true;
             }
             return par;
         }

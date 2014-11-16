@@ -380,10 +380,6 @@ namespace UV_DLP_3D_Printer
             exposureStep = xh.GetInt(sbc, "TestExposureStep", 200);
             exportpreview = (PreviewGenerator.ePreview)xh.GetEnum(sbc, "ExportPreview", typeof(PreviewGenerator.ePreview), PreviewGenerator.ePreview.None);
             xh.LoadUserParamList(userParams);
-            userParams.GetParameter("testuser1", Color.Red);
-            userParams.GetParameter("testuser2", 10);
-            userParams.GetParameter("testuser3", true);
-            userParams.GetParameter("testuser4", "string");
         }
         /// <summary>
         /// This allows for retrieve arbitrary variables from the slice XML configuration

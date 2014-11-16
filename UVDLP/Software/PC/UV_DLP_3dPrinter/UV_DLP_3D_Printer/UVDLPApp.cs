@@ -57,6 +57,8 @@ namespace UV_DLP_3D_Printer
         eShowLogWindow,
         eSceneFileNameChanged,
         eNewVersionAvailable, // the app contacted the server and saw there was a new version available
+        eSceneSaved, // scene was saved to disk. message contains the file type (cws or stl)
+        eMachineConfigLoaded,  // Machine config was just loaded
     }
     public delegate void AppEventDelegate(eAppEvent ev, String Message);
     /*
@@ -64,7 +66,7 @@ namespace UV_DLP_3D_Printer
      */
     public class UVDLPApp : IPluginHost
     {
-        public AppEventDelegate AppEvent;
+        public event AppEventDelegate AppEvent;
         private static UVDLPApp m_instance = null;
         public String m_PathMachines;
         public String m_PathProfiles;

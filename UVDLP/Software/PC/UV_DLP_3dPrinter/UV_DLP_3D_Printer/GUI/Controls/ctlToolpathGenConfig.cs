@@ -137,6 +137,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 }
                 else 
                 {
+                    UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eSlicedLoaded, "Slice Profile loaded");
+                    UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eSliceProfileChanged, "Slice Profile loaded");
                     return profile;
                 }
             }

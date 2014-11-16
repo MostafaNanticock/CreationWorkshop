@@ -109,7 +109,7 @@ namespace UV_DLP_3D_Printer.Configs
             return fileExist;
         }
         
-        protected XmlNode FindChildElement(XmlNode parentNode, String elemName)
+        public XmlNode FindChildElement(XmlNode parentNode, String elemName)
         {
             foreach (XmlNode nd in parentNode.ChildNodes)
             {
@@ -419,6 +419,7 @@ namespace UV_DLP_3D_Printer.Configs
             {
                 SetParameter(parentNode, pair.Value);
             }
+            parList.ConfigChanged = false;
         }
 
         public void SaveUserParamList(UserParameterList parList)

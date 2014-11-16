@@ -412,7 +412,8 @@ namespace UV_DLP_3D_Printer
                 {
                     //remove all the previous images first
                     //remove the png slices
-                    SceneFile.Instance().RemoveResourcesFromFile(UVDLPApp.Instance().SceneFileName, "Slices", ".png");
+                    //SceneFile.Instance().RemoveResourcesFromFile(UVDLPApp.Instance().SceneFileName, "Slices", ".png");
+                    SceneFile.Instance().RemoveResourcesBySection(UVDLPApp.Instance().SceneFileName, "Slices");
                     //remove the vector slices
                     SceneFile.Instance().RemoveResourcesFromFile(UVDLPApp.Instance().SceneFileName, "VectorSlices", ".svg");
                     //remove any slice profile in the scene file

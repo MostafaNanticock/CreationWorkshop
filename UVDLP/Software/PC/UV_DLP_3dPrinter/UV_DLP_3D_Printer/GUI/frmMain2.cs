@@ -1065,19 +1065,16 @@ namespace UV_DLP_3D_Printer.GUI
                                 PreviewGenerator pg = new PreviewGenerator();
                                 pg.ViewAngle = UVDLPApp.Instance().m_buildparms.exportpreview;
                                 Bitmap preview = pg.GeneratePreview(512, 512);
-                                if (preview != null)
-                                {
-                                    preview.Save(UVDLPApp.Instance().m_apppath + "\\testprev2.png");
                                     SceneFile.Instance().AddPreviewImage(UVDLPApp.Instance().SceneFileName, preview, "Default", "ScenePreview.png");
-                                }
                             }
-
+                            UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eSceneSaved, "cws");
                             break;
                         case 2:
                             //stl file
                             UVDLPApp.Instance().CalcScene(); // calc the scene object
                             UVDLPApp.Instance().Scene.SaveSTL_Binary(saveFileDialog1.FileName);
                             UVDLPApp.Instance().Scene.m_fullname = saveFileDialog1.FileName;
+                            UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eSceneSaved, "stl");
                             break;
                     }
                 }

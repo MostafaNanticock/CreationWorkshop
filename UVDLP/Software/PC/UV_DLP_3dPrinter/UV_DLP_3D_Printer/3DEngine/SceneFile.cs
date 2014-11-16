@@ -62,7 +62,7 @@ namespace UV_DLP_3D_Printer._3DEngine
         /// </summary>
         /// <param name="scenefilename"></param>
         /// <returns></returns>
-        public bool RemoveResourcesFromFile(string scenefilename,string section, string filepattern) 
+        public bool RemoveResourcesFromFile(string scenefilename, string section, string filepattern)
         {
             bool ret = true;
             try
@@ -70,7 +70,7 @@ namespace UV_DLP_3D_Printer._3DEngine
                 LoadManifest(scenefilename); // load the latest version of the manifest from the zip file
                 // open the zip file for read/write
                 // use the 'using' block to ensure resource disposal
-                using (ZipFile zip1 = ZipFile.Read(scenefilename)) 
+                using (ZipFile zip1 = ZipFile.Read(scenefilename))
                 {
                     XmlNode rmnodes = mManifest.FindSection(mManifest.m_toplevel, section);
                     if (rmnodes != null)
@@ -79,7 +79,7 @@ namespace UV_DLP_3D_Printer._3DEngine
                         List<ZipEntry> etr = new List<ZipEntry>(); // entries to remove
                         foreach (ZipEntry ze in zip1) // create a list of entries to remove
                         {
-                            if (FilePatternMatch(ze.FileName,filepattern))
+                            if (FilePatternMatch(ze.FileName, filepattern))
                             {
                                 etr.Add(ze);
                             }
@@ -92,7 +92,92 @@ namespace UV_DLP_3D_Printer._3DEngine
                 //now update the changed manifest entries
                 UpdateManifest(scenefilename);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+                ret = false;
+            }
+            return ret;
+        }
+
+        public bool RemoveSingleFile(string scenefilename, string section, string filename)
+        {
+            bool ret = true;
+            try
+            {
+                LoadManifest(scenefilename); // load the latest version of the manifest from the zip file
+                // open the zip file for read/write
+                // use the 'using' block to ensure resource disposal
+                using (ZipFile zip1 = ZipFile.Read(scenefilename))
+                {
+                    XmlNode rmnodes = mManifest.FindSection(mManifest.m_toplevel, section);
+                    if (rmnodes != null)
+                    {
+                        List<ZipEntry> etr = new List<ZipEntry>(); // entries to remove
+                        foreach (XmlNode xnode in rmnodes.ChildNodes)
+                        {
+                            if (xnode.InnerText.Equals(filename))
+                            {
+                                rmnodes.RemoveChild(xnode);
+                                if (zip1.ContainsEntry(filename))
+                                    etr.Add(zip1[filename]);
+                            }
+                        }
+                        //and remove them
+                        zip1.RemoveEntries(etr);
+                    }
+                    zip1.Save(); // save it
+                }
+                //now update the changed manifest entries
+                UpdateManifest(scenefilename);
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+                ret = false;
+            }
+            return ret;
+        }
+
+        public bool RemoveResourcesBySection(string scenefilename, string section)
+        {
+            bool ret = true;
+            try
+            {
+                LoadManifest(scenefilename); // load the latest version of the manifest from the zip file
+                // open the zip file for read/write
+                // use the 'using' block to ensure resource disposal
+                using (ZipFile zip1 = ZipFile.Read(scenefilename))
+                {
+                    XmlNode rmnodes = mManifest.FindSection(mManifest.m_toplevel, section);
+                    if (rmnodes != null)
+                    {
+                        List<ZipEntry> etr = new List<ZipEntry>(); // entries to remove
+                        foreach (XmlNode xnode in rmnodes.ChildNodes)
+                        {
+                            string filename = xnode.InnerText;
+                            if (zip1.ContainsEntry(filename))
+                                etr.Add(zip1[filename]);
+                            // try inner sections
+                            foreach (XmlNode xnodeinner in xnode.ChildNodes)
+                            {
+                                string filenameinner = xnode.InnerText;
+                                if (zip1.ContainsEntry(filenameinner))
+                                    etr.Add(zip1[filename]);
+                                // try inner sections
+                            }
+                            
+                        }
+                        rmnodes.RemoveAll(); // remove all child nodes for this manifest entry
+                        //and remove them
+                        zip1.RemoveEntries(etr);
+                    }
+                    zip1.Save(); // save it
+                }
+                //now update the changed manifest entries
+                UpdateManifest(scenefilename);
+            }
+            catch (Exception ex)
             {
                 DebugLogger.Instance().LogError(ex);
                 ret = false;
@@ -264,8 +349,8 @@ namespace UV_DLP_3D_Printer._3DEngine
         {
             try
             {
-                RemoveResourcesFromFile(scenefilename, "ScenePreview", imname);
                 LoadManifest(scenefilename);
+                RemoveSingleFile(scenefilename, "ScenePreview", imname);
                 using (ZipFile mZip = ZipFile.Read(scenefilename))
                 {
                     MemoryStream ms = new MemoryStream();
@@ -292,6 +377,48 @@ namespace UV_DLP_3D_Printer._3DEngine
                 DebugLogger.Instance().LogError(ex);
             }
             return false;
+        }
+
+        public void ClearPreviewImages(string scenefilename)
+        {
+            RemoveResourcesBySection(scenefilename, "ScenePreview");
+        }
+        
+        public bool AddUserFile(string scenefilename, MemoryStream ms, string fileid, string filename)
+        {
+            try
+            {
+                LoadManifest(scenefilename);
+                RemoveSingleFile(scenefilename, "ScenePreview", filename);
+                using (ZipFile mZip = ZipFile.Read(scenefilename))
+                {
+                    ms.Seek(0, SeekOrigin.Begin);
+                    // store the slice file into the zip
+                    mZip.AddEntry(filename, ms);
+                    mZip.Save();
+                }
+                //add to the manifest
+                // find the slices node in the top level
+                XmlNode sprev = mManifest.FindSection(mManifest.m_toplevel, "UserFiles");
+                if (sprev == null)  // no gcode node
+                {
+                    //create one
+                    sprev = mManifest.AddSection(mManifest.m_toplevel, "UserFiles");
+                }
+                //add the file name into the manifest
+                mManifest.SetParameter(sprev, fileid, filename);
+                UpdateManifest(scenefilename);
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
+            return false;
+        }
+
+        public void ClearUserFiles(string scenefilename)
+        {
+            RemoveResourcesBySection(scenefilename, "UserFiles");
         }
 
         public static SceneFile Instance() 
@@ -337,6 +464,7 @@ namespace UV_DLP_3D_Printer._3DEngine
             }
             return false;
         }
+
         public bool AddSliceProfileToFile(string scenefilename, MemoryStream ms, string sliceprofilename)
         {
             try
