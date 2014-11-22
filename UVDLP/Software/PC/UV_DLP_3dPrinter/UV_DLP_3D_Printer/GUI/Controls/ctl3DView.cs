@@ -104,8 +104,11 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 switch (ev)
                 {
                     case eAppEvent.eSlicedLoaded: // update the gui to view
-                        int totallayers = UVDLPApp.Instance().m_slicefile.NumSlices;
-                        SetNumLayers(totallayers);
+                        if (UVDLPApp.Instance().m_slicefile != null)
+                        {
+                            int totallayers = UVDLPApp.Instance().m_slicefile.NumSlices;
+                            SetNumLayers(totallayers);
+                        }
                         break;
                 }
             }

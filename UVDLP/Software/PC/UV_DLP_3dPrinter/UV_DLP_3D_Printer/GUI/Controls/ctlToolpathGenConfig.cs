@@ -20,10 +20,10 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         {
             try
             {
-                InitializeComponent();
-                PopulateProfiles();
-                lbGCodeSection.SelectedIndex = 0;
+                InitializeComponent();            
                 m_gcodetab = tabOptions.TabPages["tbGCode"];
+                PopulateProfiles();
+               // lbGCodeSection.SelectedIndex = 0;
             }catch(Exception ex)
             {
                 DebugLogger.Instance().LogError(ex);
