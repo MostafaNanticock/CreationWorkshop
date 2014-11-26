@@ -12,15 +12,19 @@ namespace UV_DLP_3D_Printer.Drivers
     /// </summary>
     public class UnciaDriver : GenericDriver
     {
+        char lastCharSent;
+        bool stockUnciaFirmware;
         //Timer m_reqtimer;
         //private static double s_interval = 250; // 1/4 second
         public UnciaDriver()
         {
+            
             m_drivertype = eDriverType.eUNCIA; // set correct driver type
+            stockUnciaFirmware = true;
          //   m_reqtimer = new Timer();
          //   m_reqtimer.Interval = s_interval;
          //   m_reqtimer.Elapsed += new ElapsedEventHandler(m_reqtimer_Elapsed);
-            UVDLPApp.Instance().m_deviceinterface.AlwaysReady = true; // don't looks for gcode responses, always assume we're ready for the next command.
+            UVDLPApp.Instance().m_deviceinterface.AlwaysReady = true; // don't look for gcode responses, always assume we're ready for the next command.
         }
 
         /// <summary>
@@ -62,14 +66,13 @@ namespace UV_DLP_3D_Printer.Drivers
             }
         }
 
-
         /// <summary>
         /// This function starts looking at the 2 character in the line (index 1)
         /// and will read characters until the whitespace
         /// and return the g/m code
         /// </summary>
         /// <param name="?"></param>
-        /// <returns></returns>
+        /// <returns>int</returns>
         private int GetGMCode(string line)
         {
             try
@@ -92,6 +95,11 @@ namespace UV_DLP_3D_Printer.Drivers
             return -1;
         }
 
+
+        /// <summary>
+        /// This class looks at a line of code, and strips out the commands. It then
+        /// returns the numeric value of the code.
+        /// </summary>
         private double GetGCodeValDouble(string line, char var)
         {
             try
@@ -122,21 +130,9 @@ namespace UV_DLP_3D_Printer.Drivers
                 return 0.0;
             }
         }
-        /// <summary>
-        /// </summary>
-        /// <param name="mm"></param>
-        /// <returns></returns>
-        private byte CalcZSteps(double mm)
-        {
-            // the uncia printer moves 100 microns per 300 steps
 
-            double mm2inch = 0.0393701;
-            double conv = mm * mm2inch;// convert mm to inch
-            double val = conv / .0005;//divide inches by .0005
-            byte retval = (byte)Math.Round(val); // hopefully rounding won't be necessary if we've choosen slice height correctly
-            return retval;
 
-        }
+
         /// <summary>
         /// This interprets the gcode/mcode
         /// generates a command, and sends the data to the port
@@ -168,10 +164,11 @@ namespace UV_DLP_3D_Printer.Drivers
                             double zval = GetGCodeValDouble(line, 'Z');
                             cmd[0] = (byte)'E'; // enable the stepper motor
                             Write(cmd, 1);
+                        
                             //Thread.Sleep(delay); // add a delay between steps
 
-                            //convert that to steps - 90 steps per mm
-                            double zsteps = zval * 90; // 3000 steps /mm ? // 9 steps = 100 microns = .1mm
+                            //convert that to steps - 87 steps per mm
+                            double zsteps = zval * 87; // 3000 steps /mm ? // 9 steps = 100 microns = .1mm
                             int iZStep = (int)Math.Abs(zsteps); // get the ABS value
                             if (zval > 0)
                             {
@@ -182,13 +179,15 @@ namespace UV_DLP_3D_Printer.Drivers
                                 cmd[0] = (byte)'R';
                             }
                             Write(cmd, 1); // write the direction byte
+                        
                             //
 
-                            cmd[0] = ( byte)'S';
+                            cmd[0] = (byte)'S';
 
                             for (int c = 0; c < (int)iZStep; c++) 
                             {
                                 Write(cmd, 1);
+                                
                               //  Thread.Sleep(delay); // add a delay between steps
                             }
                                 
@@ -206,7 +205,16 @@ namespace UV_DLP_3D_Printer.Drivers
                         case -1:// error getting g/mcode
                             DebugLogger.Instance().LogError("Error getting G/M code: " + line);
                             break;
+                        
+                        case 17: // M17 Turn Motors On command
+                            cmd[0] = (byte)'E'; // enable the stepper motor
+                            Write(cmd, 1);
+                            break;
 
+                        case 18: // M18 Turn Motors Off command
+                            cmd[0] = (byte)'D'; // Disable the stepper motor
+                            Write(cmd, 1);
+                            break;
                     }
                 }
                 return retval;
@@ -233,11 +241,12 @@ namespace UV_DLP_3D_Printer.Drivers
             }
             Log(data, read);
             RaiseDataReceivedEvent(this, data, read);
+       
             // we're also going to have to raise an event to the deviceinterface indicating that we're 
             // ready for the next command, because this is different than the standard
             // gcode implementation where the device interface looks for a 'ok',
             //we'll probably have to also raise a signal to the deviceinterface NOT to look for the ok
-            // so it doen't keep adding up buffers.
+            // so it doen't keep adding up buffers. -- This is done by the AlwaysReady = true;
         }
 
         public override int Write(String line)
@@ -253,10 +262,6 @@ namespace UV_DLP_3D_Printer.Drivers
                     {
                         Log(line);
                         sent = InterpretGCode(line);
-                        // interpret the gcode line,
-                        // generate the coomand
-                        //send the command
-                        //m_serialport.Write(line);
                     }
                     return sent;
                 }

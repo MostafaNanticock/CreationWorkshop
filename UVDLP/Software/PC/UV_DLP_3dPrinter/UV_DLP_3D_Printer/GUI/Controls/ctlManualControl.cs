@@ -83,7 +83,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             cOnOffMonitorTemp.Visible = false;
             cOnOffHeater.Visible = false;
             cOnOffPlatform.Visible = false;
-            //cOnOffMotors.Visible = false; // turn off for now... - smh 08/19/2014
+            cOnOffMotors.Visible = false; // turn off for now... - smh 08/19/2014
             cOnOffManGcode.Visible = false;
 
             ctlParamXYrate.Visible = false;
@@ -113,7 +113,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                         break;
                     case 'Z':
                         cMCZ.Visible = true;
-                       // cOnOffMotors.Visible = true;// turn off the motor on/off switch - smh 08/19/2014
                         ctlParamZrate.Visible = true;
                         break;
                     case 'T':
@@ -142,6 +141,9 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     case 'G':
                         cOnOffManGcode.Visible = true;
                         cGCodeManual.Visible = cOnOffManGcode.IsOn;
+                        break;
+                    case 'D':
+                            cOnOffMotors.Visible = true;// turn on the motor on/off switch
                         break;
                 }
             }
