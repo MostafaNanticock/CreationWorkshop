@@ -95,6 +95,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     case 'B': checkMCBed.Checked = true; break;
                     case 'P': checkMCProjector.Checked = true; break;
                     case 'G': checkMCGCode.Checked = true; break;
+                    case 'D': checkMCMotorDisable.Checked = true; break;
                 }
             }
         }
@@ -168,6 +169,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 res += "P";
             if (checkMCGCode.Checked)
                 res += "G";
+            if (checkMCMotorDisable.Checked)
+                res += "D";
             return res;
         }
 
