@@ -1,9 +1,4 @@
-==========================
-CreationWorkshop for Uncia
-==========================
- This is my fork of the 3dDLPUVController, made by the brilliant Steve Hernandez.
- 
- This fork is meant to be tailored for use with the Uncia DLP 3D Printer, and all of its quirks.
+
  
  Original readme.txt:
  ====================
@@ -24,6 +19,8 @@ I used C# to code this project along with Visual Studio 2010
 -Support structures generation
 
 future intgeration with CNC Mills and powder-bed based printers through a standard print interface.
+
+Support for Uncia added
 
 Please help out by reporting bugs or sending any donations to:
 pacmanfan321@gmail.com
