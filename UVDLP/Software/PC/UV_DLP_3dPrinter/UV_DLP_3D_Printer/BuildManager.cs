@@ -475,6 +475,7 @@ namespace UV_DLP_3D_Printer
         /// This function will perform an auxilary command as specified by the command name
         /// This can encompass a single extra gcode command defined somewhere else, 
         /// or an algorithm that blocks until complete
+        /// This needs to be changed to allow for command parameters to be passed to aux command
         /// </summary>
         /// <param name="line"></param>
         public void PerformAuxCommand(string line) 

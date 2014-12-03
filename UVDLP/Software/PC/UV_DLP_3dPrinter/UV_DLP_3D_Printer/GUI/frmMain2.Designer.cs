@@ -621,7 +621,7 @@
             this.ctlMainConfig1.GuiAnchor = null;
             this.ctlMainConfig1.Location = new System.Drawing.Point(1060, 264);
             this.ctlMainConfig1.Name = "ctlMainConfig1";
-            this.ctlMainConfig1.Size = new System.Drawing.Size(308, 51);
+            this.ctlMainConfig1.Size = new System.Drawing.Size(308, 56);
             this.ctlMainConfig1.StyleName = null;
             this.ctlMainConfig1.TabIndex = 5;
             // 
