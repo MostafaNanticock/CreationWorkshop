@@ -512,9 +512,16 @@ namespace UV_DLP_3D_Printer.GUI
                             break;
                         
                   case eAppEvent.eSlicedLoaded: // update the gui to view
-                      DebugLogger.Instance().LogRecord(Message);
-                      int totallayers = UVDLPApp.Instance().m_slicefile.NumSlices;
-                      ctl3DView1.SetNumLayers(totallayers);                      
+                            try // this is also called when the slice PROFILE is loaded
+                            {
+                                DebugLogger.Instance().LogRecord(Message);
+                                if (UVDLPApp.Instance().m_slicefile != null)
+                                {
+                                    int totallayers = UVDLPApp.Instance().m_slicefile.NumSlices;
+                                    ctl3DView1.SetNumLayers(totallayers);
+                                }
+                            }
+                            catch (Exception ex) { }
                       break;
                   case eAppEvent.eSliceProfileChanged:
                       SetTitle();

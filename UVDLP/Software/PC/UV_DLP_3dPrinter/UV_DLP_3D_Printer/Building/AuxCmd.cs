@@ -15,6 +15,10 @@ namespace UV_DLP_3D_Printer.Building
         {
             
         }
+        public virtual void Execute(string parms)
+        {
+
+        }
         protected void RaiseDone() 
         {
             if (AuxCmdCompletedEvent != null)

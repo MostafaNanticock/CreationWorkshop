@@ -79,18 +79,42 @@ namespace UV_DLP_3D_Printer
                 string postform = UVDLPApp.Instance().m_appconfig.m_contactform;
                 string posturl = UVDLPApp.Instance().m_appconfig.m_serveraddress;
                 string postaddr = posturl + "/" + postform;
-                foreach (PluginEntry pe in UVDLPApp.Instance().m_plugins)//foreach licensed plugin, generate the info...
+                if (UVDLPApp.Instance().m_plugins.Count > 0)
                 {
+                    foreach (PluginEntry pe in UVDLPApp.Instance().m_plugins)//foreach licensed plugin, generate the info...
+                    {
+                        try
+                        {
+                            NameValueCollection nvc = new NameValueCollection(); ;
+                            nvc["CWVersion"] = Application.ProductVersion; // include the product version
+                            nvc["Machine_ID"] = FingerPrint.Value(); //get the unique identifier of this machine
+                            nvc["PluginLicenseKey"] = FindLicenseKey(pe.m_plugin.GetInt("VendorID")); // find the license key for this plugin
+                            nvc["PluginName"] = pe.m_plugin.GetString("PluginName"); //
+                            nvc["PluginVendorID"] = pe.m_plugin.GetInt("VendorID").ToString();
+                            nvc["PluginVendorName"] = pe.m_plugin.GetString("VendorName");
+                            nvc["PluginVersion"] = pe.m_plugin.GetString("Version");// version of the plugin
+
+                            var response = client.UploadValues(postaddr, "POST", nvc);
+                            string resp = Encoding.Default.GetString(response);
+                            //DebugLogger.Instance().LogInfo(resp); // log the response as a test
+                            ParseResponse(resp);//parse the response
+                        }
+                        catch (Exception) { }
+                    }
+                }
+                else 
+                {
+                    //just do it once with defaults
                     try
                     {
                         NameValueCollection nvc = new NameValueCollection(); ;
                         nvc["CWVersion"] = Application.ProductVersion; // include the product version
                         nvc["Machine_ID"] = FingerPrint.Value(); //get the unique identifier of this machine
-                        nvc["PluginLicenseKey"] = FindLicenseKey(pe.m_plugin.GetInt("VendorID")); // find the license key for this plugin
-                        nvc["PluginName"] = pe.m_plugin.GetString("PluginName"); //
-                        nvc["PluginVendorID"] = pe.m_plugin.GetInt("VendorID").ToString();
-                        nvc["PluginVendorName"] = pe.m_plugin.GetString("VendorName");
-                        nvc["PluginVersion"] = pe.m_plugin.GetString("Version");// version of the plugin
+                        nvc["PluginLicenseKey"] = ""; // find the license key for this plugin
+                        nvc["PluginName"] = "none";
+                        nvc["PluginVendorID"] = "4096";//
+                        nvc["PluginVendorName"] = "none";
+                        nvc["PluginVersion"] = "1.0.0.0";// version of the plugin
 
                         var response = client.UploadValues(postaddr, "POST", nvc);
                         string resp = Encoding.Default.GetString(response);
@@ -98,7 +122,7 @@ namespace UV_DLP_3D_Printer
                         ParseResponse(resp);//parse the response
                     }
                     catch (Exception) { }
-                }                
+                }
             }
             catch (Exception ) 
             {
@@ -109,7 +133,7 @@ namespace UV_DLP_3D_Printer
 
         private void ParseResponse(string response) 
         {
-        
+            string resp = response;
         }
     }
 }

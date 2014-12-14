@@ -46,14 +46,22 @@ namespace UV_DLP_3D_Printer.Building
         /// This is a blocking call for now
         /// </summary>
         /// <param name="cmdname"></param>
-        public void RunCmd(string cmdname) 
+        public void RunCmd(string cmdname, string parms = "") 
         {
             cmdcompleted = false;
             foreach (AuxCmd cmd in m_lstCmds) 
             {
                 if(cmdname.Equals(cmd.m_cmdname))
                 {
-                    cmd.Execute(); // execute the command
+                    if (parms.Length != 0)
+                    {
+                        cmd.Execute(parms); // execute the command with parameters
+                    }
+                    else 
+                    {
+                        cmd.Execute(); // execute the command
+                    }
+                    
                     while (!cmdcompleted) //and wait for completion
                     {
                         Thread.Sleep(0);
