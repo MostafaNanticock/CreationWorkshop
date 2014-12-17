@@ -1,5 +1,15 @@
 ﻿
 ToDo:
+
+Supports:
+	Generate for entire scene
+	Generate for selected model(s)
+2.  Is it possible to select a model and have the software show you the unsupported areas that are hanging down. (Ron B.)
+
+-Fix Pause / Resume feature
+
+Scene/Object info areas should be merged
+
 Pro Version:
 home hobbiest licience 
 	flat fee
