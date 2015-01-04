@@ -106,6 +106,19 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             return ctl;
         }
 
+        public Control CreatePreviewControl(string name, Control ctl)
+        {
+            Control prevCtl = new ctlPreview();
+            if (ctl != null)
+            {
+                prevCtl.Width = ctl.Width;
+                prevCtl.Height = ctl.Height;
+                prevCtl.Dock = ctl.Dock;
+            }
+            prevCtl.Text = name;
+            return prevCtl;
+        }
+
         public GuiControlStyle GetControlStyle(string name)
         {
             if ((name == null) || !GuiControlStylesDict.ContainsKey(name))
@@ -527,6 +540,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             {
                 case GuiLayout.LayoutType.Control:
                     ctl = GetControlOrButton(gl.name);
+                    if (guiConf.PreviewMode)
+                        ctl = CreatePreviewControl(gl.name, ctl);
                     FillCommonLayoutParameters(gl, ctl);
                     break;
 
@@ -691,7 +706,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             shownControl.Visible = gl.isSelected.IsExplicit() && gl.isSelected;
 
             Control tabctl = null;
-            if (gl.control.IsExplicit())
+            if (gl.control.IsExplicit() && !guiConf.PreviewMode)
                 tabctl = GetControlOrButton(gl.control);
             if (tabctl == null)
             {

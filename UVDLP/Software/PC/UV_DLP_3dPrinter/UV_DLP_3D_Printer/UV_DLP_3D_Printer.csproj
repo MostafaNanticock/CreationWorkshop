@@ -272,6 +272,12 @@
     <Compile Include="GUI\CustomGUI\ctlParameter.Designer.cs">
       <DependentUpon>ctlParameter.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\CustomGUI\ctlPreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\CustomGUI\ctlPreview.Designer.cs">
+      <DependentUpon>ctlPreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\CustomGUI\ctlRFrame.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -570,6 +576,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\CustomGUI\ctlParameter.resx">
       <DependentUpon>ctlParameter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CustomGUI\ctlPreview.resx">
+      <DependentUpon>ctlPreview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\CustomGUI\ctlScene.resx">
       <DependentUpon>ctlScene.cs</DependentUpon>

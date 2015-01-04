@@ -154,5 +154,12 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             AdjustSize();
         }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            Invalidate();
+        }
+
     }
 }

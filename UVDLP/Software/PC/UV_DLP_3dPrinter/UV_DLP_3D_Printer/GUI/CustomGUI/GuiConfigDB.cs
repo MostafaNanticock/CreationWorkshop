@@ -646,6 +646,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public GuiParam<bool> HideAllDecals;
         Dictionary<string, int> NameGenerator;
 
+        public bool PreviewMode;
+
 
         public GuiConfigDB()
         {
@@ -677,6 +679,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             HideAllButtons = new GuiParam<bool>();
             HideAllControls = new GuiParam<bool>();
             HideAllDecals = new GuiParam<bool>();
+
+            PreviewMode = false;
         }
 
         public Control TopLevelControl
