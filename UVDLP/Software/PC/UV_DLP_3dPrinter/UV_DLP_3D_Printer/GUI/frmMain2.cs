@@ -1130,7 +1130,7 @@ namespace UV_DLP_3D_Printer.GUI
                     // test new gui config system
                     GuiConfigDB gconfdb = new GuiConfigDB();
                     gconfdb.LoadConfigFromFile(openFileDialog1.FileName);
-                    gconfdb.PreviewMode = true;
+                    //gconfdb.PreviewMode = true;
                     UVDLPApp.Instance().m_gui_config.ApplyConfiguration(gconfdb);
                     Control winLayout = UVDLPApp.Instance().m_gui_config.GetLayout("MainLayout");
                     if (winLayout != null)
