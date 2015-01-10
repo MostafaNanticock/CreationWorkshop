@@ -35,6 +35,9 @@ namespace Engine3D
         public const int OBJ_SUPPORT = 1; // a generated support
         public const int OBJ_GROUND = 2; // ground plane usewd for hit-testing
         public const int OBJ_SUPPORT_BASE = 3; // base support plate
+        public const int OBJ_SEL_PLANE = 4; // camera-facing selection plane for selected object
+
+
         public bool m_inSelectedList = false;
         private int m_listid; // gl call list id 
         private double m_volume = -1;

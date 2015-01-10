@@ -112,6 +112,7 @@
     <Compile Include="3DEngine\ModelLoaderType.cs" />
     <Compile Include="3DEngine\ModelLoaderAmf.cs" />
     <Compile Include="3DEngine\Path2D.cs" />
+    <Compile Include="3DEngine\Plane3d.cs" />
     <Compile Include="3DEngine\PreviewGenerator.cs" />
     <Compile Include="3DEngine\Primitives.cs" />
     <Compile Include="3DEngine\Quad3d.cs" />
@@ -799,6 +800,7 @@
     <None Include="resources\CustomGUI\buttHomeZ.png" />
     <None Include="resources\CustomGUI\buttGoZHome.png" />
     <None Include="resources\CustomGUI\buttX.png" />
+    <None Include="resources\CustomGUI\buttModifySupport.png" />
     <Content Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Down1.png" />
     <Content Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Up1.png" />
     <None Include="resources\MachineControl\mc_px0.png" />

@@ -352,6 +352,7 @@ namespace UV_DLP_3D_Printer
                     Support s = new Support();
                     Point3d center = region.Center(); // taking the center of the region is a naive approach 
                     float lz = center.z;
+                    lz += .65f;// why is this offset needed?
                     AddNewSupport(center.x, center.y, center.z, scnt++, null, lstsupports);
                     //region.ply.m_derived.
                     /*s.Create(null,(float)m_sc.fbrad, (float)m_sc.ftrad, (float)m_sc.hbrad, (float)m_sc.htrad, lz * .2f, lz * .6f, lz * .2f, 11);
@@ -861,6 +862,7 @@ namespace UV_DLP_3D_Printer
                     float px = (float)(spl.x - hxres) / (float)config.dpmmX;
                     float py = (float)(spl.y - hyres) / (float)config.dpmmY;
                     float pz = (float)(spl.ztop) * (float)config.ZThick;
+                    pz += .650f; // wtf?
                     AddNewSupport(px, py, pz, scnt++, GetSupportParrent(px,py,pz), lstsupports);
 
                 }

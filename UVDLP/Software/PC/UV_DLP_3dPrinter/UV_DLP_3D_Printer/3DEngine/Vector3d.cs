@@ -34,7 +34,11 @@ namespace Engine3D
         { 
             return new Vector3d(a.x * b, a.y * b, a.z * b); 
         }
-        public static Vector3d operator / ( Vector3d  a, float b) 
+        public static Vector3d operator *(float b, Vector3d a)
+        {
+            return new Vector3d(a.x * b, a.y * b, a.z * b);
+        }
+        public static Vector3d operator /(Vector3d a, float b) 
         { 
             return a * (1.0f / b); 
         }

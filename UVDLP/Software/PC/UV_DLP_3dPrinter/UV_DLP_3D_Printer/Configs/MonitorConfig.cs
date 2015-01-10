@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Drawing;
+using System.IO;
 
 namespace UV_DLP_3D_Printer.Configs
 {
@@ -82,7 +83,15 @@ namespace UV_DLP_3D_Printer.Configs
             {
                 try
                 {
-                    m_mask = new Bitmap(m_brightmask_filename);
+                    if (File.Exists(m_brightmask_filename))
+                    {
+                        m_mask = new Bitmap(m_brightmask_filename);
+                    }
+                    else 
+                    {
+                        DebugLogger.Instance().LogWarning("Mask Image " + m_brightmask_filename + " not found, disabling");
+                        m_usemask = false;
+                    }
                 }
                 catch (Exception ex) 
                 {

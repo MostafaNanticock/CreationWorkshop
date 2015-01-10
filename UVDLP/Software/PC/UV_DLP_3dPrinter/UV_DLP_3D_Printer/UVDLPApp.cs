@@ -118,6 +118,22 @@ namespace UV_DLP_3D_Printer
         private ServerContact m_sc;
         public AuxBuildCmds m_AuxBuildCmds;
 
+        #region SupportModes
+        public enum eSupportEditMode 
+        {
+            eNone,
+            eAddSupport,
+            eModifySupport
+        }
+        public eSupportEditMode SupportEditMode 
+        {
+            get { return m_supportmode;}
+            set { m_supportmode = value; }
+        }
+
+        private eSupportEditMode m_supportmode;
+        #endregion
+
         public static UVDLPApp Instance() 
         {
             if (m_instance == null) 
@@ -129,6 +145,7 @@ namespace UV_DLP_3D_Printer
 
         private UVDLPApp() 
         {
+            m_supportmode = eSupportEditMode.eNone;
             SceneFileName = "";
             m_callbackhandler = new CallbackHandler();
             m_appconfig = new AppConfig();

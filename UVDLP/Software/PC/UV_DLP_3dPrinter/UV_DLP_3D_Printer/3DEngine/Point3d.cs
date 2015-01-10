@@ -22,12 +22,21 @@ namespace Engine3D
             z = pnt.z;
             
         }
+
         public static Vector3d operator -(Point3d c1, Point3d c2) 
         {
             Vector3d ret = new Vector3d();
             ret.Set(c1.x - c2.x, c1.y - c2.y, c1.z - c2.z);
             return ret;
         }
+
+        public static Point3d operator +(Point3d c1, Vector3d c2)
+        {
+            Point3d ret = new Point3d();
+            ret.Set(c1.x + c2.x, c1.y + c2.y, c1.z + c2.z);
+            return ret;
+        }
+        
 
         /// <summary>
         /// This is an epsilon-based match

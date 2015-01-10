@@ -27,6 +27,15 @@ namespace Engine3D
      |  |
     _|__|_
    |______|
+
+     * 
+     * /|
+      / /
+     /_/
+     |  |
+     |  |
+     |__|
+    /____\
      
      * 
      * 
@@ -68,12 +77,57 @@ namespace Engine3D
         private int cdivs;
         public Object3d m_supporting; // the obeject that this is attached to
         private static int supcnt = 0;
+        private eSubType m_subtype;
+
+        /*
+         This translate type is used for hit-testing the support to determine where on the upport it was clicked
+         * it also is a flag used in moving a portion of the support
+         */
+        public enum eTranlateType
+        {
+            eBase,
+            eBaseshaft, // grabbed by the shaft
+            eTip // grabbed by the tip
+        }
+
+        public enum eSubType 
+        {
+            eBase, // sits on the ground with a vertical tip
+            ePointer, // sits on the ground with a angled tip
+            eIntra // connects between 2 parts of the model
+        }
+        public eSubType SubType 
+        {
+            get { return m_subtype; }
+            set 
+            {
+                if (m_subtype != value)  // value is changing
+                {
+                    // save the old center
+                    Point3d center = new Point3d(m_center);
+                    switch (value) 
+                    {
+                        //re-create based on current height / position                        
+                        case eSubType.eBase:
+                            
+                            break;
+                        case eSubType.eIntra:
+                            break;
+                        case eSubType.ePointer:
+                            break;
+                    }
+                    Translate(center.x, center.y, center.z); // move back to old position
+                    m_subtype = value;
+                }
+            }
+        }
         public Support() 
         {
             tag = Object3d.OBJ_SUPPORT; // tag for support
             m_supporting = null;
             this.Name = "Support_" + supcnt.ToString();
             supcnt++;
+            SubType = eSubType.eBase;
         }
         /// <summary>
         /// This function creates a new support structure
@@ -131,7 +185,7 @@ namespace Engine3D
 
                 makeWalls(s4i, s5i - (3 * divs) - 1, divs);
 
-                Update();
+                Update(); // update should only be called for new objects, otherwise, use the move/scale/rotate functions
                 SetColor(Color.Yellow);
                 ScaleToHeight(d1 + d2 + d3);
             }
@@ -250,14 +304,49 @@ namespace Engine3D
             return center;
         }
 
-        private void TranslateRange(Point3d pnt, int startidx, int endidx) 
+
+        private eTranlateType Hittest(Polygon ply) 
         {
+            // we need to determine where on the model this was clicked
+            return eTranlateType.eBase;
+        }
+
+
+        public void Translate(float x, float y, float z, eTranlateType tt) 
+        {
+            switch (tt) 
+            {
+                case eTranlateType.eBase:
+                    TranslateRange(x,y,z, s1i, s3i);
+                    break;
+                case eTranlateType.eBaseshaft:
+                    TranslateRange(x,y,z, s1i, s4i);
+                    break;
+            }
+            Update();
+        }
+
+        private void TranslateRange(float x, float y, float z , int startidx, int endidx) 
+        {
+            for (int c = startidx; c < endidx; c++)
+            {
+                m_lstpoints[c].x += x;
+                m_lstpoints[c].y += y;
+                m_lstpoints[c].z += z;
+            }        
+        }
+
+        private void TranslateRange(Point3d pnt, int startidx, int endidx)
+        {
+            TranslateRange(pnt.x, pnt.y, pnt.z, startidx, endidx);
+            /*
             for (int c = startidx; c < endidx; c++)
             {
                 m_lstpoints[c].x += pnt.x;
                 m_lstpoints[c].y += pnt.y;
                 m_lstpoints[c].z += pnt.z;
-            }        
+            }
+             */ 
         }
         /// <summary>
         /// This function is designed to move a support by it's tip

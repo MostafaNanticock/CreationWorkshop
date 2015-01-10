@@ -13,6 +13,8 @@ namespace UV_DLP_3D_Printer._3DEngine
     public class RTUtils
     {
         static Object3d m_gp = null; // artificial ground plane
+        static Object3d m_selplane = null; // artificial camera front-facing selection plane
+
         static bool vecinit = false;
         // keep these vectors around so we don't have to re-allocate them for every intersection test
         static Vector3d u, v, n;              // triangle vectors
@@ -155,6 +157,15 @@ namespace UV_DLP_3D_Printer._3DEngine
 		        intersect.z = start.z + ((raylen-d)*V.z);
 	        }
 	        return retval;
+        }
+        /*
+         The object selection plane is used to help move objects around
+         * This is a plane is centered at the object center and faces the center of the view
+         * This is used to determine an intersection along the plane to help move the object
+         */
+        private static void UpdateObjectSelectionPlane() 
+        {
+        
         }
 
         private static void CreateGroundPlane()

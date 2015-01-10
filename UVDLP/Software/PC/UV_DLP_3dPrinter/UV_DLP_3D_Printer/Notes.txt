@@ -1,10 +1,31 @@
 ﻿
 ToDo:
 
+Web presense / 
+	release FDM plugin
+	release SLS limited
+
+Integrate VCG library
+http://vcg.isti.cnr.it/~cignoni/newvcglib/html/
+builds for 32bit x86 on Linux and Windows
+
 Supports:
 	Generate for entire scene
 	Generate for selected model(s)
 2.  Is it possible to select a model and have the software show you the unsupported areas that are hanging down. (Ron B.)
+-Find and show lowest point/area in region of model
+-manual & automatic intra-object supports
+	-match angle of supports better to the surface of the polygon normal
+
+
+Automatic layout and support generation of scene?
+
+-need faster support generation
+	position camera at bottom facing up
+	render scene into bitmap,
+	render into zbuffer
+	test each pixel of zbuffer to associate what polygon it came from
+
 
 -Fix Pause / Resume feature
 

@@ -386,6 +386,16 @@ namespace UV_DLP_3D_Printer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap buttModifySupport {
+            get {
+                object obj = ResourceManager.GetObject("buttModifySupport", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap buttMove {
             get {
                 object obj = ResourceManager.GetObject("buttMove", resourceCulture);

@@ -49,6 +49,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         bool ctrldown;// is the control key held down?
         bool Render3dSpace = true;
         uint mColorBuffer = 0;
+
+
         //ctlImageButton imbtn;
         
 
@@ -683,9 +685,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 if (e.Button == MouseButtons.Left)
                 {
                     lmdown = true;
-                    // I saw m_ix and m_iy were 'NaN'
-                    // this means that the intersection failed somehow
-                    //m_camera.UpdateDirection(m_ix, m_iy);
                 }
                 if (e.Button == MouseButtons.Right)
                 {
@@ -749,15 +748,29 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                         if (dat.obj.tag == Object3d.OBJ_GROUND) //found the ground plane
                         {
 
-                            UVDLPApp.Instance().SelectedObject.Translate(
-                                (float)(dat.intersect.x - UVDLPApp.Instance().SelectedObject.m_center.x),
-                                (float)(dat.intersect.y - UVDLPApp.Instance().SelectedObject.m_center.y),
-                                0.0f);
+                            if (UVDLPApp.Instance().SelectedObject.tag == Object3d.OBJ_SUPPORT)
+                            {
+                                Support sup = (Support)UVDLPApp.Instance().SelectedObject;
+                                dat.intersect.z = 0.0f; // don't move the z
+                                sup.Translate(
+                                    (float)(dat.intersect.x - UVDLPApp.Instance().SelectedObject.m_center.x),
+                                    (float)(dat.intersect.y - UVDLPApp.Instance().SelectedObject.m_center.y),
+                                    0,                                    
+                                    Support.eTranlateType.eBaseshaft);
+                            }
+                            else
+                            {
+                                UVDLPApp.Instance().SelectedObject.Translate(
+                                    (float)(dat.intersect.x - UVDLPApp.Instance().SelectedObject.m_center.x),
+                                    (float)(dat.intersect.y - UVDLPApp.Instance().SelectedObject.m_center.y),
+                                    0.0f);
+                            }
                             //UVDLPApp.Instance().Engine3D.UpdateLists();
                             //UpdateView();
                         }
 
                     }
+                    /*
                     if (UVDLPApp.Instance().SelectedObject.tag == Object3d.OBJ_SUPPORT)  // if the current selected object is a support
                     {
                         Support tmpsup = (Support)UVDLPApp.Instance().SelectedObject;
@@ -788,6 +801,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                             tmpsup.m_parrent.RemoveSupport(tmpsup);
                         }
                     }
+                     */ 
                     UpdateView();
                 }                
             }
@@ -1136,6 +1150,21 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             }
         }
 
+        void AddNewSupport(float x, float y, float lz, Object3d parent)
+        {
+            Support s = new Support();
+            Configs.SupportConfig m_sc = UVDLPApp.Instance().m_supportconfig;
+            s.Create(parent, (float)m_sc.fbrad, (float)m_sc.ftrad, (float)m_sc.hbrad, (float)m_sc.htrad, lz * .2f, lz * .6f, lz * .2f, 11);
+            s.Translate(x, y, 0);
+            s.SetColor(Color.Yellow);
+            if (parent != null)
+                parent.AddSupport(s);
+            UVDLPApp.Instance().m_engine3d.AddObject(s);
+            UVDLPApp.Instance().SelectedObject = s;
+            
+            //RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eSupportGenerated, s.Name, s);
+        }
+        
 
         /// <summary>
         /// For now this is the editing mode for the currently selected support
@@ -1145,17 +1174,43 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         private void glControl1_Click(object sender, EventArgs e)
         {
             // single click on GL Control
+            if (UVDLPApp.Instance().SupportEditMode == UVDLPApp.eSupportEditMode.eAddSupport) 
+            {
+                // if we're adding supports
+                MouseEventArgs me = e as MouseEventArgs;
+                // MouseButtons buttonPushed = me.Button;
+                int xPos = me.X;
+                int yPos = me.Y;
+                List<ISectData> isects = TestHitTest(xPos, yPos);
+                if (isects.Count == 0) return; // no intersections
+                ISectData isd1 = null;
+                foreach (ISectData isd in isects)
+                {
+                    // find the closest object we clicked
+                    if (isd.obj.tag == Object3d.OBJ_NORMAL)
+                    {
+                        isd1 = isd; //  save it
+                        break;
+                    }
+                }
+                if (isd1 == null) return; // no object intersection
+                //add a support 
+                AddNewSupport(isd1.intersect.x, isd1.intersect.y, isd1.intersect.z, isd1.obj);
+                UpdateView();
+                return;
+            }
+
             Object3d obj = UVDLPApp.Instance().SelectedObject;
             if (obj == null) return;
             if (ctrldown == false) return; // ctrl need to be held down
 
             // this object is a support
-            if (obj.tag == Object3d.OBJ_SUPPORT) 
+            if (obj.tag == Object3d.OBJ_SUPPORT ) 
             {
                 Support sup = (Support)obj;// we can cast safely
                 // now we have to see if we clicked on an object
                 MouseEventArgs me = e as MouseEventArgs;
-                MouseButtons buttonPushed = me.Button;
+               // MouseButtons buttonPushed = me.Button;
                 int xPos = me.X;
                 int yPos = me.Y;
                 List<ISectData> isects = TestHitTest(xPos, yPos);

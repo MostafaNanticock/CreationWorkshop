@@ -191,8 +191,19 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         private void buttAddSupport_Click(object sender, EventArgs e)
         {
+            buttModifySupport.Checked = false;
+            if (buttAddSupport.Checked)
+            {
+                UVDLPApp.Instance().SupportEditMode = UVDLPApp.eSupportEditMode.eAddSupport;
+            }
+            else 
+            {
+                UVDLPApp.Instance().SupportEditMode = UVDLPApp.eSupportEditMode.eNone;
+            }
+            /*
             UVDLPApp.Instance().AddSupport();
             UVDLPApp.Instance().SaveSupportConfig(UVDLPApp.Instance().m_appconfig.SupportConfigName);
+             * */
         }
 
         private void buttGenBase_Click(object sender, EventArgs e)
@@ -492,6 +503,20 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             else
             {
                 this.Height = ctlTitle1.Height + 5;
+            }
+        }
+
+        private void buttModifySupport_Click(object sender, EventArgs e)
+        {
+            buttAddSupport.Checked = false; // uncheck the add
+            if (buttModifySupport.Checked)
+            {
+                // put the app in modify support
+                UVDLPApp.Instance().SupportEditMode = UVDLPApp.eSupportEditMode.eModifySupport;
+            }
+            else 
+            {
+                UVDLPApp.Instance().SupportEditMode = UVDLPApp.eSupportEditMode.eNone;
             }
         }
    

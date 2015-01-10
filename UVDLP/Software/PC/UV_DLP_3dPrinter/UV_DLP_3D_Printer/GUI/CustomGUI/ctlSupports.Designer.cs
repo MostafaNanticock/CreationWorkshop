@@ -31,6 +31,7 @@
             this.progressTitle = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlProgress();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttAddSupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.buttModifySupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttAutoSupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttGenBase = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.panelSuppotShape = new System.Windows.Forms.Panel();
@@ -78,12 +79,12 @@
             this.progressTitle.BorderThickness = 2;
             this.progressTitle.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.progressTitle.ForeColor = System.Drawing.Color.White;
-            this.progressTitle.Location = new System.Drawing.Point(4, 43);
-            this.progressTitle.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.progressTitle.Location = new System.Drawing.Point(5, 53);
+            this.progressTitle.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.progressTitle.Maximum = 100;
             this.progressTitle.Minimum = 0;
             this.progressTitle.Name = "progressTitle";
-            this.progressTitle.Size = new System.Drawing.Size(276, 20);
+            this.progressTitle.Size = new System.Drawing.Size(368, 25);
             this.progressTitle.TabIndex = 0;
             this.progressTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.progressTitle.Value = 0;
@@ -92,19 +93,20 @@
             // 
             this.flowLayoutPanel1.BackColor = System.Drawing.Color.RoyalBlue;
             this.flowLayoutPanel1.Controls.Add(this.buttAddSupport);
-            this.flowLayoutPanel1.Controls.Add(this.buttAutoSupport);
+            this.flowLayoutPanel1.Controls.Add(this.buttModifySupport);
             this.flowLayoutPanel1.Controls.Add(this.buttGenBase);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(6, 67);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
+            this.flowLayoutPanel1.Controls.Add(this.buttAutoSupport);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(8, 82);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(149, 47);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(365, 58);
             this.flowLayoutPanel1.TabIndex = 5;
             // 
             // buttAddSupport
             // 
             this.buttAddSupport.BackColor = System.Drawing.Color.Navy;
             this.buttAddSupport.Checked = false;
-            this.buttAddSupport.CheckImage = null;
+            this.buttAddSupport.CheckImage = global::UV_DLP_3D_Printer.Properties.Resources.buttChecked;
             this.buttAddSupport.Gapx = 5;
             this.buttAddSupport.Gapy = 5;
             this.buttAddSupport.GLBackgroundImage = null;
@@ -113,15 +115,38 @@
             this.buttAddSupport.GuiAnchor = null;
             this.buttAddSupport.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttAddSupport.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttAddSupport;
-            this.buttAddSupport.Location = new System.Drawing.Point(4, 4);
-            this.buttAddSupport.Margin = new System.Windows.Forms.Padding(4);
+            this.buttAddSupport.Location = new System.Drawing.Point(5, 5);
+            this.buttAddSupport.Margin = new System.Windows.Forms.Padding(5);
             this.buttAddSupport.Name = "buttAddSupport";
-            this.buttAddSupport.Size = new System.Drawing.Size(36, 39);
+            this.buttAddSupport.Size = new System.Drawing.Size(48, 48);
             this.buttAddSupport.StyleName = null;
             this.buttAddSupport.TabIndex = 23;
-            this.ctlToolTip1.SetToolTip(this.buttAddSupport, "Add manual\r\nsupport");
+            this.ctlToolTip1.SetToolTip(this.buttAddSupport, "Add Support");
             this.buttAddSupport.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttAddSupport.Click += new System.EventHandler(this.buttAddSupport_Click);
+            // 
+            // buttModifySupport
+            // 
+            this.buttModifySupport.BackColor = System.Drawing.Color.Navy;
+            this.buttModifySupport.Checked = false;
+            this.buttModifySupport.CheckImage = global::UV_DLP_3D_Printer.Properties.Resources.buttChecked;
+            this.buttModifySupport.Gapx = 5;
+            this.buttModifySupport.Gapy = 5;
+            this.buttModifySupport.GLBackgroundImage = null;
+            this.buttModifySupport.GLImage = null;
+            this.buttModifySupport.GLVisible = false;
+            this.buttModifySupport.GuiAnchor = null;
+            this.buttModifySupport.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttModifySupport.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttModifySupport;
+            this.buttModifySupport.Location = new System.Drawing.Point(63, 5);
+            this.buttModifySupport.Margin = new System.Windows.Forms.Padding(5);
+            this.buttModifySupport.Name = "buttModifySupport";
+            this.buttModifySupport.Size = new System.Drawing.Size(48, 48);
+            this.buttModifySupport.StyleName = null;
+            this.buttModifySupport.TabIndex = 26;
+            this.ctlToolTip1.SetToolTip(this.buttModifySupport, "Modify Support");
+            this.buttModifySupport.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttModifySupport.Click += new System.EventHandler(this.buttModifySupport_Click);
             // 
             // buttAutoSupport
             // 
@@ -136,13 +161,13 @@
             this.buttAutoSupport.GuiAnchor = null;
             this.buttAutoSupport.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttAutoSupport.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttAutoSupport;
-            this.buttAutoSupport.Location = new System.Drawing.Point(44, 4);
-            this.buttAutoSupport.Margin = new System.Windows.Forms.Padding(0, 4, 4, 4);
+            this.buttAutoSupport.Location = new System.Drawing.Point(169, 5);
+            this.buttAutoSupport.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.buttAutoSupport.Name = "buttAutoSupport";
-            this.buttAutoSupport.Size = new System.Drawing.Size(36, 39);
+            this.buttAutoSupport.Size = new System.Drawing.Size(48, 48);
             this.buttAutoSupport.StyleName = null;
             this.buttAutoSupport.TabIndex = 24;
-            this.ctlToolTip1.SetToolTip(this.buttAutoSupport, "Add automatic\r\nsupports");
+            this.ctlToolTip1.SetToolTip(this.buttAutoSupport, "Generate Automatic Supports");
             this.buttAutoSupport.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttAutoSupport.Click += new System.EventHandler(this.buttAutoSupport_Click);
             // 
@@ -159,13 +184,13 @@
             this.buttGenBase.GuiAnchor = null;
             this.buttGenBase.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttGenBase.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttSupBase;
-            this.buttGenBase.Location = new System.Drawing.Point(84, 4);
-            this.buttGenBase.Margin = new System.Windows.Forms.Padding(0, 4, 4, 4);
+            this.buttGenBase.Location = new System.Drawing.Point(116, 5);
+            this.buttGenBase.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.buttGenBase.Name = "buttGenBase";
-            this.buttGenBase.Size = new System.Drawing.Size(36, 39);
+            this.buttGenBase.Size = new System.Drawing.Size(48, 48);
             this.buttGenBase.StyleName = null;
             this.buttGenBase.TabIndex = 25;
-            this.ctlToolTip1.SetToolTip(this.buttGenBase, "Add supports\r\nbase plate");
+            this.ctlToolTip1.SetToolTip(this.buttGenBase, "Add Support Base Plate");
             this.buttGenBase.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttGenBase.Click += new System.EventHandler(this.buttGenBase_Click);
             // 
@@ -180,11 +205,11 @@
             this.panelSuppotShape.Controls.Add(this.numHT);
             this.panelSuppotShape.Controls.Add(this.pictureSupport);
             this.panelSuppotShape.ForeColor = System.Drawing.Color.White;
-            this.panelSuppotShape.Location = new System.Drawing.Point(6, 116);
+            this.panelSuppotShape.Location = new System.Drawing.Point(8, 143);
             this.panelSuppotShape.Margin = new System.Windows.Forms.Padding(0);
             this.panelSuppotShape.Name = "panelSuppotShape";
-            this.panelSuppotShape.Padding = new System.Windows.Forms.Padding(2);
-            this.panelSuppotShape.Size = new System.Drawing.Size(150, 153);
+            this.panelSuppotShape.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panelSuppotShape.Size = new System.Drawing.Size(200, 188);
             this.panelSuppotShape.TabIndex = 25;
             this.panelSuppotShape.Text = "Support Parameters";
             // 
@@ -192,8 +217,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Arial", 17.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.label1.Location = new System.Drawing.Point(2, 2);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(3, 2);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(127, 21);
             this.label1.TabIndex = 28;
@@ -215,14 +239,15 @@
             this.numFB1.Increment = 0.1F;
             this.numFB1.IntVal = 1;
             this.numFB1.IsFloat = true;
-            this.numFB1.Location = new System.Drawing.Point(86, 130);
+            this.numFB1.Location = new System.Drawing.Point(115, 160);
+            this.numFB1.Margin = new System.Windows.Forms.Padding(4);
             this.numFB1.MaxFloat = 20F;
             this.numFB1.MaxInt = 1000;
             this.numFB1.MinFloat = 0.1F;
-            this.numFB1.MinimumSize = new System.Drawing.Size(15, 4);
+            this.numFB1.MinimumSize = new System.Drawing.Size(20, 5);
             this.numFB1.MinInt = 1;
             this.numFB1.Name = "numFB1";
-            this.numFB1.Size = new System.Drawing.Size(59, 17);
+            this.numFB1.Size = new System.Drawing.Size(79, 21);
             this.numFB1.StyleName = null;
             this.numFB1.TabIndex = 27;
             this.numFB1.TextFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -248,14 +273,15 @@
             this.numFB.Increment = 0.1F;
             this.numFB.IntVal = 1;
             this.numFB.IsFloat = true;
-            this.numFB.Location = new System.Drawing.Point(86, 108);
+            this.numFB.Location = new System.Drawing.Point(115, 133);
+            this.numFB.Margin = new System.Windows.Forms.Padding(4);
             this.numFB.MaxFloat = 20F;
             this.numFB.MaxInt = 1000;
             this.numFB.MinFloat = 0.1F;
-            this.numFB.MinimumSize = new System.Drawing.Size(15, 4);
+            this.numFB.MinimumSize = new System.Drawing.Size(20, 5);
             this.numFB.MinInt = 1;
             this.numFB.Name = "numFB";
-            this.numFB.Size = new System.Drawing.Size(59, 17);
+            this.numFB.Size = new System.Drawing.Size(79, 21);
             this.numFB.StyleName = null;
             this.numFB.TabIndex = 26;
             this.numFB.TextFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -281,14 +307,15 @@
             this.numFT.Increment = 0.1F;
             this.numFT.IntVal = 1;
             this.numFT.IsFloat = true;
-            this.numFT.Location = new System.Drawing.Point(86, 86);
+            this.numFT.Location = new System.Drawing.Point(115, 106);
+            this.numFT.Margin = new System.Windows.Forms.Padding(4);
             this.numFT.MaxFloat = 20F;
             this.numFT.MaxInt = 1000;
             this.numFT.MinFloat = 0.1F;
-            this.numFT.MinimumSize = new System.Drawing.Size(15, 4);
+            this.numFT.MinimumSize = new System.Drawing.Size(20, 5);
             this.numFT.MinInt = 1;
             this.numFT.Name = "numFT";
-            this.numFT.Size = new System.Drawing.Size(59, 17);
+            this.numFT.Size = new System.Drawing.Size(79, 21);
             this.numFT.StyleName = null;
             this.numFT.TabIndex = 25;
             this.numFT.TextFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -313,14 +340,15 @@
             this.numHB.Increment = 0.1F;
             this.numHB.IntVal = 1;
             this.numHB.IsFloat = true;
-            this.numHB.Location = new System.Drawing.Point(86, 47);
+            this.numHB.Location = new System.Drawing.Point(115, 58);
+            this.numHB.Margin = new System.Windows.Forms.Padding(4);
             this.numHB.MaxFloat = 20F;
             this.numHB.MaxInt = 1000;
             this.numHB.MinFloat = 0.1F;
-            this.numHB.MinimumSize = new System.Drawing.Size(15, 4);
+            this.numHB.MinimumSize = new System.Drawing.Size(20, 5);
             this.numHB.MinInt = 1;
             this.numHB.Name = "numHB";
-            this.numHB.Size = new System.Drawing.Size(59, 17);
+            this.numHB.Size = new System.Drawing.Size(79, 21);
             this.numHB.StyleName = null;
             this.numHB.TabIndex = 24;
             this.numHB.TextFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -345,14 +373,15 @@
             this.numHT.Increment = 0.1F;
             this.numHT.IntVal = 1;
             this.numHT.IsFloat = true;
-            this.numHT.Location = new System.Drawing.Point(86, 25);
+            this.numHT.Location = new System.Drawing.Point(115, 31);
+            this.numHT.Margin = new System.Windows.Forms.Padding(4);
             this.numHT.MaxFloat = 20F;
             this.numHT.MaxInt = 1000;
             this.numHT.MinFloat = 0.1F;
-            this.numHT.MinimumSize = new System.Drawing.Size(15, 4);
+            this.numHT.MinimumSize = new System.Drawing.Size(20, 5);
             this.numHT.MinInt = 1;
             this.numHT.Name = "numHT";
-            this.numHT.Size = new System.Drawing.Size(59, 17);
+            this.numHT.Size = new System.Drawing.Size(79, 21);
             this.numHT.StyleName = null;
             this.numHT.TabIndex = 23;
             this.numHT.TextFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -363,10 +392,10 @@
             // 
             // pictureSupport
             // 
-            this.pictureSupport.Location = new System.Drawing.Point(4, 25);
-            this.pictureSupport.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureSupport.Location = new System.Drawing.Point(5, 31);
+            this.pictureSupport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureSupport.Name = "pictureSupport";
-            this.pictureSupport.Size = new System.Drawing.Size(81, 122);
+            this.pictureSupport.Size = new System.Drawing.Size(108, 150);
             this.pictureSupport.TabIndex = 12;
             this.pictureSupport.TabStop = false;
             this.pictureSupport.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureSupport_Paint);
@@ -378,10 +407,10 @@
             this.panel1.Controls.Add(this.numDownAngle);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(159, 68);
-            this.panel1.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.panel1.Location = new System.Drawing.Point(208, 143);
+            this.panel1.Margin = new System.Windows.Forms.Padding(0, 0, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(122, 64);
+            this.panel1.Size = new System.Drawing.Size(163, 79);
             this.panel1.TabIndex = 0;
             // 
             // chkDownPolys
@@ -397,10 +426,10 @@
             this.chkDownPolys.GuiAnchor = null;
             this.chkDownPolys.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.chkDownPolys.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttViewDown;
-            this.chkDownPolys.Location = new System.Drawing.Point(5, 26);
-            this.chkDownPolys.Margin = new System.Windows.Forms.Padding(4);
+            this.chkDownPolys.Location = new System.Drawing.Point(7, 32);
+            this.chkDownPolys.Margin = new System.Windows.Forms.Padding(5);
             this.chkDownPolys.Name = "chkDownPolys";
-            this.chkDownPolys.Size = new System.Drawing.Size(24, 26);
+            this.chkDownPolys.Size = new System.Drawing.Size(32, 32);
             this.chkDownPolys.StyleName = null;
             this.chkDownPolys.TabIndex = 31;
             this.ctlToolTip1.SetToolTip(this.chkDownPolys, "Show downward facing \r\nsurfaces by angle");
@@ -423,14 +452,15 @@
             this.numDownAngle.Increment = 1F;
             this.numDownAngle.IntVal = 1;
             this.numDownAngle.IsFloat = true;
-            this.numDownAngle.Location = new System.Drawing.Point(60, 35);
+            this.numDownAngle.Location = new System.Drawing.Point(80, 43);
+            this.numDownAngle.Margin = new System.Windows.Forms.Padding(4);
             this.numDownAngle.MaxFloat = 90F;
             this.numDownAngle.MaxInt = 1000;
             this.numDownAngle.MinFloat = 0F;
-            this.numDownAngle.MinimumSize = new System.Drawing.Size(15, 4);
+            this.numDownAngle.MinimumSize = new System.Drawing.Size(20, 5);
             this.numDownAngle.MinInt = 1;
             this.numDownAngle.Name = "numDownAngle";
-            this.numDownAngle.Size = new System.Drawing.Size(59, 17);
+            this.numDownAngle.Size = new System.Drawing.Size(79, 21);
             this.numDownAngle.StyleName = null;
             this.numDownAngle.TabIndex = 30;
             this.numDownAngle.TextFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -444,8 +474,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(37, 38);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Location = new System.Drawing.Point(49, 47);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(29, 14);
             this.label4.TabIndex = 32;
@@ -455,12 +484,11 @@
             // 
             this.label2.Font = new System.Drawing.Font("Arial", 17.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(2, 5);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(3, 6);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(94, 18);
+            this.label2.Size = new System.Drawing.Size(125, 22);
             this.label2.TabIndex = 29;
-            this.label2.Text = "Manual config";
+            this.label2.Text = "View config";
             // 
             // panel2
             // 
@@ -474,10 +502,10 @@
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.labelAutoSup);
             this.panel2.Controls.Add(this.label3);
-            this.panel2.Location = new System.Drawing.Point(159, 136);
-            this.panel2.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.panel2.Location = new System.Drawing.Point(210, 228);
+            this.panel2.Margin = new System.Windows.Forms.Padding(0, 0, 3, 2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(122, 133);
+            this.panel2.Size = new System.Drawing.Size(163, 164);
             this.panel2.TabIndex = 1;
             // 
             // numGap
@@ -496,14 +524,15 @@
             this.numGap.Increment = 0.1F;
             this.numGap.IntVal = 1;
             this.numGap.IsFloat = true;
-            this.numGap.Location = new System.Drawing.Point(18, 94);
+            this.numGap.Location = new System.Drawing.Point(24, 116);
+            this.numGap.Margin = new System.Windows.Forms.Padding(4);
             this.numGap.MaxFloat = 20F;
             this.numGap.MaxInt = 1000;
             this.numGap.MinFloat = -20F;
-            this.numGap.MinimumSize = new System.Drawing.Size(15, 4);
+            this.numGap.MinimumSize = new System.Drawing.Size(20, 5);
             this.numGap.MinInt = 1;
             this.numGap.Name = "numGap";
-            this.numGap.Size = new System.Drawing.Size(59, 17);
+            this.numGap.Size = new System.Drawing.Size(79, 21);
             this.numGap.StyleName = null;
             this.numGap.TabIndex = 36;
             this.numGap.TextFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -520,10 +549,10 @@
             "Bed of Nails",
             "Adaptive",
             "Adaptive v2"});
-            this.cmbSupType.Location = new System.Drawing.Point(5, 20);
-            this.cmbSupType.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbSupType.Location = new System.Drawing.Point(7, 25);
+            this.cmbSupType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmbSupType.Name = "cmbSupType";
-            this.cmbSupType.Size = new System.Drawing.Size(111, 21);
+            this.cmbSupType.Size = new System.Drawing.Size(147, 24);
             this.cmbSupType.TabIndex = 35;
             this.cmbSupType.SelectedIndexChanged += new System.EventHandler(this.cmbSupType_SelectedIndexChanged);
             // 
@@ -540,10 +569,10 @@
             this.chkOnlyDownward.GuiAnchor = null;
             this.chkOnlyDownward.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.chkOnlyDownward.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttAutoDown;
-            this.chkOnlyDownward.Location = new System.Drawing.Point(5, 46);
-            this.chkOnlyDownward.Margin = new System.Windows.Forms.Padding(4);
+            this.chkOnlyDownward.Location = new System.Drawing.Point(7, 57);
+            this.chkOnlyDownward.Margin = new System.Windows.Forms.Padding(5);
             this.chkOnlyDownward.Name = "chkOnlyDownward";
-            this.chkOnlyDownward.Size = new System.Drawing.Size(24, 26);
+            this.chkOnlyDownward.Size = new System.Drawing.Size(32, 32);
             this.chkOnlyDownward.StyleName = null;
             this.chkOnlyDownward.TabIndex = 32;
             this.ctlToolTip1.SetToolTip(this.chkOnlyDownward, "Generate support only on\r\ndownward facing surfaces");
@@ -565,14 +594,15 @@
             this.numY.Increment = 0.1F;
             this.numY.IntVal = 1;
             this.numY.IsFloat = true;
-            this.numY.Location = new System.Drawing.Point(37, 105);
+            this.numY.Location = new System.Drawing.Point(49, 129);
+            this.numY.Margin = new System.Windows.Forms.Padding(4);
             this.numY.MaxFloat = 20F;
             this.numY.MaxInt = 1000;
             this.numY.MinFloat = -20F;
-            this.numY.MinimumSize = new System.Drawing.Size(15, 4);
+            this.numY.MinimumSize = new System.Drawing.Size(20, 5);
             this.numY.MinInt = 1;
             this.numY.Name = "numY";
-            this.numY.Size = new System.Drawing.Size(59, 17);
+            this.numY.Size = new System.Drawing.Size(79, 21);
             this.numY.StyleName = null;
             this.numY.TabIndex = 34;
             this.numY.TextFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -596,14 +626,15 @@
             this.numX.Increment = 0.1F;
             this.numX.IntVal = 1;
             this.numX.IsFloat = true;
-            this.numX.Location = new System.Drawing.Point(37, 85);
+            this.numX.Location = new System.Drawing.Point(49, 105);
+            this.numX.Margin = new System.Windows.Forms.Padding(4);
             this.numX.MaxFloat = 20F;
             this.numX.MaxInt = 1000;
             this.numX.MinFloat = -20F;
-            this.numX.MinimumSize = new System.Drawing.Size(15, 4);
+            this.numX.MinimumSize = new System.Drawing.Size(20, 5);
             this.numX.MinInt = 1;
             this.numX.Name = "numX";
-            this.numX.Size = new System.Drawing.Size(59, 17);
+            this.numX.Size = new System.Drawing.Size(79, 21);
             this.numX.StyleName = null;
             this.numX.TabIndex = 33;
             this.numX.TextFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -616,8 +647,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Arial", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(2, 104);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Location = new System.Drawing.Point(3, 128);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(45, 14);
             this.label7.TabIndex = 32;
@@ -627,10 +657,9 @@
             // 
             this.label6.Font = new System.Drawing.Font("Arial", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(3, 89);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label6.Location = new System.Drawing.Point(4, 110);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(38, 12);
+            this.label6.Size = new System.Drawing.Size(51, 15);
             this.label6.TabIndex = 32;
             this.label6.Text = "X (mm):";
             // 
@@ -638,10 +667,9 @@
             // 
             this.labelAutoSup.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.labelAutoSup.ForeColor = System.Drawing.Color.White;
-            this.labelAutoSup.Location = new System.Drawing.Point(3, 74);
-            this.labelAutoSup.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelAutoSup.Location = new System.Drawing.Point(4, 91);
             this.labelAutoSup.Name = "labelAutoSup";
-            this.labelAutoSup.Size = new System.Drawing.Size(102, 12);
+            this.labelAutoSup.Size = new System.Drawing.Size(136, 15);
             this.labelAutoSup.TabIndex = 32;
             this.labelAutoSup.Text = "Automatic Support Grid:";
             // 
@@ -649,10 +677,9 @@
             // 
             this.label3.Font = new System.Drawing.Font("Arial", 17.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(2, -1);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Location = new System.Drawing.Point(3, -1);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(113, 18);
+            this.label3.Size = new System.Drawing.Size(151, 22);
             this.label3.TabIndex = 29;
             this.label3.Text = "Automatic config";
             // 
@@ -662,18 +689,18 @@
             this.panel3.Controls.Add(this.cmdRemoveSupports);
             this.panel3.Controls.Add(this.lbSupports);
             this.panel3.Controls.Add(this.label9);
-            this.panel3.Location = new System.Drawing.Point(8, 276);
-            this.panel3.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
+            this.panel3.Location = new System.Drawing.Point(11, 340);
+            this.panel3.Margin = new System.Windows.Forms.Padding(0, 0, 3, 2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(148, 159);
+            this.panel3.Size = new System.Drawing.Size(197, 196);
             this.panel3.TabIndex = 27;
             // 
             // cmdRemoveSupports
             // 
-            this.cmdRemoveSupports.Location = new System.Drawing.Point(2, 128);
-            this.cmdRemoveSupports.Margin = new System.Windows.Forms.Padding(2);
+            this.cmdRemoveSupports.Location = new System.Drawing.Point(3, 158);
+            this.cmdRemoveSupports.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmdRemoveSupports.Name = "cmdRemoveSupports";
-            this.cmdRemoveSupports.Size = new System.Drawing.Size(141, 26);
+            this.cmdRemoveSupports.Size = new System.Drawing.Size(188, 32);
             this.cmdRemoveSupports.TabIndex = 32;
             this.cmdRemoveSupports.Text = "Remove all Supports";
             this.cmdRemoveSupports.UseVisualStyleBackColor = true;
@@ -687,11 +714,11 @@
             this.lbSupports.FullRowSelect = true;
             this.lbSupports.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.lbSupports.HideSelection = false;
-            this.lbSupports.Location = new System.Drawing.Point(2, 26);
-            this.lbSupports.Margin = new System.Windows.Forms.Padding(2);
+            this.lbSupports.Location = new System.Drawing.Point(3, 32);
+            this.lbSupports.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lbSupports.MultiSelect = false;
             this.lbSupports.Name = "lbSupports";
-            this.lbSupports.Size = new System.Drawing.Size(142, 98);
+            this.lbSupports.Size = new System.Drawing.Size(188, 120);
             this.lbSupports.TabIndex = 31;
             this.lbSupports.UseCompatibleStateImageBehavior = false;
             this.lbSupports.View = System.Windows.Forms.View.Details;
@@ -706,10 +733,9 @@
             // 
             this.label9.Font = new System.Drawing.Font("Arial", 17.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(4, 6);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label9.Location = new System.Drawing.Point(5, 7);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(94, 18);
+            this.label9.Size = new System.Drawing.Size(125, 22);
             this.label9.TabIndex = 29;
             this.label9.Text = "Supports";
             // 
@@ -732,11 +758,11 @@
             this.ctlTitle1.GLVisible = false;
             this.ctlTitle1.GuiAnchor = null;
             this.ctlTitle1.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttSupport;
-            this.ctlTitle1.Location = new System.Drawing.Point(2, 2);
-            this.ctlTitle1.Margin = new System.Windows.Forms.Padding(2);
+            this.ctlTitle1.Location = new System.Drawing.Point(3, 2);
+            this.ctlTitle1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ctlTitle1.Name = "ctlTitle1";
             this.ctlTitle1.OnClickCallback = "";
-            this.ctlTitle1.Size = new System.Drawing.Size(278, 37);
+            this.ctlTitle1.Size = new System.Drawing.Size(371, 46);
             this.ctlTitle1.StyleName = null;
             this.ctlTitle1.TabIndex = 28;
             this.ctlTitle1.Text = "Support Generation";
@@ -744,7 +770,7 @@
             // 
             // ctlSupports
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.ctlTitle1);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -753,9 +779,9 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel3);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "ctlSupports";
-            this.Size = new System.Drawing.Size(284, 440);
+            this.Size = new System.Drawing.Size(379, 542);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.panelSuppotShape.ResumeLayout(false);
             this.panelSuppotShape.PerformLayout();
@@ -806,5 +832,6 @@
         private ctlTitle ctlTitle1;
         private ctlImageButton buttGenBase;
         private ctlNumber numGap;
+        private ctlImageButton buttModifySupport;
     }
 }
