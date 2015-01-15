@@ -101,47 +101,6 @@ namespace Engine3D
             return segments;
         }
         /// <summary>
-        /// returns true if the bounding box for the specified polyline
-        /// overlaps with this bounding box
-        /// </summary>
-        /// <param name="pl"></param>
-        /// <returns></returns>
-        public bool BBoxISect(PolyLine3d pl) 
-        {
-            /*
-                function DoBoundingBoxesIntersect(bb1, bb2) {
-
-                //First bounding box, top left corner, bottom right corner
-                var ATLx = bb1.TopLeftLatLong.Longitude;
-                var ATLy = bb1.TopLeftLatLong.Latitude;
-                var ABRx = bb1.BottomRightLatLong.Longitude;
-                var ABRy = bb1.BottomRightLatLong.Latitude;
-
-                //Second bounding box, top left corner, bottom right corner
-                var BTLx = bb2.TopLeftLatLong.Longitude;
-                var BTLy = bb2.TopLeftLatLong.Latitude;
-                var BBRx = bb2.BottomRightLatLong.Longitude;
-                var BBRy = bb2.BottomRightLatLong.Latitude;
-
-                var rabx = Math.abs(ATLx + ABRx – BTLx – BBRx);
-                var raby = Math.abs(ATLy + ABRy – BTLy – BBRy);
-
-                //rAx + rBx
-                var raxPrbx = ABRx – ATLx + BBRx – BTLx;
-
-                //rAy + rBy
-                var rayPrby = ATLy – ABRy + BTLy – BBRy;
-
-                if(rabx <= raxPrbx && raby <= rayPrby)
-                {
-                                return true;
-                }
-                return false;
-}             
-             */
-            return false;
-        }
-        /// <summary>
         /// Calculate the bounding box for this polyline
         /// </summary>
         public void CalcBBox() 

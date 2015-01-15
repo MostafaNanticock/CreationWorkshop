@@ -139,8 +139,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 //if this is a support, remove it from the parent as to not create an orphan
                 if (UVDLPApp.Instance().SelectedObject.tag == Object3d.OBJ_SUPPORT || UVDLPApp.Instance().SelectedObject.tag == Object3d.OBJ_SUPPORT_BASE)
                 {
-                    if (UVDLPApp.Instance().SelectedObject.m_parrent != null)
-                        UVDLPApp.Instance().SelectedObject.m_parrent.RemoveSupport(UVDLPApp.Instance().SelectedObject);
+                    if (UVDLPApp.Instance().SelectedObject.m_parent != null)
+                        UVDLPApp.Instance().SelectedObject.m_parent.RemoveSupport(UVDLPApp.Instance().SelectedObject);
                 }
                 
                 UVDLPApp.Instance().RemoveCurrentModel();

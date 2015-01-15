@@ -19,14 +19,14 @@ namespace Engine3D
 
         public List<Point3d> m_lstpoints; // list of 3d points in object
         public List<Polygon> m_lstpolys;// list of polygons
-        public List<PolyLine3d> m_boundingBox;
         public List<Object3d> m_supports; // a list of support objects attached to this one
-        public Object3d m_parrent = null;
+        public Object3d m_parent = null;
 
         public string m_name; // just the filename
         public string m_fullname; // full path with filename
         private bool m_visible;
-        public Point3d m_min, m_max,m_center;
+        public Point3d m_min, m_max;
+        public Point3d m_center;
         public int m_wireframe = 0; // wireframe thickness 0 = no wireframe
         public float m_radius;
         public Material material;// = new Material();
@@ -39,7 +39,7 @@ namespace Engine3D
 
 
         public bool m_inSelectedList = false;
-        private int m_listid; // gl call list id 
+        protected int m_listid; // gl call list id 
         private double m_volume = -1;
 
 
@@ -112,9 +112,9 @@ namespace Engine3D
         {
             if (s == null)
                 return;
-            if (s.m_parrent != null) 
-                s.m_parrent.RemoveSupport(s);
-            s.m_parrent = this;
+            if (s.m_parent != null) 
+                s.m_parent.RemoveSupport(s);
+            s.m_parent = this;
             if (m_supports.IndexOf(s) < 0)
                 m_supports.Add(s);
         }
@@ -125,7 +125,7 @@ namespace Engine3D
                 return;
             while (m_supports.IndexOf(s) >= 0)
                 m_supports.Remove(s);
-            s.m_parrent = null;
+            s.m_parent = null;
         }
 
         public SupportBase GetSupportBase()
@@ -182,7 +182,7 @@ namespace Engine3D
             }
                
         }
-        public void CalcMinMaxes() 
+        private void CalcMinMaxes() 
         {
             foreach (Polygon p in m_lstpolys) 
             {
@@ -222,6 +222,12 @@ namespace Engine3D
             }
             Translate((float)center.x, (float)center.y, (float)cz);
         }
+        /// <summary>
+        /// This scales from the center of the object
+        /// </summary>
+        /// <param name="sfx"></param>
+        /// <param name="sfy"></param>
+        /// <param name="sfz"></param>
         public void Scale(float sfx,float sfy, float sfz)
         {
             Point3d center = CalcCenter();
@@ -260,11 +266,6 @@ namespace Engine3D
             float zmove = -zlev - epsilon;
             Translate((float)-center.x, (float)-center.y, (float)zmove);                   
         }
-
-        public void Render() 
-        {
-            
-        }
         public void FlipWinding() 
         {
             foreach (Polygon p in m_lstpolys) 
@@ -272,19 +273,10 @@ namespace Engine3D
                 p.FlipWinding();
             }
         }
-        private static int GetListID() 
+        protected static int GetListID() 
         {
             return GL.GenLists(1); 
         }
-        /*
-        public virtual void RenderGL(bool showalpha, bool selected) 
-        {
-            foreach (Polygon poly in m_lstpolys)
-            {
-                poly.RenderGL(this.m_wireframe, showalpha, selected);
-            }
-        }
-         */
 
         /// <summary>
         /// Return a list of polygon next to a hole
@@ -352,7 +344,6 @@ namespace Engine3D
                     GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
                     GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
                     GL.StencilMask(0xFF);
-                    //GL.DepthMask(false);
                     GL.Clear(ClearBufferMask.StencilBufferBit);
                 }
                 foreach (Polygon poly in m_lstpolys)
@@ -524,6 +515,9 @@ namespace Engine3D
                 return false;
             }
         }
+        /// <summary>
+        /// Iterates through all the points, looking for the min / max points of the models
+        /// </summary>
         public void FindMinMax()         
         {
             Point3d first = (Point3d)this.m_lstpoints[0];
@@ -545,7 +539,7 @@ namespace Engine3D
                 if (p.z > m_max.z)
                     m_max.z = p.z;
             }
-        
+            CalcMinMaxes();
         }
         /*
          This is called after calccenter
@@ -620,22 +614,20 @@ namespace Engine3D
         }
 
         /*
-         This function should be called after a move,scale,rotate
+         This function initializes initial positions 
+         * and calculates the center, radius
          */
         public void Update() 
         {
             try
             {
-                //Update
                 CalcCenter();
                 CalcRadius();
                 FindMinMax();
-                UpdateBoundingBox();
                 foreach (Polygon p in m_lstpolys)
                 {
                     p.Update();
                 }
-               // MarkPolysDown();
                 m_listid = -1; // invalidate the list id
             }
             catch (Exception ex) 
@@ -644,25 +636,20 @@ namespace Engine3D
                 DebugLogger.Instance().LogError(ex.StackTrace);
             }
         }
-
+        /*
         public void UpdateMove(float x, float y , float z)
         {
             try
             {
-                //Update
-                //CalcCenter();
                 m_center.Translate(x, y, z);
-                //CalcRadius();
-                //FindMinMax();
                 m_min.Translate(x, y, z);
                 m_max.Translate(x, y, z);
 
-                UpdateBoundingBox();
+                //UpdateBoundingBox();
                 foreach (Polygon p in m_lstpolys)
                 {
                     p.UpdateMove( x,  y ,  z);
                 }
-                // MarkPolysDown();
                 m_listid = -1; // invalidate the list id
             }
             catch (Exception ex)
@@ -671,7 +658,8 @@ namespace Engine3D
                 DebugLogger.Instance().LogError(ex.StackTrace);
             }
         }
-        /*This cuntion adds the objects points and polygons to this one*/
+        */
+        /*This function adds the objects points and polygons to this one*/
         public void Add(Object3d obj) 
         {
             foreach (Point3d p in obj.m_lstpoints)
@@ -684,40 +672,29 @@ namespace Engine3D
             }
             Update();
         }
-
-        public void UpdateBoundingBox()
+        public void RenderBoundingBox(Color color) 
         {
-            m_boundingBox = new List<PolyLine3d>();
-            PolyLine3d face = new PolyLine3d();
-            face.AddPoint(new Point3d(m_min.x, m_min.y, m_min.z));
-            face.AddPoint(new Point3d(m_max.x, m_min.y, m_min.z));
-            face.AddPoint(new Point3d(m_max.x, m_max.y, m_min.z));
-            face.AddPoint(new Point3d(m_min.x, m_max.y, m_min.z));
-            face.AddPoint(new Point3d(m_min.x, m_min.y, m_min.z));
-            m_boundingBox.Add(face);
-            face = new PolyLine3d();
-            face.AddPoint(new Point3d(m_min.x, m_min.y, m_max.z));
-            face.AddPoint(new Point3d(m_max.x, m_min.y, m_max.z));
-            face.AddPoint(new Point3d(m_max.x, m_max.y, m_max.z));
-            face.AddPoint(new Point3d(m_min.x, m_max.y, m_max.z));
-            face.AddPoint(new Point3d(m_min.x, m_min.y, m_max.z));
-            m_boundingBox.Add(face);
-            face = new PolyLine3d();
-            face.AddPoint(new Point3d(m_min.x, m_min.y, m_min.z));
-            face.AddPoint(new Point3d(m_min.x, m_min.y, m_max.z));
-            m_boundingBox.Add(face);
-            face = new PolyLine3d();
-            face.AddPoint(new Point3d(m_max.x, m_min.y, m_min.z));
-            face.AddPoint(new Point3d(m_max.x, m_min.y, m_max.z));
-            m_boundingBox.Add(face);
-            face = new PolyLine3d();
-            face.AddPoint(new Point3d(m_max.x, m_max.y, m_min.z));
-            face.AddPoint(new Point3d(m_max.x, m_max.y, m_max.z));
-            m_boundingBox.Add(face);
-            face = new PolyLine3d();
-            face.AddPoint(new Point3d(m_min.x, m_max.y, m_min.z));
-            face.AddPoint(new Point3d(m_min.x, m_max.y, m_max.z));
-            m_boundingBox.Add(face);
+            GL.Begin(PrimitiveType.LineStrip);//.Lines);
+            GL.Color3(color);            
+            GL.Vertex3(m_min.x, m_min.y, m_min.z);
+            GL.Vertex3(m_max.x, m_min.y, m_min.z);
+            GL.Vertex3(m_max.x, m_max.y, m_min.z);
+            GL.Vertex3(m_min.x, m_max.y, m_min.z);
+            GL.Vertex3(m_min.x, m_min.y, m_min.z);
+            GL.Vertex3(m_min.x, m_min.y, m_max.z);
+            GL.Vertex3(m_max.x, m_min.y, m_max.z);
+            GL.Vertex3(m_max.x, m_max.y, m_max.z);
+            GL.Vertex3(m_min.x, m_max.y, m_max.z);
+            GL.Vertex3(m_min.x, m_min.y, m_max.z);
+            GL.Vertex3(m_min.x, m_min.y, m_min.z);
+            GL.Vertex3(m_min.x, m_min.y, m_max.z);
+            GL.Vertex3(m_max.x, m_min.y, m_min.z);
+            GL.Vertex3(m_max.x, m_min.y, m_max.z);
+            GL.Vertex3(m_max.x, m_max.y, m_min.z);
+            GL.Vertex3(m_max.x, m_max.y, m_max.z);
+            GL.Vertex3(m_min.x, m_max.y, m_min.z);
+            GL.Vertex3(m_min.x, m_max.y, m_max.z);
+            GL.End();            
         }
 
         public void STranslate(float x, float y, float z)
@@ -750,7 +727,15 @@ namespace Engine3D
                     if (sup is Support)
                         ((Support)sup).AddToHeight(z);
             }
-            UpdateMove(x,y,z);
+            m_center.Translate(x, y, z);
+            m_min.Translate(x, y, z);
+            m_max.Translate(x, y, z);
+
+            foreach (Polygon p in m_lstpolys)
+            {
+                p.UpdateMove(x, y, z);
+            }
+            m_listid = -1; // invalidate the list id
             if (updateUndo)
                 UVDLPApp.Instance().m_undoer.SaveTranslation(this, x, y, z);
         }

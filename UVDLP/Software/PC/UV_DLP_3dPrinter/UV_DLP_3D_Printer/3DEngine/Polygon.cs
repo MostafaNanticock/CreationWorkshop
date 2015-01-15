@@ -128,6 +128,8 @@ namespace Engine3D
                 return null;
             }
         }
+
+
         public void CalcMinMax() 
         {
             m_minmax.m_min = m_points[0].z;
@@ -216,7 +218,9 @@ namespace Engine3D
         {
             //CalcCenter();
             m_center.Translate(x, y, z);
-            CalcMinMax();
+            //CalcMinMax();
+            m_minmax.m_min += z;
+            m_minmax.m_max += z;
             
         }
         /*

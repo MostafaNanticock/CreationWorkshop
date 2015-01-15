@@ -194,8 +194,7 @@
             this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
             this.glControl1.Click += new System.EventHandler(this.glControl1_Click);
             this.glControl1.DoubleClick += new System.EventHandler(this.glControl1_DoubleClick);
-            this.glControl1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.glControl1_KeyDown);
-            this.glControl1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.glControl1_KeyPress);
+            this.glControl1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.glControl1_KeyDown);            
             this.glControl1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.glControl1_KeyUp);
             this.glControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl1_MouseDown);
             this.glControl1.MouseLeave += new System.EventHandler(this.glControl1_MouseLeave);

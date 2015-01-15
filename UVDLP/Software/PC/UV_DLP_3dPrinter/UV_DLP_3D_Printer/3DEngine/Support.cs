@@ -49,7 +49,7 @@ namespace Engine3D
      \__/   - D1  - The 'Foot'
      
      * We'll generate this object from the bottom up
-     * it has 4 segments , the top and the bottom face each have an extra point in the center for easier triangulation 
+     * it has 5 segments , the top and the bottom face each have an extra point in the center for easier triangulation 
      * the bottom face has numdivpnts +1 
      * the next seg up has numdivpnts
      * the next seg up has numdivpnts
@@ -74,20 +74,47 @@ namespace Engine3D
         private int s3i; // the starting index of the top of the foot/ bottom of the body
         private int s4i; // top of the body, bottom of the head
         private int s5i; // top of the head
+
+        private int psi_base; // polygon start index of the base
+        private int pei_base; // polygon end index for base
+
+        private int psi_tip; // polygon start index for tip
+        private int pei_tip;
+
         private int cdivs;
         public Object3d m_supporting; // the obeject that this is attached to
         private static int supcnt = 0;
         private eSubType m_subtype;
-
+        private eSelType m_seltype;
+        public eSelType SelectionType 
+        { 
+            get{ return m_seltype; }
+            set { m_seltype = value; }
+        }
         /*
          This translate type is used for hit-testing the support to determine where on the upport it was clicked
          * it also is a flag used in moving a portion of the support
          */
+        /*
         public enum eTranlateType
         {
+            eWhole, // entire object
             eBase,
             eBaseshaft, // grabbed by the shaft
             eTip // grabbed by the tip
+        }
+         * */
+        /// <summary>
+        /// The support can be sub-selected,
+        /// meaning that portions of the model can be moved independantly 
+        /// the base and tip can be moved separately
+        /// the shaft can be dragged around
+        /// </summary>
+        public enum eSelType 
+        {
+            eWhole,
+            eTip,
+            eBase
         }
 
         public enum eSubType 
@@ -128,6 +155,7 @@ namespace Engine3D
             this.Name = "Support_" + supcnt.ToString();
             supcnt++;
             SubType = eSubType.eBase;
+            m_seltype = eSelType.eWhole;
         }
         /// <summary>
         /// This function creates a new support structure
@@ -174,16 +202,19 @@ namespace Engine3D
                 //now the top of the shaft, bottom of the head
                 s5i = m_lstpoints.Count;
                 GenerateCirclePoints(htrad, divs, zlev, true); // top of head
-
+                psi_base = m_lstpolys.Count; // should be 0 index
                 MakeTopBottomFace(s1i, divs, false);// bottom
-                MakeTopBottomFace(s5i, divs, true);// top
-                //MakeTopBottomFace(s4i, divs, true);// top
-                
-                makeWalls(s1i, s2i, divs);               
+                //MakeTopBottomFace(s5i, divs, true);// top                
+                makeWalls(s1i, s2i, divs);
+                pei_base = m_lstpolys.Count; // should be top index of 
+
                 makeWalls(s2i, s3i - divs - 1, divs);
                 makeWalls(s3i, s4i - (2*divs) - 1, divs);
 
+                psi_tip = m_lstpolys.Count;
                 makeWalls(s4i, s5i - (3 * divs) - 1, divs);
+                MakeTopBottomFace(s5i, divs, true);// top
+                pei_tip = m_lstpolys.Count;
 
                 Update(); // update should only be called for new objects, otherwise, use the move/scale/rotate functions
                 SetColor(Color.Yellow);
@@ -204,6 +235,11 @@ namespace Engine3D
                 obj.m_name = UVDLPApp.Instance().Engine3D.GetUniqueName(this.m_name); // need to find unique name
                 obj.m_fullname = this.m_fullname;
                 obj.tag = this.tag;
+
+                obj.pei_base = pei_base;
+                obj.pei_tip = pei_tip;
+                obj.psi_base = psi_base;
+                obj.psi_tip = psi_tip;
 
                 foreach (Polygon ply in m_lstpolys)
                 {
@@ -304,23 +340,46 @@ namespace Engine3D
             return center;
         }
 
-
-        private eTranlateType Hittest(Polygon ply) 
+        //determine when on the model it was selected
+        public void Select(Polygon ply) 
         {
-            // we need to determine where on the model this was clicked
-            return eTranlateType.eBase;
+            //based on the polygon passed in, we need to identify which segment of the model this belongs to
+            m_seltype = eSelType.eWhole; // mark it whole
+
+            for (int c = psi_base; c < pei_base; c++) 
+            {
+                if(ply == m_lstpolys[c])
+                {
+                    m_seltype = eSelType.eBase;
+                }
+            }
+            for (int c = psi_tip; c < pei_tip; c++)
+            {
+                if (ply == m_lstpolys[c])
+                {
+                    m_seltype = eSelType.eTip;
+                }
+            }
+
+            for (int c = 0; c < m_lstpolys.Count; c++)
+            {
+                m_lstpolys[c].m_color = Color.Yellow;
+            }
         }
 
-
-        public void Translate(float x, float y, float z, eTranlateType tt) 
+        public void Translate(float x, float y, float z) 
         {
-            switch (tt) 
+
+            switch (m_seltype) 
             {
-                case eTranlateType.eBase:
+                case eSelType.eBase:
                     TranslateRange(x,y,z, s1i, s3i);
                     break;
-                case eTranlateType.eBaseshaft:
-                    TranslateRange(x,y,z, s1i, s4i);
+                case eSelType.eTip:
+                    TranslateRange(x,y,z, s4i, s5i);
+                    break;
+                case eSelType.eWhole:
+                    base.Translate(x, y, z);
                     break;
             }
             Update();
@@ -448,7 +507,37 @@ namespace Engine3D
                  GL.Vertex3(p.x, p.y, p.z);
              }
              GL.End();
-             base.RenderGL(showalpha, selected, renderOutline, renderColor);
+            // base.RenderGL(showalpha, selected, renderOutline, renderColor);
+             if (m_listid == -1)
+             {
+                 m_listid = GetListID();
+                 GL.NewList(m_listid, ListMode.CompileAndExecute);
+                 int pidx = 0;
+                 foreach (Polygon poly in m_lstpolys)
+                 {
+                     Color clr = poly.m_color; // get the color of the poly by default
+                     if (selected) // object selected
+                     {
+                            if(m_seltype == eSelType.eBase &&  (pidx >= psi_base) && (pidx < pei_base)) 
+                            {
+                                clr = Color.Green;
+                            }
+                            if (m_seltype == eSelType.eTip && (pidx >= psi_tip) && (pidx < pei_tip))
+                            {
+                                clr = Color.Green;
+                            }
+                            if (m_seltype == eSelType.eWhole)
+                                clr = Color.Green;
+                     }
+                     poly.RenderGL(this.m_wireframe, showalpha, clr);
+                     pidx++;
+                 }
+                 GL.EndList();
+             }
+             else
+             {
+                 GL.CallList(m_listid);
+             }
          }
     }
 }

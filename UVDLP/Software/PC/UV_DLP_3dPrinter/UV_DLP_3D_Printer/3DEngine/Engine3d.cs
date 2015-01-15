@@ -97,7 +97,8 @@ namespace Engine3D
                 int c = 0;
                 foreach (Object3d obj in m_objects)
                 {
-                    obj.CalcMinMaxes();
+                    //obj.CalcMinMaxes();
+                    obj.FindMinMax();
                     if (c == 0) //first one
                     {                        
                         mm.m_min = obj.m_min.z;
@@ -331,11 +332,14 @@ namespace Engine3D
                     Color clr = Color.Red;
                     foreach (Object3d obj in UVDLPApp.Instance().SelectedObjectList)
                     {
+                        obj.RenderBoundingBox(clr);
+                        /*
                         foreach (PolyLine3d ply in obj.m_boundingBox)
                         {
                             ply.m_color = clr;
                             ply.RenderGL();
                         }
+                         */ 
                         clr = Color.Orange;
                     }
                 }
@@ -354,6 +358,11 @@ namespace Engine3D
                     if (q.visible)
                         q.RenderGL();
                 }
+                /*
+                if (RTUtils.m_selplane != null) 
+                {
+                    RTUtils.m_selplane.RenderGL(true, false, false, Color.Cornsilk);
+                }*/
             }
             catch (Exception ex) 
             {

@@ -107,7 +107,8 @@ namespace Engine3D
             //idx += numdivscirc;
            // }        
             CalcCenter();
-            CalcMinMaxes();
+            //CalcMinMaxes();
+            FindMinMax();
 
         }
         /*

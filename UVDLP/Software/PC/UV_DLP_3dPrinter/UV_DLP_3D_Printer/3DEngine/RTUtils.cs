@@ -13,7 +13,7 @@ namespace UV_DLP_3D_Printer._3DEngine
     public class RTUtils
     {
         static Object3d m_gp = null; // artificial ground plane
-        static Object3d m_selplane = null; // artificial camera front-facing selection plane
+        static public Object3d m_selplane = null; // artificial camera front-facing selection plane
 
         static bool vecinit = false;
         // keep these vectors around so we don't have to re-allocate them for every intersection test
@@ -22,9 +22,15 @@ namespace UV_DLP_3D_Printer._3DEngine
         static Vector3d V, temp;
         static Point3d IOendp = new Point3d();
         static Point3d IOintersect = new Point3d();
+        
         static Point3d GPendp;
         static Point3d GPintersect;
+
+        static Point3d ObSelendp;
+        static Point3d ObSelintersect;
+
         static List<ISectData> m_isectlst;
+
         static void Initvecs() 
         {
             vecinit = true;
@@ -38,8 +44,13 @@ namespace UV_DLP_3D_Printer._3DEngine
             temp = new Vector3d();
             IOendp = new Point3d();
             IOintersect = new Point3d();
+
             GPendp = new Point3d();
             GPintersect = new Point3d();
+
+            ObSelendp = new Point3d();
+            ObSelintersect = new Point3d();
+
             m_isectlst = new List<ISectData>();
         }
         // intersect3D_RayTriangle(): find the 3D intersection of a ray with a triangle
@@ -51,27 +62,15 @@ namespace UV_DLP_3D_Printer._3DEngine
         //             2 =  are in the same plane
         static int intersect3D_RayTriangle(Point3d startp, Point3d endp, Polygon T,ref Point3d I)
         {
-           // Vector3d u, v, n;              // triangle vectors
-           // Vector3d dir, w0, w;           // ray vectors
-
             float r, a, b;              // params to calc ray-plane intersect
 
             // get triangle edge vectors and plane normal
             
-            //u = T.m_points[1] - T.m_points[0];
             u.Set(T.m_points[1].x - T.m_points[0].x, T.m_points[1].y - T.m_points[0].y, T.m_points[1].z - T.m_points[0].z);
-            //v = T.m_points[2] - T.m_points[0];
             v.Set(T.m_points[2].x - T.m_points[0].x, T.m_points[2].y - T.m_points[0].y, T.m_points[2].z - T.m_points[0].z);
             n = Vector3d.cross(u , v);              // cross product
-            //n = T.m_normal;
-                      
-            //if (n == 0)             // triangle is degenerate
-            //    return -1;                  // do not deal with this case
-            
-
-            //dir = endp - startp;//dir = R.P1 - R.P0;              // ray direction vector
             dir.Set(endp.x - startp.x, endp.y - startp.y, endp.z - startp.z);
-            //w0 = startp - T.m_points[0];//w0 = R.P0 - T.V0;
+
             w0.Set(startp.x - T.m_points[0].x, startp.y - T.m_points[0].y, startp.z - T.m_points[0].z);
             a = (float)-Vector3d.dot(n, w0); //a = -dot(n, w0);
             b = (float)Vector3d.dot(n, dir);//b = dot(n, dir);
@@ -132,10 +131,7 @@ namespace UV_DLP_3D_Printer._3DEngine
         {
 	        bool retval = false;
 	        float EO;//EO is distance from start of ray to center of sphere
-	        float d,disc,raylen;//v is length of direction ray
-	        //Vector3d V,temp;//V is unit vector of the ray
-	       // temp =new Vector3d();
-           // V = new Vector3d();
+	        float d,disc,raylen;//
 
 	        temp.Set(center.x - start.x,center.y - start.y,	center.z - start.z);
 
@@ -162,10 +158,99 @@ namespace UV_DLP_3D_Printer._3DEngine
          The object selection plane is used to help move objects around
          * This is a plane is centered at the object center and faces the center of the view
          * This is used to determine an intersection along the plane to help move the object
+         * parameters:
+         * center is the  center of the currently selected object
+         * fromcamera is the vector from the camera to the center of the selected object
+         * cameraup is the up vector of the camera
          */
-        private static void UpdateObjectSelectionPlane() 
+        public static void UpdateObjectSelectionPlane(Point3d center,float rad, Vector3d cameraup, Vector3d cameraright) 
         {
-        
+            //get the currently selected object
+            //create 2 polygons 
+            //forward facing towards the camera
+            /*
+             p0   p1
+             *------
+             |\    |
+             | \   |  
+             |  *  | object center
+             |   \ |
+             |    \|
+             ------|
+             p3   p2             
+             */
+            Point3d p0;
+            Point3d p1;
+            Point3d p2;
+            Point3d p3;
+
+            if (m_selplane == null)
+            {
+                m_selplane = new Object3d();
+                m_selplane.Name = "Selection Plane";
+                p0 = new Point3d();
+                p1 = new Point3d();
+                p2 = new Point3d();
+                p3 = new Point3d();
+                // add the points
+                m_selplane.m_lstpoints.Add(p0);
+                m_selplane.m_lstpoints.Add(p1);
+                m_selplane.m_lstpoints.Add(p2);
+                m_selplane.m_lstpoints.Add(p3);
+                //new polygon
+                Polygon ply0 = new Polygon();
+                ply0.m_points = new Point3d[3];
+                //set poly points
+                ply0.m_points[0] = p0;
+                ply0.m_points[1] = p1;
+                ply0.m_points[2] = p2;
+                //add the polygon to the model
+                m_selplane.m_lstpolys.Add(ply0);
+
+                Polygon ply1 = new Polygon();
+                ply1.m_points = new Point3d[3];
+                ply1.m_points[0] = p0;
+                ply1.m_points[1] = p2;
+                ply1.m_points[2] = p3;
+                m_selplane.m_lstpolys.Add(ply1);
+                m_selplane.tag = Object3d.OBJ_SEL_PLANE; // groundplane tag
+            }
+            else 
+            {
+                //references to already created points
+                p0 = m_selplane.m_lstpoints[0];
+                p1 = m_selplane.m_lstpoints[1];
+                p2 = m_selplane.m_lstpoints[2];
+                p3 = m_selplane.m_lstpoints[3];
+            }
+            float scaler = 1000.0f;
+                        
+            p0.Set((cameraup.x / 2) - (cameraright.x / 2), (cameraup.y / 2) - (cameraright.y / 2), (cameraup.z/2) - (cameraright.z/2));
+            p1.Set((cameraup.x / 2) + (cameraright.x / 2), (cameraup.y / 2) + (cameraright.y / 2), (cameraup.z / 2) + (cameraright.z / 2));
+            p2.Set((-cameraup.x / 2) + (cameraright.x / 2), (-cameraup.y / 2) + (cameraright.y / 2), (-cameraup.z / 2) + (cameraright.z / 2));
+            p3.Set((-cameraup.x / 2) - (cameraright.x / 2), (-cameraup.y / 2) - (cameraright.y / 2), (-cameraup.z / 2) - (cameraright.z / 2));
+                       
+            p0.x *= scaler;
+            p0.y *= scaler;
+            p0.z *= scaler;
+
+            p1.x *= scaler;
+            p1.y *= scaler;
+            p1.z *= scaler;
+
+            p2.x *= scaler;
+            p2.y *= scaler;
+            p2.z *= scaler;
+
+            p3.x *= scaler;
+            p3.y *= scaler;
+            p3.z *= scaler;
+
+            // initial positions
+            m_selplane.Update();
+            // center it on the object           
+            m_selplane.Translate(center.x, center.y, center.z); 
+
         }
 
         private static void CreateGroundPlane()
@@ -199,7 +284,37 @@ namespace UV_DLP_3D_Printer._3DEngine
            // p1.m
 
         }
+        private static ISectData ISectObjSelPlane(Vector3d direction, Point3d origin) 
+        {
+            ISectData isect = null;
+            if (m_selplane == null)
+                return null;
+            direction.Normalize();
+            direction.Scale(10000.0f);
 
+            ObSelendp.Set(origin);
+            ObSelendp.x += direction.x;
+            ObSelendp.y += direction.y;
+            ObSelendp.z += direction.z;
+            // intersect with the imaginary object selection plane
+            if (IntersectSphere(origin, ObSelendp, ref ObSelintersect, m_selplane.m_center, m_selplane.m_radius))
+            {
+                foreach (Polygon p in m_selplane.m_lstpolys)
+                {
+                    // try a less- costly sphere intersect here   
+                    if (IntersectSphere(origin, ObSelendp, ref ObSelintersect, p.m_center, p.m_radius))
+                    {
+                        // if it intersects,
+                        if (RTUtils.IntersectPoly(p, origin, ObSelendp, ref ObSelintersect))
+                        {
+                            isect = new ISectData(m_selplane, p, ObSelendp, origin, direction);
+                        }
+                    }
+                }
+            }
+            return isect;
+        
+        }
         private static ISectData ISectGroundPlane(Vector3d direction, Point3d origin)
         {
             ISectData isect = null;
@@ -247,8 +362,11 @@ namespace UV_DLP_3D_Printer._3DEngine
         /// <returns></returns>
         /// 
         static object lck = new object();
-        public static List<ISectData> IntersectObjects(Vector3d direction, Point3d origin, List<Object3d> objects, bool supports) 
+        public static List<ISectData> IntersectObjects(Vector3d direction, Point3d origin, List<Object3d> objectsin, bool supports) 
         {
+            List<Object3d> objects = new List<Object3d>();
+            objects.AddRange(objectsin);
+            objects.Add(RTUtils.m_selplane);
             //List<ISectData> m_isectlst = new List<ISectData>();
             
             try
@@ -291,11 +409,20 @@ namespace UV_DLP_3D_Printer._3DEngine
                         }
                     }
                 }
+                //intersect the ground plane
                 ISectData gp = ISectGroundPlane(direction, origin);
                 if (gp != null)
                 {
                     m_isectlst.Add(gp);
                 }
+                /*
+                //intersect the object selection plane
+                ISectData obsel = ISectObjSelPlane(direction, origin);
+                if (obsel != null) 
+                {
+                    m_isectlst.Add(obsel);
+                }
+                 */ 
                 m_isectlst.Sort();
             }
             catch (Exception ex) 

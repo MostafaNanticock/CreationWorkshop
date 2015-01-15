@@ -761,10 +761,10 @@ namespace UV_DLP_3D_Printer._3DEngine
                         XmlNode objnode = mManifest.AddSection(mc, "model");
                         mManifest.SetParameter(objnode, "name", objnameNE);
                         mManifest.SetParameter(objnode, "tag", obj.tag);
-                        if (obj.tag != Object3d.OBJ_NORMAL && obj.m_parrent != null)
+                        if (obj.tag != Object3d.OBJ_NORMAL && obj.m_parent != null)
                         {
                             // note it's parent name in the entry
-                            mManifest.SetParameter(objnode, "parent", Path.GetFileNameWithoutExtension(obj.m_parrent.Name));
+                            mManifest.SetParameter(objnode, "parent", Path.GetFileNameWithoutExtension(obj.m_parent.Name));
                         }
                     }
                     if (newfile)

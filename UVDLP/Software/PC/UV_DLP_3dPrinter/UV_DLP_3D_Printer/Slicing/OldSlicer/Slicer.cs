@@ -318,13 +318,14 @@ namespace UV_DLP_3D_Printer
             {
                 MinMax mm = UVDLPApp.Instance().Engine3D.CalcSceneExtents();
                 int numslices = CalcNumSlices(mm.m_max, m_sf.m_config.ZThick);
-                float curz = (float)(m_sf.m_config.ZThick / 2.0); // start at Wz0               
+                float curz = (float)(m_sf.m_config.ZThick / 2.0); // start at half slice thickness             
                 int c = 0;
                 string scenename = UVDLPApp.Instance().SceneFileName;
                 // a little housework here...
                 foreach (Object3d obj in UVDLPApp.Instance().Engine3D.m_objects)
                 {
-                    obj.CalcMinMaxes();
+                    //obj.CalcMinMaxes();
+                    obj.FindMinMax();
                 }
 
                 m_sf.NumSlices = numslices;

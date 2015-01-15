@@ -29,15 +29,18 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         public GLCamera m_camera;
         public GLCamera m_axisCam;
         bool loaded = false;
-        float m_ix = 1.0f, m_iy = 1.0f, m_iz = 2.0f;
+        //float m_ix = 1.0f, m_iy = 1.0f, m_iz = 2.0f;
         Engine3D.Vector3d m_isectnormal; // the normal at the intersection
         Slice m_curslice = null; // for previewing only
-        private bool lmdown, rmdown, mmdown;
-        private int mdx, mdy;
+
+        private bool lmdown, rmdown, mmdown; // flags for mouse buttons down
+        private int mdx, mdy; // delta mouse movements
+
         IGraphicsContext m_context = null;
         OpenTK.Matrix4 m_projection;
         OpenTK.Matrix4 m_axisProjection;
         OpenTK.Matrix4 m_modelView;
+
         private bool firstTime = true;
         float m_savex, m_savey, m_saveh; // m_savez
         C2DGraphics gr2d;
@@ -111,6 +114,14 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                             int totallayers = UVDLPApp.Instance().m_slicefile.NumSlices;
                             SetNumLayers(totallayers);
                         }
+                        break;
+                    case eAppEvent.eObjectSelected:
+                        // set the current sel plane object
+                        if (UVDLPApp.Instance().SelectedObject != null)
+                        {
+                            RTUtils.UpdateObjectSelectionPlane(UVDLPApp.Instance().SelectedObject.m_center, UVDLPApp.Instance().SelectedObject.m_radius,m_camera.m_right, m_camera.m_up);
+                        }
+
                         break;
                 }
             }
@@ -231,6 +242,10 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             if (update3D)
                 Render3dSpace = true;
             glControl1.Invalidate();
+            if (UVDLPApp.Instance().SelectedObject != null)
+            {
+                RTUtils.UpdateObjectSelectionPlane(UVDLPApp.Instance().SelectedObject.m_center, UVDLPApp.Instance().SelectedObject.m_radius, m_camera.m_right, m_camera.m_up);
+            }
             //DisplayFunc();
         }
 
@@ -565,9 +580,11 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 {
                     if (!float.IsNaN(isect.intersect.x)) // check for NaN
                     {
+                        /*
                         m_ix = (float)isect.intersect.x; // show the closest
                         m_iy = (float)isect.intersect.y;
                         m_iz = (float)isect.intersect.z;
+                        */
                         isect.poly.CalcNormal();
                         m_isectnormal.x = isect.poly.m_normal.x;
                         m_isectnormal.y = isect.poly.m_normal.y;
@@ -617,17 +634,13 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                         //m_savez = obj.m_center.z;
                         if (obj.tag == Object3d.OBJ_SUPPORT)
                         {
-                            obj.CalcMinMaxes();
+                            //obj.CalcMinMaxes();
+                            obj.FindMinMax();
                             m_saveh = obj.m_max.z - obj.m_min.z;
                         }
                     }
                 }
             }
-        }
-
-        private void glControl1_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
-        {
-            
         }
 
         private void glControl1_KeyUp(object sender, KeyEventArgs e)
@@ -641,7 +654,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             {
                 m_movingobjectmode = false;
                 // update object info
-                //SetupSceneTree();
                 Object3d obj = UVDLPApp.Instance().SelectedObject;
                 if (obj != null)
                 {
@@ -651,7 +663,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     UVDLPApp.Instance().m_undoer.SaveTranslation(obj, m_savex, m_savey, 0);
                     if (obj.tag == Object3d.OBJ_SUPPORT)
                     {
-                        obj.CalcMinMaxes();
+                        //obj.CalcMinMaxes();
+                        obj.FindMinMax();
                         m_saveh = (obj.m_max.z - obj.m_min.z) / m_saveh;
                         UVDLPApp.Instance().m_undoer.SaveScale(obj, 1, 1, m_saveh);
                         UVDLPApp.Instance().m_undoer.LinkToPrev();
@@ -745,9 +758,10 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     // examine the last isect data
                     foreach (ISectData dat in hits)
                     {
-                        if (dat.obj.tag == Object3d.OBJ_GROUND) //found the ground plane
+                        //if (dat.obj.tag == Object3d.OBJ_GROUND) //found the ground plane
+                        if (dat.obj.tag == Object3d.OBJ_SEL_PLANE) //found the ground plane
                         {
-
+                            /*
                             if (UVDLPApp.Instance().SelectedObject.tag == Object3d.OBJ_SUPPORT)
                             {
                                 Support sup = (Support)UVDLPApp.Instance().SelectedObject;
@@ -756,21 +770,20 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                                     (float)(dat.intersect.x - UVDLPApp.Instance().SelectedObject.m_center.x),
                                     (float)(dat.intersect.y - UVDLPApp.Instance().SelectedObject.m_center.y),
                                     0,                                    
-                                    Support.eTranlateType.eBaseshaft);
+                                    Support.eTranlateType.eWhole);
                             }
                             else
                             {
+                             */ 
                                 UVDLPApp.Instance().SelectedObject.Translate(
                                     (float)(dat.intersect.x - UVDLPApp.Instance().SelectedObject.m_center.x),
                                     (float)(dat.intersect.y - UVDLPApp.Instance().SelectedObject.m_center.y),
                                     0.0f);
-                            }
-                            //UVDLPApp.Instance().Engine3D.UpdateLists();
-                            //UpdateView();
+                            //}
                         }
 
                     }
-                    /*
+                    
                     if (UVDLPApp.Instance().SelectedObject.tag == Object3d.OBJ_SUPPORT)  // if the current selected object is a support
                     {
                         Support tmpsup = (Support)UVDLPApp.Instance().SelectedObject;
@@ -796,12 +809,12 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                                 break;
                             }
                         }
-                        if (!foundObject && (tmpsup.m_parrent != null))
+                        if (!foundObject && (tmpsup.m_parent != null))
                         {
-                            tmpsup.m_parrent.RemoveSupport(tmpsup);
+                            tmpsup.m_parent.RemoveSupport(tmpsup);
                         }
                     }
-                     */ 
+                    
                     UpdateView();
                 }                
             }
@@ -860,7 +873,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             // this will allow us to select an object from the bottom.
             foreach (ISectData i in isects)
             {
-                if (i.obj.tag != Object3d.OBJ_GROUND)
+                if (i.obj.tag != Object3d.OBJ_GROUND && i.obj.tag != Object3d.OBJ_SEL_PLANE)
                 {
                     if (ModifierKeys == Keys.Control) // double click and control
                     {
@@ -869,7 +882,22 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     }
                     else
                     {
-                        UVDLPApp.Instance().SelectedObject = i.obj;                        
+                        if (i.obj.tag == Object3d.OBJ_SUPPORT) 
+                        {
+                            Support sup = (Support)i.obj;
+                            // if this is a support, do a sub-selection on the support
+                            if (UVDLPApp.Instance().SupportEditMode == UVDLPApp.eSupportEditMode.eModifySupport)
+                            {
+                                // if we're in modify support mode, do a sub-select
+                                sup.Select(i.poly);
+                            }
+                            else 
+                            {
+                                // mark the entire object as selected
+                                sup.SelectionType = Support.eSelType.eWhole;
+                            }
+                        }
+                        UVDLPApp.Instance().SelectedObject = i.obj;
                         UVDLPApp.Instance().m_engine3d.UpdateLists();
                     }
                     UpdateView();
