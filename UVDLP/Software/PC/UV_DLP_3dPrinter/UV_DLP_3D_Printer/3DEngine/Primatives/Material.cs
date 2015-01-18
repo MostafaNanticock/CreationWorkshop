@@ -8,6 +8,9 @@ using OpenTK.Platform.Windows;
 
 namespace Engine3D
 {
+    /// <summary>
+    /// This class isn't used yet, but it will be...
+    /// </summary>
     public struct TexCoord
     {
         public float U;

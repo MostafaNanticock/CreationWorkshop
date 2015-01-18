@@ -60,10 +60,20 @@ namespace Engine3D
      * We should be able to change the top and bottom radius of any of the head, body,or foot, 
      * as well as the height of any of these segments
      * 
-     * In latyer revisions of this, we would want to:
      * translate (x,y) the body, but keep the top and bottom stationary
      * translate the bottom of the foot, and the top of the head
+     * 
+     * 
+     * In later revisions of this, we would want to:
      * match the surface normal of the top of the head, bottom of the foot to meet with the surface we're attaching too
+     * 
+     * 
+     * Rules for moving supports
+     * When the whole support is selected
+     *      Allow the user to use the mouse to slide the Support around via X/Y
+     *      The B
+     * 
+     * 
      */
     public class Support : Cylinder3d
     {
@@ -75,14 +85,22 @@ namespace Engine3D
         private int s4i; // top of the body, bottom of the head
         private int s5i; // top of the head
 
+        //keep indexs to the polygon array as well
+
         private int psi_base; // polygon start index of the base
         private int pei_base; // polygon end index for base
 
         private int psi_tip; // polygon start index for tip
         private int pei_tip;
 
-        private int cdivs;
-        public Object3d m_supporting; // the obeject that this is attached to
+
+        float m_fbrad,  m_ftrad,  m_hbrad,  m_htrad;
+
+
+
+        private int cdivs; // number of circular divisions
+
+        public Object3d m_supporting; // the object that this is attached to
         private static int supcnt = 0;
         private eSubType m_subtype;
         private eSelType m_seltype;
@@ -91,19 +109,7 @@ namespace Engine3D
             get{ return m_seltype; }
             set { m_seltype = value; }
         }
-        /*
-         This translate type is used for hit-testing the support to determine where on the upport it was clicked
-         * it also is a flag used in moving a portion of the support
-         */
-        /*
-        public enum eTranlateType
-        {
-            eWhole, // entire object
-            eBase,
-            eBaseshaft, // grabbed by the shaft
-            eTip // grabbed by the tip
-        }
-         * */
+
         /// <summary>
         /// The support can be sub-selected,
         /// meaning that portions of the model can be moved independantly 
@@ -120,7 +126,6 @@ namespace Engine3D
         public enum eSubType 
         {
             eBase, // sits on the ground with a vertical tip
-            ePointer, // sits on the ground with a angled tip
             eIntra // connects between 2 parts of the model
         }
         public eSubType SubType 
@@ -130,24 +135,78 @@ namespace Engine3D
             {
                 if (m_subtype != value)  // value is changing
                 {
+                    if (m_lstpoints.Count == 0)  // object not created yet
+                        return;
                     // save the old center
-                    Point3d center = new Point3d(m_center);
-                    switch (value) 
-                    {
-                        //re-create based on current height / position                        
+                   // Point3d center = new Point3d(m_center);
+                    switch (value) // figure out the new value
+                    {                  
                         case eSubType.eBase:
-                            
+                            if (m_subtype == eSubType.eIntra) 
+                            {
+                                // change to base
+                                ChangeSubType(eSubType.eBase);
+                                Update();
+                            }
                             break;
                         case eSubType.eIntra:
-                            break;
-                        case eSubType.ePointer:
+                            if (m_subtype == eSubType.eBase) 
+                            {
+                                //change to intra
+                                ChangeSubType(eSubType.eIntra);
+                                Update();
+                            }
                             break;
                     }
-                    Translate(center.x, center.y, center.z); // move back to old position
+                    //Translate(center.x, center.y, center.z); // move back to old position
                     m_subtype = value;
                 }
             }
         }
+
+        /// <summary>
+        /// scale a layer of the support
+        /// </summary>
+        /// <param name="startidx"></param>
+        /// <param name="endidx"></param>
+        private void ScaleLayer(float newrad,int startidx, int endidx) 
+        {
+            //save the center
+            Point3d center = CalcCentroid(s1i, s2i);
+            //move the item to 0,0,0
+            STranslateRange(-center.x, -center.y, -center.z, s1i, s2i);
+            ReGenCircPoints(newrad, cdivs, startidx);
+            /*
+            //calculate the current radius over a range of points that represent this 'slice' of cylinder.
+            float rad = CalcRadiusRange(s1i, s2i);
+            //scale to a unit radius of 1
+            ScaleRange(1 / rad, s1i, s2i);
+            //now re-scale to the desired size
+            ScaleRange(newrad, s1i, s2i);
+            //and move back to the center of where it was before
+             */
+            STranslateRange(center.x, center.y, center.z, s1i, s2i);
+        
+        }
+        private void ChangeSubType(eSubType type) 
+        {
+            // may need to change the base to a base tip or flat base
+            switch (type) 
+            {
+                case eSubType.eBase:
+                    //scale the very bottom to be the foot bottom radius
+                    ScaleLayer(m_fbrad, s1i, s2i);
+
+                   // ScaleLayer(m_ftrad, s2i, s3i);
+                    //ScaleLayer(m_ftrad, s3i, s4i);
+                    break;
+                case eSubType.eIntra:
+                    ScaleLayer(m_htrad, s1i, s2i);
+                    //ScaleLayer(m_ftrad, s2i, s3i);
+                    break;
+            }
+        }
+        
         public Support() 
         {
             tag = Object3d.OBJ_SUPPORT; // tag for support
@@ -179,6 +238,10 @@ namespace Engine3D
         {
             try
             {
+                m_fbrad = fbrad;
+                m_ftrad = ftrad;
+                m_hbrad = hbrad;
+                m_htrad = htrad;
                 m_supporting = supporting;
                 cdivs = divs;
                 float zlev = 0.0f; // start at the bottom of the cylinder
@@ -317,6 +380,25 @@ namespace Engine3D
             }
         }
         /// <summary>
+        /// Since we've updated the object movement and selection
+        /// and we can now sub-select a portion of the support
+        /// we need to be able to return a centroid for the selected portion of the support
+        /// </summary>
+        /// <returns></returns>
+        public Point3d Centroid() 
+        {
+            switch (m_seltype) 
+            {
+                case eSelType.eBase:
+                    return CalcCentroid(s1i, s3i);                    
+                case eSelType.eTip:
+                    return CalcCentroid(s4i, s5i);                    
+                case eSelType.eWhole:
+                    return m_center;
+            }
+            return m_center;
+        }
+        /// <summary>
         /// Calculate the centroid of the given points
         /// </summary>
         /// <param name="?"></param>
@@ -338,6 +420,65 @@ namespace Engine3D
             center.y /= num;
             center.z /= num;
             return center;
+        }
+
+        /// <summary>
+        /// For our purposes, I think this is only going to work well if 
+        /// there is no z varience - aka - all points are the same z on the ground plane
+        /// </summary>
+        /// <param name="scale"></param>
+        /// <param name="startidx"></param>
+        /// <param name="endidx"></param>
+        private void ScaleRange(float scale, int startidx, int endidx)
+        {
+            //Point3d center = new Point3d();
+            //calculate the center
+            for (int c = startidx; c < endidx; c++)
+            {
+                m_lstpoints[c].x *= scale;
+                m_lstpoints[c].y *= scale;
+               // m_lstpoints[c].z *= scale;
+            }
+        }
+
+        private MinMax CalcMinMaxRange(int startidx, int endidx) 
+        {
+            MinMax mm = new MinMax();
+            mm.m_min = m_lstpoints[startidx].z;
+            mm.m_max = m_lstpoints[startidx].z;
+            for (int c = startidx; c < endidx; c++)
+            {
+                if (m_lstpoints[c].z < mm.m_min)
+                    mm.m_min = m_lstpoints[c].z;
+                if (m_lstpoints[c].z > mm.m_max)
+                    mm.m_max = m_lstpoints[c].z;
+            }
+            return mm;
+        }
+
+        /// <summary>
+        /// This function calulates the radius for the point list specified
+        /// This is used to re-scale the various segments of the support
+        /// </summary>
+        /// <param name="startidx"></param>
+        /// <param name="endidx"></param>
+        /// <returns></returns>
+        private float CalcRadiusRange(int startidx, int endidx) 
+        {
+            // iterate through the specified points
+            float maxdist = 0.0f;
+            float td = 0.0f;
+            for (int c = startidx; c < endidx; c++ )
+            {
+                Point3d p = m_lstpoints[c];
+                td = (p.x - m_center.x) * (p.x - m_center.x);
+                td += (p.y - m_center.y) * (p.y - m_center.y);
+                td += (p.z - m_center.z) * (p.z - m_center.z);
+                if (td >= maxdist)
+                    maxdist = td;
+            }
+            float radius = (float)Math.Sqrt(maxdist);
+            return radius;
         }
 
         //determine when on the model it was selected
@@ -373,16 +514,29 @@ namespace Engine3D
             switch (m_seltype) 
             {
                 case eSelType.eBase:
-                    TranslateRange(x,y,z, s1i, s3i);
+                    TranslateRange(x,y,z, s1i, s4i);
                     break;
                 case eSelType.eTip:
-                    TranslateRange(x,y,z, s4i, s5i);
+                    TranslateRange(x,y,z, s4i, m_lstpoints.Count);
                     break;
                 case eSelType.eWhole:
                     base.Translate(x, y, z);
                     break;
             }
-            Update();
+            base.Translate(0, 0, 0);
+           // Update();
+        }
+        // simple range translate , no update function called
+        private void STranslateRange(float x, float y, float z, int startidx, int endidx)
+        {
+            for (int c = startidx; c < endidx; c++)
+            {
+                m_lstpoints[c].x += x;
+                m_lstpoints[c].y += y;
+                m_lstpoints[c].z += z;
+            }
+            //Update();
+            //m_listid = -1; // regenerate the list id
         }
 
         private void TranslateRange(float x, float y, float z , int startidx, int endidx) 
@@ -392,20 +546,47 @@ namespace Engine3D
                 m_lstpoints[c].x += x;
                 m_lstpoints[c].y += y;
                 m_lstpoints[c].z += z;
-            }        
+            }
+            Update();
+            m_listid = -1; // regenerate the list id
         }
 
         private void TranslateRange(Point3d pnt, int startidx, int endidx)
         {
             TranslateRange(pnt.x, pnt.y, pnt.z, startidx, endidx);
-            /*
-            for (int c = startidx; c < endidx; c++)
-            {
-                m_lstpoints[c].x += pnt.x;
-                m_lstpoints[c].y += pnt.y;
-                m_lstpoints[c].z += pnt.z;
-            }
-             */ 
+        }
+
+        /// <summary>
+        /// This functiuon positions the base at the location 'intersect'
+        /// The idir is the direction that was used to intersect
+        /// </summary>
+        /// <param name="intersect"></param>
+        /// <param name="idir"></param>
+        /// <param name="inorm"></param>
+        public void PositionBottom(ISectData dat) 
+        {
+            // the bottom could be a tip or base
+            // need to orient the bottom and position it.
+            Point3d center;
+            center = Centroid(); // get the centroid of the selected portion of the object
+            MinMax mm = CalcMinMaxRange(s1i,s4i);
+            float dist = (float)((mm.m_max - mm.m_min) / 2);
+            Translate(
+                (float)(dat.intersect.x - center.x),
+                (float)(dat.intersect.y - center.y),
+                (float)(dat.intersect.z - center.z + dist));
+            //Update();
+        }
+        public void MoveFromTip(ISectData dat) 
+        {
+            Point3d center;
+            center = Centroid(); // get the centroid of the selected portion of the object
+            MinMax mm = CalcMinMaxRange(s4i, m_lstpoints.Count);
+            float dist = (float)((mm.m_max - mm.m_min) );
+            Translate(
+                (float)(dat.intersect.x - center.x),
+                (float)(dat.intersect.y - center.y),
+                (float)(dat.intersect.z - center.z - dist));
         }
         /// <summary>
         /// This function is designed to move a support by it's tip
@@ -423,9 +604,9 @@ namespace Engine3D
             ScaleToHeight(tip.z * .85);
             Point3d center;
             // first, move along the vec in the direction of the vector
-            center = CalcCentroid(0,s5i);
+            center = CalcCentroid(s3i,s5i);
             diff.Set(tip.x + vec.x - center.x, tip.y + vec.y - center.y, 0.0f); // only slide along the x/y plane
-            TranslateRange(diff,0, s5i);
+            TranslateRange(diff,s3i, s5i);
 
             center = CalcCentroid(s5i, m_lstpoints.Count);            
             diff.Set(tip.x - center.x,tip.y - center.y,tip.z - center.z);

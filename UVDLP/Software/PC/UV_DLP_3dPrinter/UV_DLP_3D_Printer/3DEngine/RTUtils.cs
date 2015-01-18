@@ -158,13 +158,16 @@ namespace UV_DLP_3D_Printer._3DEngine
          The object selection plane is used to help move objects around
          * This is a plane is centered at the object center and faces the center of the view
          * This is used to determine an intersection along the plane to help move the object
+         * This is created by picking a center point, and using the camera's forward and right vectors to generate
+         * 2 polygons that form a forward-facing plane at a distance of the camera to the point along the forward vector
          * parameters:
          * center is the  center of the currently selected object
          * fromcamera is the vector from the camera to the center of the selected object
          * cameraup is the up vector of the camera
          */
-        public static void UpdateObjectSelectionPlane(Point3d center,float rad, Vector3d cameraup, Vector3d cameraright) 
+        public static void UpdateObjectSelectionPlane(Point3d center, Vector3d cameraup, Vector3d cameraright) 
         {
+
             //get the currently selected object
             //create 2 polygons 
             //forward facing towards the camera
@@ -223,7 +226,7 @@ namespace UV_DLP_3D_Printer._3DEngine
                 p2 = m_selplane.m_lstpoints[2];
                 p3 = m_selplane.m_lstpoints[3];
             }
-            float scaler = 1000.0f;
+            float scaler = 100.0f;
                         
             p0.Set((cameraup.x / 2) - (cameraright.x / 2), (cameraup.y / 2) - (cameraright.y / 2), (cameraup.z/2) - (cameraright.z/2));
             p1.Set((cameraup.x / 2) + (cameraright.x / 2), (cameraup.y / 2) + (cameraright.y / 2), (cameraup.z / 2) + (cameraright.z / 2));

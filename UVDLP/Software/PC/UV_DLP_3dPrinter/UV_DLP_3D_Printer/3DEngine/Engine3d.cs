@@ -358,11 +358,11 @@ namespace Engine3D
                     if (q.visible)
                         q.RenderGL();
                 }
-                /*
+                
                 if (RTUtils.m_selplane != null) 
                 {
-                    RTUtils.m_selplane.RenderGL(true, false, false, Color.Cornsilk);
-                }*/
+                 //   RTUtils.m_selplane.RenderGL(true, false, false, Color.Cornsilk);
+                }
             }
             catch (Exception ex) 
             {

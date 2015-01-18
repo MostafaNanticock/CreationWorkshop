@@ -11,7 +11,7 @@ using System.Threading;
 // C++ port by Tomasz Dabrowski (http://28byteslater.com), under the MIT license.
 // GitHub: https://github.com/dabroz/csgjs-cpp/
 //
-// C# port by Steve Hernandez (http://www.envisionlabs.net/), under the Creative Commons License
+// C# port by Steve Hernandez (http://www.envisionlabs.net/), under the MIT license.
 // GitHub: https://github.com/Pacmanfan/UVDLPSlicerController
 // 
 // Constructive Solid Geometry (CSG) is a modeling technique that uses Boolean

@@ -737,6 +737,8 @@ namespace UV_DLP_3D_Printer
                                     {
                                         PrintLayer(bmp, m_curlayer, curtype);
                                     }
+                                    
+                                    RaiseStatusEvent(eBuildStatus.eLayerCompleted,"Completed Layer");
                                 }
                             }
                             break;

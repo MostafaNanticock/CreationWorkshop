@@ -57,7 +57,10 @@ namespace Engine3D
         {
             Init();
         }
-
+        /// <summary>
+        /// Copy copies the supports as well
+        /// </summary>
+        /// <returns></returns>
         public Object3d Copy() 
         {
             //copy this object
@@ -707,7 +710,7 @@ namespace Engine3D
             }
         }
         /*Move the model in object space */
-        public void Translate(float x, float y, float z, bool updateUndo = false) 
+        public virtual void Translate(float x, float y, float z, bool updateUndo = false) 
         {
             foreach (Point3d p in m_lstpoints) 
             {
