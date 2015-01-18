@@ -982,9 +982,12 @@ namespace Engine3D
                             {
                                 return false;
                             }
-                            poly.m_points[idx].x = (float)float.Parse(toks[1].Trim(), System.Globalization.NumberStyles.Any);
-                            poly.m_points[idx].y = (float)float.Parse(toks[2].Trim(), System.Globalization.NumberStyles.Any);
-                            poly.m_points[idx].z = (float)float.Parse(toks[3].Trim(), System.Globalization.NumberStyles.Any);                           
+                            poly.m_points[idx].x = (float)float.Parse(toks[1].Trim(), System.Globalization.CultureInfo.InvariantCulture); 
+                            poly.m_points[idx].y = (float)float.Parse(toks[2].Trim(), System.Globalization.CultureInfo.InvariantCulture); 
+                            poly.m_points[idx].z = (float)float.Parse(toks[3].Trim(), System.Globalization.CultureInfo.InvariantCulture); 
+                            //poly.m_points[idx].x = (float)float.Parse(toks[1].Trim(), System.Globalization.NumberStyles.Any);
+                            //poly.m_points[idx].y = (float)float.Parse(toks[2].Trim(), System.Globalization.NumberStyles.Any);
+                            //poly.m_points[idx].z = (float)float.Parse(toks[3].Trim(), System.Globalization.NumberStyles.Any);                           
                         }
 
                         line = sr.ReadLine().Trim();//endloop
