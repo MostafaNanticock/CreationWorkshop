@@ -95,6 +95,7 @@ namespace Engine3D
 
 
         float m_fbrad,  m_ftrad,  m_hbrad,  m_htrad;
+        float m_tipheight;
 
 
 
@@ -175,7 +176,7 @@ namespace Engine3D
             Point3d center = CalcCentroid(s1i, s2i);
             //move the item to 0,0,0
             STranslateRange(-center.x, -center.y, -center.z, s1i, s2i);
-            ReGenCircPoints(newrad, cdivs, startidx);
+            ReGenCircPoints(newrad, cdivs, startidx, 0, false);
             /*
             //calculate the current radius over a range of points that represent this 'slice' of cylinder.
             float rad = CalcRadiusRange(s1i, s2i);
@@ -242,6 +243,7 @@ namespace Engine3D
                 m_ftrad = ftrad;
                 m_hbrad = hbrad;
                 m_htrad = htrad;
+                m_tipheight = d3;
                 m_supporting = supporting;
                 cdivs = divs;
                 float zlev = 0.0f; // start at the bottom of the cylinder
@@ -288,6 +290,12 @@ namespace Engine3D
                 DebugLogger.Instance().LogError(ex.Message);
 
             }
+        }
+
+        public void ResetTip()
+        {
+            ReGenCircPoints(m_hbrad, cdivs, s4i, -m_tipheight, false); // bottom of head
+            ReGenCircPoints(m_htrad, cdivs, s5i, 0, true); // top of head
         }
 
         public Support MakeCopy() 
@@ -508,24 +516,44 @@ namespace Engine3D
             }
         }
 
-        public void Translate(float x, float y, float z) 
+        public void Translate(float x, float y, float z)
         {
 
-            switch (m_seltype) 
+            switch (m_seltype)
             {
                 case eSelType.eBase:
-                    TranslateRange(x,y,z, s1i, s4i);
+                    TranslateRange(x, y, z, s1i, s4i);
                     break;
                 case eSelType.eTip:
-                    TranslateRange(x,y,z, s4i, m_lstpoints.Count);
+                    TranslateRange(x, y, z, s4i, m_lstpoints.Count);
                     break;
                 case eSelType.eWhole:
                     base.Translate(x, y, z);
                     break;
             }
             base.Translate(0, 0, 0);
-           // Update();
+            // Update();
         }
+
+        public void Transform(Matrix3D tMat)
+        {
+
+            switch (m_seltype)
+            {
+                case eSelType.eBase:
+                    TransformRange(tMat, s1i, s4i);
+                    break;
+                case eSelType.eTip:
+                    TransformRange(tMat, s4i, m_lstpoints.Count);
+                    break;
+                case eSelType.eWhole:
+                    TransformRange(tMat, 0, m_lstpoints.Count);
+                    break;
+            }
+            base.Translate(0, 0, 0);
+            // Update();
+        }
+
         // simple range translate , no update function called
         private void STranslateRange(float x, float y, float z, int startidx, int endidx)
         {
@@ -539,13 +567,26 @@ namespace Engine3D
             //m_listid = -1; // regenerate the list id
         }
 
-        private void TranslateRange(float x, float y, float z , int startidx, int endidx) 
+        private void TranslateRange(float x, float y, float z, int startidx, int endidx)
         {
             for (int c = startidx; c < endidx; c++)
             {
                 m_lstpoints[c].x += x;
                 m_lstpoints[c].y += y;
                 m_lstpoints[c].z += z;
+            }
+            Update();
+            m_listid = -1; // regenerate the list id
+        }
+
+        private void TransformRange(Matrix3D tMat, int startidx, int endidx)
+        {
+            for (int c = startidx; c < endidx; c++)
+            {
+                Point3d p3 = tMat.Transform(m_lstpoints[c]);
+                m_lstpoints[c].x = p3.x;
+                m_lstpoints[c].y = p3.y;
+                m_lstpoints[c].z = p3.z;
             }
             Update();
             m_listid = -1; // regenerate the list id
@@ -583,10 +624,21 @@ namespace Engine3D
             center = Centroid(); // get the centroid of the selected portion of the object
             MinMax mm = CalcMinMaxRange(s4i, m_lstpoints.Count);
             float dist = (float)((mm.m_max - mm.m_min) );
+            //Translate(
+            //    (float)(dat.intersect.x - center.x),
+            //    (float)(dat.intersect.y - center.y),
+            //    (float)(dat.intersect.z - center.z - dist));
+            ResetTip();
+            Matrix3D tMat = new Matrix3D();
+            Vector3d vup = new Vector3d(0,1,0);
+            Vector3d dir = new Vector3d(-dat.poly.m_normal.x, -dat.poly.m_normal.y, -dat.poly.m_normal.z);
+            dir.Normalize();
+            tMat.LookAt(dir, vup);
+            Transform(tMat);
             Translate(
-                (float)(dat.intersect.x - center.x),
-                (float)(dat.intersect.y - center.y),
-                (float)(dat.intersect.z - center.z - dist));
+                (float)(dat.intersect.x),
+                (float)(dat.intersect.y),
+                (float)(dat.intersect.z));
         }
         /// <summary>
         /// This function is designed to move a support by it's tip
