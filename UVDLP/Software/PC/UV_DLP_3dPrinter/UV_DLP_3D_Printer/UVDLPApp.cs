@@ -122,8 +122,8 @@ namespace UV_DLP_3D_Printer
         public enum eSupportEditMode 
         {
             eNone,
-            eAddSupport,
-            eModifySupport
+            eAddSupport
+            //eModifySupport
         }
         public eSupportEditMode SupportEditMode 
         {
@@ -350,7 +350,7 @@ namespace UV_DLP_3D_Printer
             }
             RaiseAppEvent(eAppEvent.eModelRemoved, "model removed");
         }
-
+        /*
         /// <summary>
         /// Adds a new dummy support
         /// </summary>
@@ -366,7 +366,7 @@ namespace UV_DLP_3D_Printer
             UVDLPApp.Instance().m_undoer.SaveAddition(s);
             RaiseAppEvent(eAppEvent.eModelAdded, "Model Created");
         }
-
+        */
         /// <summary>
         /// Adds a support base plate under objects 
         /// </summary>
@@ -582,23 +582,7 @@ namespace UV_DLP_3D_Printer
         public void PostLoadScene() 
         {
             
-            /*
-            m_gcode = SceneFile.Instance().LoadGCodeFromScene(SceneFileName);
-            if (m_gcode == null) 
-            {
-                m_gcode = new GCodeFile(""); // create empty file
-            }
-             
-            RaiseAppEvent(eAppEvent.eGCodeLoaded, "GCode Loaded ");
-            SceneFile.Instance().LoadSliceProfileFromScene(SceneFileName);
-            m_slicefile = new SliceFile(m_buildparms);
-            m_slicefile.m_mode = SliceFile.SFMode.eLoaded;
-            m_slicer.SliceFile = m_slicefile;
-            //set the number of slices
-            m_slicefile.NumSlices = m_slicer.GetNumberOfSlices(m_buildparms);
-            RaiseAppEvent(eAppEvent.eSliceProfileChanged, "Slice Profile loaded");
-            RaiseAppEvent(eAppEvent.eSlicedLoaded, "Slice Profile loaded");
-            */
+            
         }
         public void LoadGCode(String filename)
         {
@@ -608,7 +592,6 @@ namespace UV_DLP_3D_Printer
                 {
                     DebugLogger.Instance().LogRecord("Cannot load GCode File " + filename);
                 }
-                //StartGCodeInterpret();
                 RaiseAppEvent(eAppEvent.eGCodeLoaded, "GCode Loaded " + filename);
             }
             catch (Exception ex)

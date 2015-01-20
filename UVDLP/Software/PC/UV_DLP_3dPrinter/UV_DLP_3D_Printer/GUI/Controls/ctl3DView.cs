@@ -776,120 +776,79 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                         // either we're moving a support
                         if (UVDLPApp.Instance().SelectedObject.tag == Object3d.OBJ_SUPPORT)
                         {
-                            //
-                            if (UVDLPApp.Instance().SupportEditMode == UVDLPApp.eSupportEditMode.eModifySupport)
+                            // if it's the base we're moving,
+                            //allow the base to change types
+                            // see if it intersects with the ground, or an object
+                            //cast as a support object
+                            Support sup = (Support)UVDLPApp.Instance().SelectedObject;
+                            if (sup.SelectionType == Support.eSelType.eWhole) 
                             {
-                                // if it's the base we're moving,
-                                //allow the base to change types
-                                // see if it intersects with the ground, or an object
-                                //cast as a support object
-                                Support sup = (Support)UVDLPApp.Instance().SelectedObject;
-                                if (sup.SelectionType == Support.eSelType.eWhole) 
-                                {
-                                    // we're in modify mode, but we're still moving the whole support
-                                    if (dat.obj.tag == Object3d.OBJ_SEL_PLANE)
-                                    {                                        
-                                        // move the support                                     
-                                        sup.Translate(
-                                            (float)(dat.intersect.x - UVDLPApp.Instance().SelectedObject.m_center.x),
-                                            (float)(dat.intersect.y - UVDLPApp.Instance().SelectedObject.m_center.y),
-                                            0.0f);
-                                        break;
-                                    }
-                                }
-                                else if (sup.SelectionType == Support.eSelType.eBase) 
-                                {
-                                    //going to change this to test for intersection with object, or ground plane
-                                    // if intersected with an object, change to intra type
-                                    // and set the base on the object
-                                    // if intersected with ground, change to base type and put on ground
-                                    if (dat.obj.tag == Object3d.OBJ_GROUND) 
-                                    {
-                                        // make sure we're a base tip
-                                        sup.SubType = Support.eSubType.eBase;
-                                        // position the bottom to the intersection point
-                                        sup.PositionBottom(dat);
-                                        break;
-                                    }
-                                    else if (dat.obj.tag == Object3d.OBJ_NORMAL) // intersected with an object 
-                                    {
-                                        //should check with the normal of the object to see if it's facing upwards
-                                        sup.SubType = Support.eSubType.eIntra;
-                                        // position the bottom to the intersection point
-                                        sup.PositionBottom(dat);
-                                        break;
-                                    }
-                                }
-                                else if (sup.SelectionType == Support.eSelType.eTip) 
-                                {
-                                    if (dat.obj.tag == Object3d.OBJ_NORMAL) // intersected with an object 
-                                    {
-
-                                        sup.MoveFromTip(dat);
-                                        // if the polygon we intersected is facing downward, we allow it
-                                        //dat.poly.CalcNormal();
-                                        
-                                        m_isectnormal.x = dat.poly.m_normal.x;
-                                        m_isectnormal.y = dat.poly.m_normal.y;
-                                        m_isectnormal.z = dat.poly.m_normal.z;
-                                        double angle = 90;
-                                        Engine3D.Vector3d upvec = new Engine3D.Vector3d();
-                                        double inc = 1.0 / 90.0;
-                                        angle = -(1 - (angle * inc));
-                                        upvec.Set(new Point3d(0,0,1));
-                                        if (m_isectnormal.Dot(upvec) < angle) 
-                                            sup.MoveFromTip(dat);
-
-                                        /*
-                                        //should check with the normal of the object to see if it's facing downward
-                                        // position the tip to the intersection point
-                                        //sup.PositionBottom(dat);
-                                        dat.poly.CalcNormal();
-                                        m_isectnormal.x = dat.poly.m_normal.x;
-                                        m_isectnormal.y = dat.poly.m_normal.y;
-                                        m_isectnormal.z = dat.poly.m_normal.z;
-                                        // ok, we've got the normal, we know where we've intersected
-                                        // my best guess is that we should move the support 5mm in the direction of the camera
-                                        // the tip of the support should touch the intersection point
-                                        // let's start with scaling the height...
-                                        //sup.ScaleToHeight(isd1.intersect.z);
-                                        //m_camera.m_eye
-                                        Engine3D.Vector3d towardseye = new Engine3D.Vector3d();
-                                        towardseye = m_isectnormal;// -m_camera.m_eye;
-                                        towardseye.Normalize(); // make the unit length of 1
-                                        towardseye.Scale(4.0f); // scale to 5 mm
-                                        sup.MoveFromTip(dat.intersect, towardseye);
-                                         * */
-                                        UpdateView();
-                                        break;
-                                    }                                    
-                                }
-                                //need to check the object intersection tag selection plane, object, or ground
-                                /*
-                                dat.intersect.z = 0.0f; // don't move the z
-                                Point3d center;
-                                center = sup.Centroid(); // get the centroid of the selected portion of the object
-                                sup.Translate(
-                                    (float)(dat.intersect.x - center.x),
-                                    (float)(dat.intersect.y - center.y),
-                                    0.0f);
-                                 */
-                            }
-                            else // move the whole support based on the object selection plane
-                            {
+                                // we're in modify mode, but we're still moving the whole support
                                 if (dat.obj.tag == Object3d.OBJ_SEL_PLANE)
-                                {
-                                    Support sup = (Support)UVDLPApp.Instance().SelectedObject;
-                                    // move the support
-                                    //then do the scale to height function see below 
+                                {                               
+                                    //we should really try a top/ bottom intersection / scale to hieg
+                                    // move the support                                     
                                     sup.Translate(
                                         (float)(dat.intersect.x - UVDLPApp.Instance().SelectedObject.m_center.x),
                                         (float)(dat.intersect.y - UVDLPApp.Instance().SelectedObject.m_center.y),
                                         0.0f);
+                                    // now we've moved the object approximately to where it needs to be
+                                    //turn it back into a base 
+                                    sup.SubType = Support.eSubType.eBase;
+                                    //get the center location
+                                    Point3d centroid = sup.Centroid();
+                                    Engine3D.Vector3d upvec = new Engine3D.Vector3d();
+                                    upvec.Set(0, 0, 1);
+                                    Point3d origin = new Point3d();
+                                    origin.Set(centroid.x, centroid.y, .001f);// above the ground plane
+                                    List<ISectData> isects = RTUtils.IntersectObjects(upvec, origin, UVDLPApp.Instance().Engine3D.m_objects, false);
+                                    foreach (ISectData isd in isects) 
+                                    {
+                                        if (isd.obj.tag == Object3d.OBJ_NORMAL)// if we've intersected a normal object upwards
+                                        {
+                                            sup.SelectionType = Support.eSelType.eTip;
+                                            sup.MoveFromTip(isd);
+                                            sup.SelectionType = Support.eSelType.eWhole;
+                                            break;      
+                                        }
+                                    }
+                                    //starting at the x/y ground plane, hittest upward
                                     break;
                                 }
                             }
-                            
+                            else if (sup.SelectionType == Support.eSelType.eBase) 
+                            {
+                                //going to change this to test for intersection with object, or ground plane
+                                // if intersected with an object, change to intra type
+                                // and set the base on the object
+                                // if intersected with ground, change to base type and put on ground
+                                if (dat.obj.tag == Object3d.OBJ_GROUND) 
+                                {
+                                    // make sure we're a base tip
+                                    sup.SubType = Support.eSubType.eBase;
+                                    // position the bottom to the intersection point
+                                    sup.PositionBottom(dat);
+                                    break;
+                                }
+                                else if (dat.obj.tag == Object3d.OBJ_NORMAL) // intersected with an object 
+                                {
+                                    //should check with the normal of the object to see if it's facing upwards
+                                    sup.SubType = Support.eSubType.eIntra;
+                                    // position the bottom to the intersection point
+                                    sup.PositionBottom(dat);
+                                    break;
+                                }
+                            }
+                            else if (sup.SelectionType == Support.eSelType.eTip) 
+                            {
+                                if (dat.obj.tag == Object3d.OBJ_NORMAL) // intersected with an object 
+                                {
+
+                                    sup.MoveFromTip(dat);                                        
+                                    UpdateView();
+                                    break;
+                                }                                    
+                            }
                         }
                         else // or a normal object based on object selection plane
                         {
@@ -902,76 +861,9 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                             }
                             break;
                         }
-                        /*
-                            // if we're NOT in object mody mode, grab and move whole objects
-                            //if (dat.obj.tag == Object3d.OBJ_GROUND) //found the ground plane
-                            if (dat.obj.tag == Object3d.OBJ_SEL_PLANE) //found the ground plane
-                            {
-                                if (UVDLPApp.Instance().SelectedObject.tag == Object3d.OBJ_SUPPORT)
-                                {
-                                    //may need to do some additional hit-testing of supports moving
-                                    Support sup = (Support)UVDLPApp.Instance().SelectedObject;
-                                    dat.intersect.z = 0.0f; // don't move the z
-                                    Point3d center;
-                                    if (UVDLPApp.Instance().SupportEditMode == UVDLPApp.eSupportEditMode.eModifySupport)
-                                    {
-                                        center = sup.Centroid();
-                                    }
-                                    else
-                                    {
-                                        center = sup.m_center;
-                                    }
-                                    sup.Translate(
-                                        (float)(dat.intersect.x - center.x),
-                                        (float)(dat.intersect.y - center.y),
-                                        0.0f);
-                                }
-                                else
-                                {
-                                    UVDLPApp.Instance().SelectedObject.Translate(
-                                        (float)(dat.intersect.x - UVDLPApp.Instance().SelectedObject.m_center.x),
-                                        (float)(dat.intersect.y - UVDLPApp.Instance().SelectedObject.m_center.y),
-                                        0.0f);
-                                }
-                            }
-                        */
                     }
-                    /*
-                    if (UVDLPApp.Instance().SelectedObject.tag == Object3d.OBJ_SUPPORT)  // if the current selected object is a support
-                    {
-                        Support tmpsup = (Support)UVDLPApp.Instance().SelectedObject;
-                        Point3d pnt = new Point3d();
-                        pnt.Set(tmpsup.m_center.x, tmpsup.m_center.y, 0);
-                        Engine3D.Vector3d vec = new Engine3D.Vector3d();
-                        vec.Set(0, 0, 1); // create a vector striaght up
-                        // hit test from the selected objects center x/y/0 position straight up
-                        //see if it hits any object in the scene,
-                        // if it does, scale the object from the ground plane to the closest intersection point
-                        List<ISectData> iss = RTUtils.IntersectObjects(vec, pnt, UVDLPApp.Instance().Engine3D.m_objects, false);
-                        bool foundObject = false;
-                        foreach (ISectData htd in iss)
-                        {
-                            if (htd.obj.tag == Object3d.OBJ_NORMAL)  // if this is not another support or the ground
-                            {
-                                // this should be it...
-                                tmpsup.ScaleToHeight(htd.intersect.z);
-                                //set the parent object
-                                 tmpsup.m_supporting = htd.obj;
-                                htd.obj.AddSupport(tmpsup);
-                                foundObject = true;
-                                break;
-                            }
-                        }
-                        if (!foundObject && (tmpsup.m_parent != null))
-                        {
-                            tmpsup.m_parent.RemoveSupport(tmpsup);
-                        }
-                    }
-                    */
                     UpdateView();
                 }                
-            
-            //UpdateView(false);
         }
 
         private void glControl1_MouseUp(object sender, MouseEventArgs e)
@@ -1038,17 +930,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                         if (i.obj.tag == Object3d.OBJ_SUPPORT) 
                         {
                             Support sup = (Support)i.obj;
-                            // if this is a support, do a sub-selection on the support
-                            if (UVDLPApp.Instance().SupportEditMode == UVDLPApp.eSupportEditMode.eModifySupport)
-                            {
-                                // if we're in modify support mode, do a sub-select
-                                sup.Select(i.poly);
-                            }
-                            else 
-                            {
-                                // mark the entire object as selected
-                                sup.SelectionType = Support.eSelType.eWhole;
-                            }
+                            sup.Select(i.poly);
                         }
                         UVDLPApp.Instance().SelectedObject = i.obj;
                         UVDLPApp.Instance().m_engine3d.UpdateLists();
@@ -1057,14 +939,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     break;
                 }
             }
-            /*
-               if (isects.Count > 0) 
-               {
-                   ISectData i = (ISectData)isects[0];
-                   UVDLPApp.Instance().SelectedObject = i.obj;
-                   UVDLPApp.Instance().m_engine3d.UpdateLists();
-               }
-             * */
         }
 
         private void ctl3DView_Load(object sender, EventArgs e)
@@ -1331,7 +1205,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             }
         }
 
-        void AddNewSupport(float x, float y, float lz, Object3d parent)
+        Support AddNewSupport(float x, float y, float lz, Object3d parent)
         {
             Support s = new Support();
             Configs.SupportConfig m_sc = UVDLPApp.Instance().m_supportconfig;
@@ -1342,7 +1216,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 parent.AddSupport(s);
             UVDLPApp.Instance().m_engine3d.AddObject(s);
             UVDLPApp.Instance().SelectedObject = s;
-            
+            return s;
             //RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eSupportGenerated, s.Name, s);
         }
         
@@ -1376,81 +1250,15 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 }
                 if (isd1 == null) return; // no object intersection
                 //add a support 
-                AddNewSupport(isd1.intersect.x, isd1.intersect.y, isd1.intersect.z, isd1.obj);
+                Support sup = AddNewSupport(isd1.intersect.x, isd1.intersect.y, isd1.intersect.z, isd1.obj);
+                sup.SelectionType = Support.eSelType.eTip;
+                sup.MoveFromTip(isd1);
+                sup.SelectionType = Support.eSelType.eWhole;
+
                 UpdateView();
                 return;
-            }
-
-            Object3d obj = UVDLPApp.Instance().SelectedObject;
-            if (obj == null) return;
-            if (ctrldown == false) return; // ctrl need to be held down
-
-            // this object is a support
-            if (obj.tag == Object3d.OBJ_SUPPORT ) 
-            {
-                Support sup = (Support)obj;// we can cast safely
-                // now we have to see if we clicked on an object
-                MouseEventArgs me = e as MouseEventArgs;
-               // MouseButtons buttonPushed = me.Button;
-                int xPos = me.X;
-                int yPos = me.Y;
-                List<ISectData> isects = TestHitTest(xPos, yPos);
-                if (isects.Count == 0) return; // no intersections
-                ISectData isd1 =null;
-                foreach (ISectData isd in isects) 
-                {
-                    // find the closest object we clicked
-                    if (isd.obj.tag == Object3d.OBJ_NORMAL) 
-                    {
-                        isd1 = isd; //  save it
-                        break;
-                    }
-                }
-                if (isd1 == null) return; // no object intersection
-                isd1.poly.CalcNormal();
-                m_isectnormal.x = isd1.poly.m_normal.x;
-                m_isectnormal.y = isd1.poly.m_normal.y;
-                m_isectnormal.z = isd1.poly.m_normal.z;
-                // ok, we've got the normal, we know where we've intersected
-                // my best guess is that we should move the support 5mm in the direction of the camera
-                // the tip of the support should touch the intersection point
-                // let's start with scaling the height...
-                //sup.ScaleToHeight(isd1.intersect.z);
-                //m_camera.m_eye
-                Engine3D.Vector3d towardseye = new Engine3D.Vector3d();
-                towardseye = m_isectnormal;// -m_camera.m_eye;
-                towardseye.Normalize(); // make the unit length of 1
-                towardseye.Scale(4.0f); // scale to 5 mm
-                sup.MoveFromTip(isd1.intersect, towardseye);
-                UpdateView();
-                //sup.
-            }
+            }            
         }
-
-
-        /*
-       public void SetButtonStatus(bool stButtConnect, bool stButtDisconnect, bool stButtPlay, bool stButtStop, bool stButtPause)
-       {
-           buttConnect.Enabled = stButtConnect;
-           buttDisconnect.Enabled = stButtDisconnect;
-           buttPlay.Enabled = stButtPlay;
-           buttStop.Enabled = stButtStop;
-           buttPause.Enabled = stButtPause;
-       }
-        */
-        /*
-       public String MainMessage
-       {
-           get { return textMainMessage.Text; }
-           set { textMainMessage.Text = value; }
-       }
-    
-       public String TimeMessage
-       {
-           get { return textTime.Text; }
-           set { textTime.Text = value; }
-       }
-         * */
     }
 
     public class ctlBgnd

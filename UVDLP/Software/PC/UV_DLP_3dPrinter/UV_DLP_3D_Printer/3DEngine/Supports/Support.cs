@@ -96,6 +96,7 @@ namespace Engine3D
 
         float m_fbrad,  m_ftrad,  m_hbrad,  m_htrad;
         float m_tipheight;
+        float m_baseheight;
 
 
 
@@ -201,7 +202,14 @@ namespace Engine3D
             {
                 case eSubType.eBase:
                     //scale the very bottom to be the foot bottom radius
-                    ScaleLayer(m_fbrad, s1i, s2i);
+                    //ScaleLayer(m_fbrad, s1i, s2i); // simply scaling doesn't fix the 'damage' done by previous angling
+                    Point3d centroid = CalcCentroid(s1i, s2i);
+                    STranslateRange(-centroid.x, -centroid.y, -centroid.z, s1i, s2i);
+                    ReGenCircPoints(m_fbrad, cdivs, s1i, 0, true);
+                    ReGenCircPoints(m_ftrad, cdivs, s2i, 1, false);
+                    ReGenCircPoints(m_ftrad, cdivs, s3i, 1, false);
+
+                    STranslateRange(centroid.x, centroid.y, centroid.z, s1i, s4i);
 
                     break;
                 case eSubType.eIntra:
@@ -247,6 +255,7 @@ namespace Engine3D
                 m_hbrad = hbrad;
                 m_htrad = htrad;
                 m_tipheight = 2;// d3;
+                m_baseheight = d1;
                 m_supporting = supporting;
                 cdivs = divs;
                 float zlev = 0.0f; // start at the bottom of the cylinder
@@ -544,7 +553,7 @@ namespace Engine3D
             switch (m_seltype)
             {
                 case eSelType.eBase:
-                    TransformRange(tMat, s1i, s4i);
+                    TransformRange(tMat, s1i, s2i);
                     break;
                 case eSelType.eTip:
                     TransformRange(tMat, s4i, m_lstpoints.Count);
@@ -612,13 +621,68 @@ namespace Engine3D
             // the bottom could be a tip or base
             // need to orient the bottom and position it.
             Point3d center;
-            center = Centroid(); // get the centroid of the selected portion of the object
-            MinMax mm = CalcMinMaxRange(s1i,s4i);
-            float dist = (float)((mm.m_max - mm.m_min) / 2);
-            Translate(
-                (float)(dat.intersect.x - center.x),
-                (float)(dat.intersect.y - center.y),
-                (float)(dat.intersect.z - center.z + dist));
+            // for a base support, just slide it around
+            if (m_subtype == eSubType.eBase)
+            {
+                center = Centroid(); // get the centroid of the selected portion of the object
+                MinMax mm = CalcMinMaxRange(s1i, s4i);
+                float dist = (float)((mm.m_max - mm.m_min) / 2);
+                Translate(
+                    (float)(dat.intersect.x - center.x),
+                    (float)(dat.intersect.y - center.y),
+                    (float)(dat.intersect.z - center.z + dist));
+            }
+            else if (m_subtype == eSubType.eIntra)  // bottom tip
+            {
+                // for a base tip, find the angle and angle it in               
+                Vector3d isectnorm = new Vector3d();
+                //save the polygon intersection normal
+                isectnorm.x = dat.poly.m_normal.x;
+                isectnorm.y = dat.poly.m_normal.y;
+                isectnorm.z = dat.poly.m_normal.z;
+                isectnorm.Normalize();
+
+                if (isectnorm.z < 0)
+                {
+                    isectnorm.z *= -1.0f;
+                }
+                // limit the z down to 45 degrees
+                if (isectnorm.z < .75)
+                {
+                    isectnorm.z = .75f;
+                }
+
+                // re-genrate the points on the bottom of the foot
+                ReGenCircPoints(m_htrad, cdivs, s1i, 0, true); // bottom of foot is the tip radius
+                Matrix3D tMat = new Matrix3D();
+                Vector3d vup = new Vector3d(0, 1, 0);
+                Vector3d dir = new Vector3d(isectnorm.x, isectnorm.y, isectnorm.z);
+                dir.Normalize();
+
+                
+                //direction should be upward at this point.
+                //create a matrix transform
+                tMat.LookAt(dir, vup);
+                //transform the si1-s2i points to look at the vector                
+                TransformRange(tMat, s1i, s2i);
+                //move the range of points to be touching the intersection point
+                STranslateRange(dat.intersect.x, dat.intersect.y, dat.intersect.z, s1i, s2i);
+                
+                //now, get the center of s4i to s5i                
+                Point3d cnt = CalcCentroid(s2i, s4i);
+                //translate to 0,0,0
+                STranslateRange(-cnt.x, -cnt.y, -cnt.z, s2i, s4i);
+                //reset the points,
+                ReGenCircPoints(m_hbrad, cdivs, s2i, 0, false); // top of foot
+                ReGenCircPoints(m_hbrad, cdivs, s3i, 0, false); // top of foot
+                Point3d newp = new Point3d();
+                newp.x = dat.intersect.x + (isectnorm.x * 2);
+                newp.y = dat.intersect.y + (isectnorm.y * 2);
+                newp.z = dat.intersect.z + (isectnorm.z * 2);
+                STranslateRange(newp.x,newp.y,newp.z, s2i, s4i);
+                
+                Update();
+            }
             //Update();
         }
         public void MoveFromTip(ISectData dat) 
@@ -669,6 +733,7 @@ namespace Engine3D
 
             //
         }
+        /*
         /// <summary>
         /// This function is designed to move a support by it's tip
         /// it will angle up from the s5i index and position the points to intersect around the 
@@ -694,6 +759,7 @@ namespace Engine3D
             TranslateRange(diff, s5i, m_lstpoints.Count);
             Update();
         }
+         */ 
         public void ScaleToHeight(double height) 
         {
             if (height == 0.0d) height = 1.0;

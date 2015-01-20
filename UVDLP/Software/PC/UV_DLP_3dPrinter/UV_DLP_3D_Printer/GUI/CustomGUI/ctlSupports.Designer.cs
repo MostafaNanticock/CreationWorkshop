@@ -31,9 +31,8 @@
             this.progressTitle = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlProgress();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttAddSupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
-            this.buttModifySupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
-            this.buttAutoSupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttGenBase = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.buttAutoSupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.panelSuppotShape = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.numFB1 = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlNumber();
@@ -93,7 +92,6 @@
             // 
             this.flowLayoutPanel1.BackColor = System.Drawing.Color.RoyalBlue;
             this.flowLayoutPanel1.Controls.Add(this.buttAddSupport);
-            this.flowLayoutPanel1.Controls.Add(this.buttModifySupport);
             this.flowLayoutPanel1.Controls.Add(this.buttGenBase);
             this.flowLayoutPanel1.Controls.Add(this.buttAutoSupport);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(8, 82);
@@ -125,28 +123,28 @@
             this.buttAddSupport.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttAddSupport.Click += new System.EventHandler(this.buttAddSupport_Click);
             // 
-            // buttModifySupport
+            // buttGenBase
             // 
-            this.buttModifySupport.BackColor = System.Drawing.Color.Navy;
-            this.buttModifySupport.Checked = false;
-            this.buttModifySupport.CheckImage = global::UV_DLP_3D_Printer.Properties.Resources.buttChecked;
-            this.buttModifySupport.Gapx = 5;
-            this.buttModifySupport.Gapy = 5;
-            this.buttModifySupport.GLBackgroundImage = null;
-            this.buttModifySupport.GLImage = null;
-            this.buttModifySupport.GLVisible = false;
-            this.buttModifySupport.GuiAnchor = null;
-            this.buttModifySupport.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.buttModifySupport.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttModifySupport;
-            this.buttModifySupport.Location = new System.Drawing.Point(63, 5);
-            this.buttModifySupport.Margin = new System.Windows.Forms.Padding(5);
-            this.buttModifySupport.Name = "buttModifySupport";
-            this.buttModifySupport.Size = new System.Drawing.Size(48, 48);
-            this.buttModifySupport.StyleName = null;
-            this.buttModifySupport.TabIndex = 26;
-            this.ctlToolTip1.SetToolTip(this.buttModifySupport, "Modify Support");
-            this.buttModifySupport.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.buttModifySupport.Click += new System.EventHandler(this.buttModifySupport_Click);
+            this.buttGenBase.BackColor = System.Drawing.Color.Navy;
+            this.buttGenBase.Checked = false;
+            this.buttGenBase.CheckImage = null;
+            this.buttGenBase.Gapx = 5;
+            this.buttGenBase.Gapy = 5;
+            this.buttGenBase.GLBackgroundImage = null;
+            this.buttGenBase.GLImage = null;
+            this.buttGenBase.GLVisible = false;
+            this.buttGenBase.GuiAnchor = null;
+            this.buttGenBase.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttGenBase.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttSupBase;
+            this.buttGenBase.Location = new System.Drawing.Point(58, 5);
+            this.buttGenBase.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.buttGenBase.Name = "buttGenBase";
+            this.buttGenBase.Size = new System.Drawing.Size(48, 48);
+            this.buttGenBase.StyleName = null;
+            this.buttGenBase.TabIndex = 25;
+            this.ctlToolTip1.SetToolTip(this.buttGenBase, "Add Support Base Plate");
+            this.buttGenBase.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttGenBase.Click += new System.EventHandler(this.buttGenBase_Click);
             // 
             // buttAutoSupport
             // 
@@ -161,7 +159,7 @@
             this.buttAutoSupport.GuiAnchor = null;
             this.buttAutoSupport.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttAutoSupport.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttAutoSupport;
-            this.buttAutoSupport.Location = new System.Drawing.Point(169, 5);
+            this.buttAutoSupport.Location = new System.Drawing.Point(111, 5);
             this.buttAutoSupport.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.buttAutoSupport.Name = "buttAutoSupport";
             this.buttAutoSupport.Size = new System.Drawing.Size(48, 48);
@@ -170,29 +168,6 @@
             this.ctlToolTip1.SetToolTip(this.buttAutoSupport, "Generate Automatic Supports");
             this.buttAutoSupport.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttAutoSupport.Click += new System.EventHandler(this.buttAutoSupport_Click);
-            // 
-            // buttGenBase
-            // 
-            this.buttGenBase.BackColor = System.Drawing.Color.Navy;
-            this.buttGenBase.Checked = false;
-            this.buttGenBase.CheckImage = null;
-            this.buttGenBase.Gapx = 5;
-            this.buttGenBase.Gapy = 5;
-            this.buttGenBase.GLBackgroundImage = null;
-            this.buttGenBase.GLImage = null;
-            this.buttGenBase.GLVisible = false;
-            this.buttGenBase.GuiAnchor = null;
-            this.buttGenBase.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.buttGenBase.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttSupBase;
-            this.buttGenBase.Location = new System.Drawing.Point(116, 5);
-            this.buttGenBase.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
-            this.buttGenBase.Name = "buttGenBase";
-            this.buttGenBase.Size = new System.Drawing.Size(48, 48);
-            this.buttGenBase.StyleName = null;
-            this.buttGenBase.TabIndex = 25;
-            this.ctlToolTip1.SetToolTip(this.buttGenBase, "Add Support Base Plate");
-            this.buttGenBase.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.buttGenBase.Click += new System.EventHandler(this.buttGenBase_Click);
             // 
             // panelSuppotShape
             // 
@@ -832,6 +807,5 @@
         private ctlTitle ctlTitle1;
         private ctlImageButton buttGenBase;
         private ctlNumber numGap;
-        private ctlImageButton buttModifySupport;
     }
 }
