@@ -11,16 +11,28 @@ namespace UV_DLP_3D_Printer.Configs
     /// <summary>
     /// This is a class for holding configuartion to generate
     /// Automatic or manual support structures.
+    /// It also holds the parameters about the individual supports that are created
+    /// In the future, this needs to be split into 2 classes:
+    /// 1 - The automatic support generation configuration
+    /// 2 - the individual support configuration
+    /// 
     /// </summary>
 [Serializable]
     public class SupportConfig
     {
-        public enum eAUTOSUPPORTTYPE 
+        public enum eAUTOSUPPORTTYPE  // this is for the automatic support generation 
         {
             eBON, // bed of nails
             eADAPTIVE, // a tree-like structure
-            eADAPTIVE2, // a tree-like structure
+            //eADAPTIVE2, // a tree-like structure
         }
+
+        public enum eCrossSectionShape
+        {
+            eCircle, // generate points around a circle
+            ePlus // use the list of points to define an 'X' or '+' shape for each cross-section
+        }
+
         public const int FILE_VERSION = 1; // this should change every time the format changes
         public double xspace, yspace;
         public double mingap; // minimum gap between adaptively generated supports
@@ -30,8 +42,10 @@ namespace UV_DLP_3D_Printer.Configs
         public double fbrad; // foot bottom radius
         public double fbrad2; // foot bottom radius 2
         public int vdivs; // vertical divisions, not used
-        public bool m_onlydownward;
+        public int cdivs; // circular divisions - used for cylinderical supports
+        public bool m_onlydownward; // generate supports only on the downward facing polygons in the scene / object
         public eAUTOSUPPORTTYPE eSupType;
+        public eCrossSectionShape eSectionShape;
 
         public SupportConfig() 
         {
@@ -46,8 +60,27 @@ namespace UV_DLP_3D_Printer.Configs
             fbrad2 = .2; // for intra-object support
             //vdivs = 1; // divisions vertically
             m_onlydownward = false;
+            cdivs = 11; // a prime number
+            eSectionShape = eCrossSectionShape.eCircle;
         }
-        
+
+        public SupportConfig Clone() 
+        {
+            SupportConfig sc = new SupportConfig();
+            sc.eSupType = eSupType;
+            sc.fbrad = fbrad;
+            sc.fbrad2 = fbrad2;
+            sc.ftrad = ftrad;
+            sc.hbrad = hbrad;
+            sc.htrad = htrad;
+            sc.m_onlydownward = m_onlydownward;
+            sc.mingap = mingap;
+            sc.vdivs = vdivs;
+            sc.xspace = xspace;
+            sc.yspace = yspace;
+            sc.eSectionShape = eSectionShape;
+            return sc;
+        }
         public void Load(String filename)
         {
             XmlHelper xh = new XmlHelper();

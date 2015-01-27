@@ -128,7 +128,7 @@ namespace UV_DLP_3D_Printer
                     GenerateSupportObjects();
                     break;
                 case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE:
-                case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE2:
+                //case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE2:
                     GenerateAdaptive2();
                     break;
             }
@@ -181,6 +181,32 @@ namespace UV_DLP_3D_Printer
             public PolyLine3d ply;
         };
         /// <summary>
+        /// This is the auto support generation routine for
+        /// the app that can do the following:
+        /// gridded x/y supports
+        /// handle all un-supported regions
+        /// generate intra-object supports
+        /// </summary>
+        public void GenerateAutoIntra() 
+        {
+            //iterate through all models
+            // add all points into a master list - allpoly
+            // add all polygons into a master list - allpnt
+            //iterate through allpoly and generate a list of polys facing downward - downpoly
+            // now, here comes the tricky part - 
+            //foreach downward poly dply in downpoly
+            // foreach point dpnt in dply
+            // intersect the scene from dpnt downward
+            // now - either it's going to intersect the ground, or another polygon 
+            // create a support (or support entry) sup for the dpnt and intersection (ground or poly)
+            // add sup to potentials list
+
+            // the above algorithm is completely sufficient. the problem with it is that it will
+            // generate far too many supports
+            // I think at this point, we do a secondary pass to smartly remove supports
+        }
+        /// <summary>
+        /// NOT CURRENTLY USED
         /// This is the adaptive support generation, it should automatically 
         /// detect overhangs,
         /// The way that it does this is by generating a closed polyline loop for each layer
@@ -354,16 +380,6 @@ namespace UV_DLP_3D_Printer
                     float lz = center.z;
                     lz += .65f;// why is this offset needed?
                     AddNewSupport(center.x, center.y, center.z, scnt++, null, lstsupports);
-                    //region.ply.m_derived.
-                    /*s.Create(null,(float)m_sc.fbrad, (float)m_sc.ftrad, (float)m_sc.hbrad, (float)m_sc.htrad, lz * .2f, lz * .6f, lz * .2f, 11);
-                    s.Translate((float)center.x, (float)center.y, 0);
-                    s.Name = "Support " + scnt;
-                    s.SetColor(Color.Yellow);
-                    scnt++;
-                    lstsupports.Add(s);
-                    RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eSupportGenerated, s.Name, s);
-                    */
-
                 }
                 RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eCompleted, "Support Generation Completed", lstsupports);
                 m_generating = false;
@@ -967,13 +983,16 @@ namespace UV_DLP_3D_Printer
         Support AddNewSupport(float x, float y, float lz, int scnt, Object3d parent, List<Object3d> lstsupports)
         {
             Support s = new Support();
-            s.Create(parent, (float)m_sc.fbrad, (float)m_sc.ftrad, (float)m_sc.hbrad, (float)m_sc.htrad, lz * .2f, lz * .6f, lz * .2f, 11);
+
+            //s.Create(m_sc ,parent, (float)m_sc.fbrad, (float)m_sc.ftrad, (float)m_sc.hbrad, (float)m_sc.htrad, lz * .2f, lz * .6f, lz * .2f, 11);
+            s.Create(m_sc, parent, lz * .2f, lz * .6f, lz * .2f);
             s.Translate(x, y, 0);
             s.Name = "Support " + scnt;
             s.SetColor(Color.Yellow);
             lstsupports.Add(s);
             if (parent != null)
                 parent.AddSupport(s);
+            
             RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eSupportGenerated, s.Name, s);
             return s;
         }

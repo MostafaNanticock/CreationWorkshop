@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SliceBuildConfig FileVersion="2">
+  <DotsPermmX>102.4</DotsPermmX>
+  <DotsPermmY>76.8</DotsPermmY>
+  <XResolution>1024</XResolution>
+  <YResolution>768</YResolution>
+  <BlankTime>4100</BlankTime>
+  <PlatformTemp>75</PlatformTemp>
+  <ExportSVG>0</ExportSVG>
+  <Export>False</Export>
+  <ExportPNG>False</ExportPNG>
+  <XOffset>0</XOffset>
+  <YOffset>0</YOffset>
+  <Direction>Bottom_Up</Direction>
+  <LiftDistance>4</LiftDistance>
+  <SlideTiltValue>2</SlideTiltValue>
+  <AntiAliasing>True</AntiAliasing>
+  <UseMainLiftGCode>False</UseMainLiftGCode>
+  <AntiAliasingValue>1.5</AntiAliasingValue>
+  <LiftFeedRate>100</LiftFeedRate>
+  <LiftRetractRate>200</LiftRetractRate>
+  <ExportOption>ZIP</ExportOption>
+  <FlipX>True</FlipX>
+  <FlipY>False</FlipY>
+  <Notes>3D Ink - genearlly cures in ~3000 ms. solid, transparent</Notes>
+  <GCodeHeader>;********** Header Start ********
+;Here you can set any G or M-Code which should be executed BEFORE the build process
+G21 ;Set units to be mm
+G91; Set to Relative Positioning
+M17; Enable/Power all stepper motors
+;********** Header End **********
+
+</GCodeHeader>
+  <GCodeFooter>;********** Footer Start ********
+;Here you can set any G or M-Code which should be executed after the last Layer is Printed
+G28 E
+M18 ;Disable Motors
+;&lt;Completed&gt;
+;********** Footer End ********
+</GCodeFooter>
+  <GCodePreslice>;********** Pre-Slice Start ********
+;Set up any GCode here to be executed before a lift
+;********** Pre-Slice End **********
+</GCodePreslice>
+  <GCodeLift>;********** Lift Sequence ********
+M650 D$ZLiftDist P500  S$SlideTiltVal W$LayerThickness; Sets parameters for the peel
+M651; Runs the peel action
+;********** Lift Sequence **********</GCodeLift>
+  <SelectedInk>3dInk_Orange</SelectedInk>
+  <InkConfig>
+    <Name>Default</Name>
+    <SliceHeight>0.100000001490116</SliceHeight>
+    <LayerTime>7500</LayerTime>
+    <FirstLayerTime>18000</FirstLayerTime>
+    <NumberofBottomLayers>4</NumberofBottomLayers>
+    <ResinPriceL>60</ResinPriceL>
+  </InkConfig>
+  <InkConfig>
+    <Name>3dInk_Orange</Name>
+    <SliceHeight>0.100000001490116</SliceHeight>
+    <LayerTime>3800</LayerTime>
+    <FirstLayerTime>8000</FirstLayerTime>
+    <NumberofBottomLayers>4</NumberofBottomLayers>
+    <ResinPriceL>60</ResinPriceL>
+  </InkConfig>
+  <MinTestExposure>500</MinTestExposure>
+  <TestExposureStep>200</TestExposureStep>
+</SliceBuildConfig>

@@ -122,7 +122,7 @@
     <Compile Include="3DEngine\Supports\Support.cs" />
     <Compile Include="3DEngine\Supports\SupportBase.cs" />
     <Compile Include="3DEngine\ModelLoading\ThreeDSFile.cs" />
-    <Compile Include="3DEngine\Supports\TreeSupport.cs" />
+    <Compile Include="3DEngine\Supports\SupportData.cs" />
     <Compile Include="3DEngine\Undoer.cs" />
     <Compile Include="Building\AuxBuildCmds.cs" />
     <Compile Include="Building\AuxCmd.cs" />
@@ -133,7 +133,7 @@
     <Compile Include="Configs\InkConfig.cs" />
     <Compile Include="Configs\MonitorConfig.cs" />
     <Compile Include="Configs\ParmList.cs" />
-    <Compile Include="Configs\SupportConfig.cs" />
+    <Compile Include="3DEngine\Supports\SupportConfig.cs" />
     <Compile Include="Configs\UserParameterList.cs" />
     <Compile Include="Configs\XmlHelper.cs" />
     <Compile Include="Device_Interface\AutoDetect\ConnectionTester.cs" />
@@ -508,7 +508,7 @@
     <Compile Include="Slicing\OldSlicer\GCodeGenerator.cs" />
     <Compile Include="Utility\ImageUtils\ColorCalculator.cs" />
     <Compile Include="Utility\ImageUtils\ExtBitmap.cs" />
-    <Compile Include="Utility\LockBitmap.cs" />
+    <Compile Include="Utility\ImageUtils\LockBitmap.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Configs\MachineConfig.cs" />
     <Compile Include="Configs\Settings.cs" />

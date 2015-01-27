@@ -111,37 +111,6 @@ namespace Engine3D
             FindMinMax();
 
         }
-        /// <summary>
-        /// This re-generates the circle points
-        /// Z is assumed to be 0
-        /// This function is used for changing the tip and base radius
-        /// </summary>
-        /// <param name="radius"></param>
-        /// <param name="numdivscirc"></param>
-        protected void ReGenCircPoints(double radius, int numdivscirc, int startidx, double zlvl, bool addcenter) 
-        {
-            float step = (float)(Math.PI * 2) / numdivscirc;
-            float t = 0.0f;
-            for (int cnt = 0; cnt < numdivscirc; cnt++)
-            {
-                Point3d pnt;
-                pnt = m_lstpoints[startidx + cnt];
-
-                //Point3d pnt = new Point3d(); // bottom points
-                pnt.x = (float)(radius * Math.Cos(t));
-                pnt.y = (float)(radius * Math.Sin(t));
-                pnt.z = (float)zlvl;
-                t += step;
-            }
-            if (addcenter)
-            {
-                // add another point right in the center for the triangulating the face
-                Point3d centerpnt = m_lstpoints[startidx + numdivscirc]; // bottom points
-                centerpnt.x = 0;
-                centerpnt.y = 0;
-                centerpnt.z = (float)zlvl;
-            }
-        }
 
         /*
          This function generates a list of points for a cirlce add a certain level,

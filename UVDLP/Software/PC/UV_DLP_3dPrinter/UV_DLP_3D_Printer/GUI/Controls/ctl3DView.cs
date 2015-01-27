@@ -1208,16 +1208,19 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         Support AddNewSupport(float x, float y, float lz, Object3d parent)
         {
             Support s = new Support();
-            Configs.SupportConfig m_sc = UVDLPApp.Instance().m_supportconfig;
-            s.Create(parent, (float)m_sc.fbrad, (float)m_sc.ftrad, (float)m_sc.hbrad, (float)m_sc.htrad, lz * .2f, lz * .6f, lz * .2f, 11);
+            Configs.SupportConfig sc = UVDLPApp.Instance().m_supportconfig;
+            //s.Create(sc,parent, (float)sc.fbrad, (float)sc.ftrad, (float)sc.hbrad, (float)sc.htrad, lz * .2f, lz * .6f, lz * .2f, 11);
+            s.Create(sc, parent,  lz * .2f, lz * .6f, lz * .2f);
             s.Translate(x, y, 0);
             s.SetColor(Color.Yellow);
             if (parent != null)
                 parent.AddSupport(s);
             UVDLPApp.Instance().m_engine3d.AddObject(s);
             UVDLPApp.Instance().SelectedObject = s;
-            return s;
             //RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eSupportGenerated, s.Name, s);
+            UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eModelAdded, "");
+            return s;
+            
         }
         
 

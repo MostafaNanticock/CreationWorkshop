@@ -7,6 +7,8 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform.Windows;
 using System.Drawing;
+using UV_DLP_3D_Printer.Configs;
+
 namespace Engine3D
 {
     /// <summary>
@@ -28,17 +30,6 @@ namespace Engine3D
     _|__|_
    |______|
 
-     * 
-     * /|
-      / /
-     /_/
-     |  |
-     |  |
-     |__|
-    /____\
-     
-     * 
-     * 
     
      //typical support acting as a suport between object parts
       __
@@ -94,13 +85,13 @@ namespace Engine3D
         private int pei_tip;
 
 
-        float m_fbrad,  m_ftrad,  m_hbrad,  m_htrad;
+        SupportConfig mSC; // the parameters used to create this support
+
+        //float m_fbrad,  m_ftrad,  m_hbrad,  m_htrad;
         float m_tipheight;
         float m_baseheight;
 
-
-
-        private int cdivs; // number of circular divisions
+       // private int mSC.cdivs; // number of circular divisions
 
         public Object3d m_supporting; // the object that this is attached to
         private static int supcnt = 0;
@@ -139,8 +130,7 @@ namespace Engine3D
                 {
                     if (m_lstpoints.Count == 0)  // object not created yet
                         return;
-                    // save the old center
-                   // Point3d center = new Point3d(m_center);
+
                     switch (value) // figure out the new value
                     {                  
                         case eSubType.eBase:
@@ -160,7 +150,6 @@ namespace Engine3D
                             }
                             break;
                     }
-                    //Translate(center.x, center.y, center.z); // move back to old position
                     m_subtype = value;
                 }
             }
@@ -177,19 +166,44 @@ namespace Engine3D
             Point3d center = CalcCentroid(s1i, s2i);
             //move the item to 0,0,0
             STranslateRange(-center.x, -center.y, -center.z, s1i, s2i);
-            ReGenCircPoints(newrad, cdivs, startidx, 0, false);
-            /*
-            //calculate the current radius over a range of points that represent this 'slice' of cylinder.
-            float rad = CalcRadiusRange(s1i, s2i);
-            //scale to a unit radius of 1
-            ScaleRange(1 / rad, s1i, s2i);
-            //now re-scale to the desired size
-            ScaleRange(newrad, s1i, s2i);
-            //and move back to the center of where it was before
-             */
-            STranslateRange(center.x, center.y, center.z, s1i, s2i);
-        
+            //regenerate points for the s1i layer
+            ReGenSegmentPoints(newrad, mSC.cdivs, startidx, 0, false);
+            //move them back to where they were....
+            STranslateRange(center.x, center.y, center.z, s1i, s2i);        
         }
+
+        /// <summary>
+        /// This re-generates the circle points
+        /// Z is assumed to be 0
+        /// This function is used for changing the tip and base radius
+        /// </summary>
+        /// <param name="radius"></param>
+        /// <param name="numdivscirc"></param>
+        protected void ReGenSegmentPoints(double radius, int numdivscirc, int startidx, double zlvl, bool addcenter)
+        {
+            float step = (float)(Math.PI * 2) / numdivscirc;
+            float t = 0.0f;
+            for (int cnt = 0; cnt < numdivscirc; cnt++)
+            {
+                Point3d pnt;
+                pnt = m_lstpoints[startidx + cnt];
+
+                //Point3d pnt = new Point3d(); // bottom points
+                pnt.x = (float)(radius * Math.Cos(t));
+                pnt.y = (float)(radius * Math.Sin(t));
+                pnt.z = (float)zlvl;
+                t += step;
+            }
+            if (addcenter)
+            {
+                // add another point right in the center for the triangulating the face
+                Point3d centerpnt = m_lstpoints[startidx + numdivscirc]; // bottom points
+                centerpnt.x = 0;
+                centerpnt.y = 0;
+                centerpnt.z = (float)zlvl;
+            }
+        }
+
         /// <summary>
         /// Changing the subtype here will change the base from a flat
         /// bottom to a tip bottom and vice versa
@@ -201,19 +215,17 @@ namespace Engine3D
             switch (type) 
             {
                 case eSubType.eBase:
-                    //scale the very bottom to be the foot bottom radius
-                    //ScaleLayer(m_fbrad, s1i, s2i); // simply scaling doesn't fix the 'damage' done by previous angling
+                    // simply scaling doesn't fix the 'damage' done by previous angling
                     Point3d centroid = CalcCentroid(s1i, s2i);
                     STranslateRange(-centroid.x, -centroid.y, -centroid.z, s1i, s2i);
-                    ReGenCircPoints(m_fbrad, cdivs, s1i, 0, true);
-                    ReGenCircPoints(m_ftrad, cdivs, s2i, 1, false);
-                    ReGenCircPoints(m_ftrad, cdivs, s3i, 1, false);
-
+                    ReGenSegmentPoints(mSC.fbrad, mSC.cdivs, s1i, 0, true);
+                    ReGenSegmentPoints(mSC.ftrad, mSC.cdivs, s2i, 1, false);
+                    ReGenSegmentPoints(mSC.ftrad, mSC.cdivs, s3i, 1, false);
                     STranslateRange(centroid.x, centroid.y, centroid.z, s1i, s4i);
 
                     break;
                 case eSubType.eIntra:
-                    ScaleLayer(m_htrad, s1i, s2i);
+                    ScaleLayer((float)mSC.htrad, s1i, s2i);
                     //ScaleLayer(m_ftrad, s2i, s3i);
                     break;
             }
@@ -225,9 +237,11 @@ namespace Engine3D
             m_supporting = null;
             this.Name = "Support_" + supcnt.ToString();
             supcnt++;
+            mSC = UVDLPApp.Instance().m_supportconfig.Clone(); // start off by cloing the app's defaults
             SubType = eSubType.eBase;
             m_seltype = eSelType.eWhole;
         }
+
         /// <summary>
         /// This function creates a new support structure
         /// you can specify the:
@@ -239,58 +253,51 @@ namespace Engine3D
         /// as well as the segment lengths from bottom to top D1,D2,D3
         /// you can also specify the number of divisions in the circle - divs
         /// </summary>
-        /// <param name="fbrad"></param>
-        /// <param name="ftrad"></param>
-        /// <param name="hbrad"></param>
-        /// <param name="htrad"></param>
         /// <param name="d1"></param>
         /// <param name="d2"></param>
         /// <param name="d3"></param>
-        public void Create(Object3d supporting, float fbrad, float ftrad, float hbrad, float htrad, float d1, float d2, float d3, int divs)
+        public void Create(SupportConfig SC, Object3d supporting, float d1, float d2, float d3)
         {
             try
             {
-                m_fbrad = fbrad;
-                m_ftrad = ftrad;
-                m_hbrad = hbrad;
-                m_htrad = htrad;
+                mSC = SC.Clone();
                 m_tipheight = 2;// d3;
                 m_baseheight = d1;
+
                 m_supporting = supporting;
-                cdivs = divs;
                 float zlev = 0.0f; // start at the bottom of the cylinder
                 s1i = 0; // set 0 to be the starting index for the bottom of the foot
-                GenerateCirclePoints(fbrad, divs, zlev, true); // foot bottom
+                GenerateCirclePoints(mSC.fbrad, mSC.cdivs, zlev, true); // foot bottom
                 zlev += d1;
                 //now the top of the foot
                 s2i = m_lstpoints.Count;
-                GenerateCirclePoints(ftrad, divs, zlev, false); // foot top
+                GenerateCirclePoints(mSC.ftrad, mSC.cdivs, zlev, false); // foot top
 
                 //zlev += d1;
                 s3i = m_lstpoints.Count;
-                GenerateCirclePoints(ftrad, divs, zlev, false); // foot top
+                GenerateCirclePoints(mSC.ftrad, mSC.cdivs, zlev, false); // foot top
                 
                 zlev += d2;
 
                 //now the bottom of the shaft
                 s4i = m_lstpoints.Count;
-                GenerateCirclePoints(hbrad, divs, zlev, false); // bottom of head
+                GenerateCirclePoints(mSC.hbrad, mSC.cdivs, zlev, false); // bottom of head
                 zlev += d3;
                 //now the top of the shaft, bottom of the head
                 s5i = m_lstpoints.Count;
-                GenerateCirclePoints(htrad, divs, zlev, true); // top of head
+                GenerateCirclePoints(mSC.htrad, mSC.cdivs, zlev, true); // top of head
                 psi_base = m_lstpolys.Count; // should be 0 index
-                MakeTopBottomFace(s1i, divs, false);// bottom
-                //MakeTopBottomFace(s5i, divs, true);// top                
-                makeWalls(s1i, s2i, divs);
+                MakeTopBottomFace(s1i, mSC.cdivs, false);// bottom
+                //MakeTopBottomFace(s5i, mSC.cdivs, true);// top                
+                makeWalls(s1i, s2i, mSC.cdivs);
                 pei_base = m_lstpolys.Count; // should be top index of 
 
-                makeWalls(s2i, s3i - divs - 1, divs);
-                makeWalls(s3i, s4i - (2*divs) - 1, divs);
+                makeWalls(s2i, s3i - mSC.cdivs - 1, mSC.cdivs);
+                makeWalls(s3i, s4i - (2*mSC.cdivs) - 1, mSC.cdivs);
 
                 psi_tip = m_lstpolys.Count;
-                makeWalls(s4i, s5i - (3 * divs) - 1, divs);
-                MakeTopBottomFace(s5i, divs, true);// top
+                makeWalls(s4i, s5i - (3 * mSC.cdivs) - 1, mSC.cdivs);
+                MakeTopBottomFace(s5i, mSC.cdivs, true);// top
                 pei_tip = m_lstpolys.Count;
 
                 Update(); // update should only be called for new objects, otherwise, use the move/scale/rotate functions
@@ -306,8 +313,8 @@ namespace Engine3D
 
         public void ResetTip()
         {
-            ReGenCircPoints(m_hbrad, cdivs, s4i, -m_tipheight, false); // bottom of head
-            ReGenCircPoints(m_htrad, cdivs, s5i, 0, true); // top of head
+            ReGenSegmentPoints(mSC.hbrad, mSC.cdivs, s4i, -m_tipheight, false); // bottom of head
+            ReGenSegmentPoints(mSC.htrad, mSC.cdivs, s5i, 0, true); // top of head
         }
 
         public Support MakeCopy() 
@@ -441,7 +448,7 @@ namespace Engine3D
             center.z /= num;
             return center;
         }
-
+        /*
         /// <summary>
         /// For our purposes, I think this is only going to work well if 
         /// there is no z varience - aka - all points are the same z on the ground plane
@@ -460,7 +467,7 @@ namespace Engine3D
                // m_lstpoints[c].z *= scale;
             }
         }
-
+        */
         private MinMax CalcMinMaxRange(int startidx, int endidx) 
         {
             MinMax mm = new MinMax();
@@ -600,7 +607,7 @@ namespace Engine3D
                 m_lstpoints[c].y = p3.y;
                 m_lstpoints[c].z = p3.z;
             }
-            Update();
+           // Update(); // not necessary
             m_listid = -1; // regenerate the list id
         }
 
@@ -653,7 +660,7 @@ namespace Engine3D
                 }
 
                 // re-genrate the points on the bottom of the foot
-                ReGenCircPoints(m_htrad, cdivs, s1i, 0, true); // bottom of foot is the tip radius
+                ReGenSegmentPoints(mSC.htrad, mSC.cdivs, s1i, 0, true); // bottom of foot is the tip radius
                 Matrix3D tMat = new Matrix3D();
                 Vector3d vup = new Vector3d(0, 1, 0);
                 Vector3d dir = new Vector3d(isectnorm.x, isectnorm.y, isectnorm.z);
@@ -673,8 +680,8 @@ namespace Engine3D
                 //translate to 0,0,0
                 STranslateRange(-cnt.x, -cnt.y, -cnt.z, s2i, s4i);
                 //reset the points,
-                ReGenCircPoints(m_hbrad, cdivs, s2i, 0, false); // top of foot
-                ReGenCircPoints(m_hbrad, cdivs, s3i, 0, false); // top of foot
+                ReGenSegmentPoints(mSC.hbrad, mSC.cdivs, s2i, 0, false); // top of foot
+                ReGenSegmentPoints(mSC.hbrad, mSC.cdivs, s3i, 0, false); // top of foot
                 Point3d newp = new Point3d();
                 newp.x = dat.intersect.x + (isectnorm.x * 2);
                 newp.y = dat.intersect.y + (isectnorm.y * 2);
@@ -726,7 +733,7 @@ namespace Engine3D
             //translate to 0
             TranslateRange(-cnt.x, -cnt.y, -cnt.z, s4i, s5i);            
             //reset the points,
-            ReGenCircPoints(m_hbrad, cdivs, s4i, 0, false); // bottom of head
+            ReGenSegmentPoints(mSC.hbrad, mSC.cdivs, s4i, 0, false); // bottom of head
             //move back
             TranslateRange(cnt.x, cnt.y, cnt.z, s4i, s5i);
             Update();
@@ -802,7 +809,7 @@ namespace Engine3D
          {
              GL.Begin(PrimitiveType.Lines);//.LineStrip);
              GL.Color4(Color4.Red);
-             for (int c = 0; c < cdivs; c++) 
+             for (int c = 0; c < mSC.cdivs; c++) 
              {
                  Point3d p = (Point3d)m_lstpoints[s1i  + c];
                  GL.Vertex3(p.x, p.y, p.z);
@@ -811,7 +818,7 @@ namespace Engine3D
 
              GL.Begin(PrimitiveType.Lines);//.LineStrip);
              GL.Color4(Color4.Red);
-             for (int c = 0; c < cdivs; c++)
+             for (int c = 0; c < mSC.cdivs; c++)
              {
                  Point3d p = (Point3d)m_lstpoints[s2i + c];
                  GL.Vertex3(p.x, p.y, p.z);
@@ -820,7 +827,7 @@ namespace Engine3D
 
              GL.Begin(PrimitiveType.Lines);//.LineStrip);
              GL.Color4(Color4.Red);
-             for (int c = 0; c < cdivs; c++)
+             for (int c = 0; c < mSC.cdivs; c++)
              {
                  Point3d p = (Point3d)m_lstpoints[s3i + c];
                  GL.Vertex3(p.x, p.y, p.z);
@@ -829,7 +836,7 @@ namespace Engine3D
 
              GL.Begin(PrimitiveType.Lines);//.LineStrip);
              GL.Color4(Color4.Red);
-             for (int c = 0; c < cdivs; c++)
+             for (int c = 0; c < mSC.cdivs; c++)
              {
                  Point3d p = (Point3d)m_lstpoints[s4i  + c];
                  GL.Vertex3(p.x, p.y, p.z);

@@ -90,9 +90,9 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE:
                         cmbSupType.SelectedIndex = 1;
                         break;
-                    case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE2:
-                        cmbSupType.SelectedIndex = 2;
-                        break;
+//                    case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE2:
+  //                      cmbSupType.SelectedIndex = 2;
+    //                    break;
                 }
                 UpdateForSupportType();
             }
@@ -124,9 +124,9 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     case 1:
                         m_sc.eSupType = SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE;
                         break;
-                    case 2:
-                        m_sc.eSupType = SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE2;
-                        break;
+//                    case 2:
+  //                      m_sc.eSupType = SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE2;
+    //                    break;
                 }
                 return true;
             }
@@ -383,7 +383,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     
                     break;
                 case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE:
-                case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE2:
+                //case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE2:
                     chkOnlyDownward.Visible = false;
                     //labelAutoSup.Visible = false;
                     labelAutoSup.Text = "Minimum Gap (mm)";

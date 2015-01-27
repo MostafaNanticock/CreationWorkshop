@@ -522,8 +522,7 @@
             this.cmbSupType.FormattingEnabled = true;
             this.cmbSupType.Items.AddRange(new object[] {
             "Bed of Nails",
-            "Adaptive",
-            "Adaptive v2"});
+            "Adaptive"});
             this.cmbSupType.Location = new System.Drawing.Point(7, 25);
             this.cmbSupType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmbSupType.Name = "cmbSupType";

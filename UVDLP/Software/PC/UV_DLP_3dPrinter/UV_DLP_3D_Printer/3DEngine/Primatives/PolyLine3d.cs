@@ -211,6 +211,11 @@ namespace Engine3D
             m_points.Add(pnt);
         }
 
+        public void AddPoints(Point3d[] pnts) 
+        {
+            m_points.AddRange(pnts);
+        }
+
         public bool PointInPoly2D(float x, float y)
         {
             int i, j, nvert = m_points.Count;
