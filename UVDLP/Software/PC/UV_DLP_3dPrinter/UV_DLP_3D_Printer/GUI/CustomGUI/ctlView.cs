@@ -143,14 +143,24 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         private void setSelectedObjectViewMode(bool isBoundingBox, bool isOutline, bool isShaded)
         {
-            UVDLPApp.Instance().m_appconfig.m_showBoundingBox = buttBoundingBox.Checked = isBoundingBox;
-            UVDLPApp.Instance().m_appconfig.m_showOutline = buttSelOutline.Checked = isOutline;
-            UVDLPApp.Instance().m_appconfig.m_showShaded = buttSelColor.Checked = isShaded;
-            UVDLPApp.Instance().m_appconfig.Save(UVDLPApp.Instance().m_apppath + UVDLPApp.m_pathsep + UVDLPApp.m_appconfigname);
-            foreach (Object3d obj in UVDLPApp.Instance().SelectedObjectList)
-                obj.InvalidateList();
+            try
+            {
+                UVDLPApp.Instance().m_appconfig.m_showBoundingBox = buttBoundingBox.Checked = isBoundingBox;
+                UVDLPApp.Instance().m_appconfig.m_showOutline = buttSelOutline.Checked = isOutline;
+                UVDLPApp.Instance().m_appconfig.m_showShaded = buttSelColor.Checked = isShaded;
+                UVDLPApp.Instance().m_appconfig.Save(UVDLPApp.Instance().m_apppath + UVDLPApp.m_pathsep + UVDLPApp.m_appconfigname);
+                if (UVDLPApp.Instance().SelectedObjectList != null)
+                {
+                    foreach (Object3d obj in UVDLPApp.Instance().SelectedObjectList)
+                        obj.InvalidateList();
+                }
 
-            UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eReDraw, "");
+                UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eReDraw, "");
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
         }
 
         private void buttSliceView_Click(object sender, EventArgs e)

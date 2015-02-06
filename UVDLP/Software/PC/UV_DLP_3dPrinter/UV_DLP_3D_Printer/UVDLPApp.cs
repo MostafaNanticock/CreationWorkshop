@@ -705,21 +705,7 @@ namespace UV_DLP_3D_Printer
                 DebugLogger.Instance().LogRecord(ex.Message);
             }
         }
-        /*
-        public void SetupDriverProjector()
-        {
-            DebugLogger.Instance().LogRecord("Changing monitor driver type to " + eDriverType.eGENERIC.ToString());
-            if (m_deviceinterface.DriverProjector != null)
-            {
-                if (m_deviceinterface.DriverProjector.Connected == true)
-                {
-                    // be sure to close the old driver to play nice
-                    m_deviceinterface.DriverProjector.Disconnect();
-                }
-            }
-            m_deviceinterface.DriverProjector = DriverFactory.Create(eDriverType.eGENERIC);
-        }
-         * */
+
         public void SetupDriver() 
         {
             DebugLogger.Instance().LogRecord("Changing driver type to " + m_printerinfo.m_driverconfig.m_drivertype.ToString());
@@ -864,6 +850,7 @@ namespace UV_DLP_3D_Printer
             // initialize the plugins, the main form will send a secondary init after the main app gui is created
             PerformPluginCommand("InitCommand", true);
             m_sc = new ServerContact();
+            m_undoer.RegisterCallback();
 
         }
         #region Plug-in management and licensing

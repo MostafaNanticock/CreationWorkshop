@@ -43,6 +43,7 @@ namespace UV_DLP_3D_Printer
         public bool usemainliftgcode; // should we use mainliftgcode-tab instead of generating the gcode
         public double aaval; // anti-aliasing scaler value - How much to upsample the image values between 1.0 - 3.0 should be fine
         public double liftfeedrate; // initial lift may cause a lot of suction. To maximize lift power, we slow the steppers down to maximize stepper motor torque.
+        public double bottomliftfeedrate; // the bottom layers require a lower lift rate because of the additional resin exposure
         public double liftretractrate; // the feedrate that this lowers(for bottom-up) or raises(top-down) the build platform, this is the retraction rate of the lift.
         private String m_headercode; // inserted at beginning of file
         private String m_footercode; // inserted at end of file
@@ -93,7 +94,7 @@ namespace UV_DLP_3D_Printer
         private String[] m_deflift = 
         {
             ";********** Lift Sequence ********\r\n",// 
-            "G1{$SlideTiltVal != 0? X$SlideTiltVal:} Z($ZLiftDist * $ZDir) F$ZLiftRate\r\n", 
+            "G1{$SlideTiltVal != 0? X$SlideTiltVal:} Z($ZLiftDist * $ZDir) F{$CURSLICE < $NumFirstLayers?$ZBottomLiftRate:$ZLiftRate}\r\n", 
             "G1{$SlideTiltVal != 0? X($SlideTiltVal * -1):} Z(($LayerThickness-$ZLiftDist) * $ZDir) F$ZRetractRate\r\n",
             ";<Delay> %d$BlankTime\r\n",
             ";********** Lift Sequence **********\r\n", // 
@@ -188,6 +189,7 @@ namespace UV_DLP_3D_Printer
             antialiasing = source.antialiasing;
             usemainliftgcode = source.usemainliftgcode;
             liftfeedrate = source.liftfeedrate;
+            bottomliftfeedrate = source.bottomliftfeedrate;
             liftretractrate = source.liftretractrate;
             aaval = source.aaval;//
             //m_generateautosupports = source.m_generateautosupports;
@@ -266,6 +268,7 @@ namespace UV_DLP_3D_Printer
             usemainliftgcode = false;
             aaval = 1.5;
             liftfeedrate = 50.0;// 50mm/s
+            bottomliftfeedrate = 25.0;
             liftretractrate = 100.0;// 100mm/s
             m_exportopt = "SUBDIR"; // default to saving in subdirectory
             m_flipX = false;
@@ -348,6 +351,7 @@ namespace UV_DLP_3D_Printer
             usemainliftgcode = xh.GetBool(sbc, "UseMainLiftGCode", false);
             aaval = xh.GetDouble(sbc, "AntiAliasingValue", 1.5);
             liftfeedrate = xh.GetDouble(sbc, "LiftFeedRate", 50.0); // 50mm/s
+            bottomliftfeedrate = xh.GetDouble(sbc, "BottomLiftFeedRate", 25.0); // 50mm/s
             liftretractrate = xh.GetDouble(sbc, "LiftRetractRate", 100.0); // 100mm/s
             m_exportopt = xh.GetString(sbc, "ExportOption", "SUBDIR"); // default to saving in subdirectory
             m_flipX = xh.GetBool(sbc, "FlipX", false);
@@ -479,6 +483,7 @@ namespace UV_DLP_3D_Printer
             xh.SetParameter(sbc, "UseMainLiftGCode", usemainliftgcode);
             xh.SetParameter(sbc, "AntiAliasingValue", aaval);
             xh.SetParameter(sbc, "LiftFeedRate", liftfeedrate);
+            xh.SetParameter(sbc, "BottomLiftFeedRate", bottomliftfeedrate);            
             xh.SetParameter(sbc, "LiftRetractRate", liftretractrate);
             xh.SetParameter(sbc, "ExportOption", m_exportopt);
 
@@ -553,6 +558,7 @@ namespace UV_DLP_3D_Printer
             sb.Append(";(Use Mainlift GCode Tab  = " + usemainliftgcode.ToString() + ")\r\n");
             sb.Append(";(Anti Aliasing Value     = " + aaval.ToString() + " )\r\n");
             sb.Append(";(Z Lift Feed Rate        = " + String.Format("{0:0.00000}", liftfeedrate) + " mm/s )\r\n");
+            sb.Append(";(Z Bottom Lift Feed Rate = " + String.Format("{0:0.00000}", bottomliftfeedrate) + " mm/s )\r\n");
             sb.Append(";(Z Lift Retract Rate     = " + String.Format("{0:0.00000}", liftretractrate) + " mm/s )\r\n");
             sb.Append(";(Flip X                  = " + m_flipX.ToString() + ")\r\n");
             sb.Append(";(Flip Y                  = " + m_flipY.ToString() + ")\r\n");

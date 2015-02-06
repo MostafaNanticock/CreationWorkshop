@@ -319,6 +319,7 @@
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(50, 412);
             this.flowLayoutPanel2.TabIndex = 2;
+            this.flowLayoutPanel2.Tag = "0";
             // 
             // buttExpandLeft
             // 

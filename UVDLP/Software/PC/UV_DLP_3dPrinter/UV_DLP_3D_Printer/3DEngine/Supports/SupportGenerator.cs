@@ -204,6 +204,11 @@ namespace UV_DLP_3D_Printer
             // the above algorithm is completely sufficient. the problem with it is that it will
             // generate far too many supports
             // I think at this point, we do a secondary pass to smartly remove supports
+
+            // we still need to identify 'islands' of unsupported regions / polys
+            // and make sure to add a support to them
+            // I need to come up with some sort of function to iterate through all polys
+            // and mark them as supported or not.
         }
         /// <summary>
         /// NOT CURRENTLY USED

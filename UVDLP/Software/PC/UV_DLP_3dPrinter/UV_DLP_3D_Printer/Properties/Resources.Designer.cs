@@ -63,36 +63,6 @@ namespace UV_DLP_3D_Printer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap _9_4_2013_12_40_20_PM {
-            get {
-                object obj = ResourceManager.GetObject("9-4-2013 12-40-20 PM", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap _9_6_2013_12_05_11_AM {
-            get {
-                object obj = ResourceManager.GetObject("9-6-2013 12-05-11 AM", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap _9_6_2013_12_05_50_AM {
-            get {
-                object obj = ResourceManager.GetObject("9-6-2013 12-05-50 AM", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap animatedTurningHelix {
             get {
                 object obj = ResourceManager.GetObject("animatedTurningHelix", resourceCulture);
