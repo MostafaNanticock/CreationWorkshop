@@ -244,9 +244,19 @@ namespace UV_DLP_3D_Printer
                 }
                 SliceBuildConfig sbf = new SliceBuildConfig(m_sf.m_config); // save it
 
-                Bitmap bmp = new Bitmap(m_sf.m_config.xres, m_sf.m_config.yres); // create a new bitmap on a per-slice basis                    
+                Bitmap bmp = new Bitmap(m_sf.m_config.xres, m_sf.m_config.yres); // create a new bitmap on a per-slice basis                         
                 Graphics graph = Graphics.FromImage(bmp);
                 graph.Clear(UVDLPApp.Instance().m_appconfig.m_backgroundcolor);//clear the image for rendering
+                /*
+                Bitmap bmpoutline =null;
+                //create outline bitmaps as well
+                if (m_sf.m_config.createoutlines)
+                {
+                    bmpoutline = new Bitmap(m_sf.m_config.xres, m_sf.m_config.yres); // create a new bitmap on a per-slice basis                         
+                    Graphics graphoutline = Graphics.FromImage(bmpoutline);
+                    graphoutline.Clear(UVDLPApp.Instance().m_appconfig.m_backgroundcolor);//clear the image for rendering
+                }
+                */
 
                 //convert all to 2d lines
                 Bitmap savebm = null;
@@ -262,11 +272,13 @@ namespace UV_DLP_3D_Printer
                         Slice sl = new Slice();//create a new slice
                         sl.m_segments = lstintersections;// Set the list of intersections 
                         sl.RenderSlice(m_sf.m_config, ref bmp);
-                        /*if (vectorPath != null)
+                        //optionally render just the outlines of the slices
+                        /*
+                        if (m_sf.m_config.createoutlines) 
                         {
-                            sl.Optimize();
-                            lstPoly.AddRange(sl.m_opsegs);
-                        }*/
+                            sl.RenderSlice(m_sf.m_config, ref bmpoutline, true);
+                        }
+                         */ 
                         if (allIntersections != null)
                             allIntersections.AddRange(lstintersections);
                         savebm = bmp;
@@ -276,6 +288,10 @@ namespace UV_DLP_3D_Printer
                 if (m_sf.m_config.antialiasing == true) // we're using anti-aliasing here, so resize the image
                 {
                     savebm = ResizeImage(bmp, new Size(m_saved.xres, m_saved.yres));
+                    if (m_sf.m_config.createoutlines)
+                    {
+                        
+                    }
                 }
                 if (m_sf.m_config.m_flipX == true)
                 {

@@ -433,7 +433,7 @@ namespace UV_DLP_3D_Printer
         /// </summary>
         /// <param name="sp"></param>
         /// <param name="bmp"></param>
-        public void RenderSlice(SliceBuildConfig sp, ref Bitmap bmp)
+        public void RenderSlice(SliceBuildConfig sp, ref Bitmap bmp, bool outlineonly = false)
         {
             try
             {
@@ -452,6 +452,8 @@ namespace UV_DLP_3D_Printer
 
                 // find the x/y min/max
                 MinMax_XY mm = CalcMinMax_XY(lines2d);
+                if (outlineonly)
+                    return;
                 // iterate from the ymin to the ymax
                 for (int y = mm.ymin; y < mm.ymax; y++) // this needs to be in scaled value 
                 {

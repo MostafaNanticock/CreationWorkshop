@@ -16,7 +16,12 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             InitializeComponent();
         }
-
+        public void FixForeColor(Color clr)
+        {
+            label9.ForeColor = clr;
+            label10.ForeColor = clr;
+            label11.ForeColor = clr;
+        }
 
         protected void MoveObject(ctlTextBox var, float x, float y, float z)
         {

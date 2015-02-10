@@ -59,6 +59,7 @@ namespace UV_DLP_3D_Printer
         public String selectedInk;
         public int minExposure; // for resin test model
         public int exposureStep; // for resin test model
+        public bool createoutlines; // render the slices additionallyt as outlines in separate bitmaps
         public PreviewGenerator.ePreview exportpreview; // generate a preview file and image
         //need some parms here for auto support
 
@@ -199,6 +200,7 @@ namespace UV_DLP_3D_Printer
             m_notes = source.m_notes;
             m_resinprice = source.m_resinprice;
             selectedInk = source.selectedInk;
+            createoutlines = source.createoutlines;
             if (source.inks != null)
             {
                 inks = new Dictionary<string, InkConfig>();
@@ -284,6 +286,7 @@ namespace UV_DLP_3D_Printer
             selectedInk = "Default";
             inks[selectedInk] = new InkConfig(selectedInk);
             minExposure = 500;
+            createoutlines = false;
             exposureStep = 200;
             exportpreview = PreviewGenerator.ePreview.None;
             userParams = new UserParameterList();
@@ -357,6 +360,7 @@ namespace UV_DLP_3D_Printer
             m_flipX = xh.GetBool(sbc, "FlipX", false);
             m_flipY = xh.GetBool(sbc, "FlipY", false);
             m_notes = xh.GetString(sbc, "Notes", "");
+            createoutlines = xh.GetBool(sbc, "RenderOutlines", false);
             //m_resinprice = xh.GetDouble(sbc, "ResinPriceL", 0.0);
 
             m_headercode = xh.GetString(sbc, "GCodeHeader", DefGCodeHeader());
@@ -486,6 +490,7 @@ namespace UV_DLP_3D_Printer
             xh.SetParameter(sbc, "BottomLiftFeedRate", bottomliftfeedrate);            
             xh.SetParameter(sbc, "LiftRetractRate", liftretractrate);
             xh.SetParameter(sbc, "ExportOption", m_exportopt);
+            xh.SetParameter(sbc, "RenderOutlines", createoutlines);
 
             xh.SetParameter(sbc, "FlipX", m_flipX);
             xh.SetParameter(sbc, "FlipY", m_flipY);
@@ -548,7 +553,8 @@ namespace UV_DLP_3D_Printer
            // sb.Append(";(Y Pixel Offset          = " + YOffset + " px )\r\n");
             sb.Append(";(Layer Thickness         = " + String.Format("{0:0.00000}", ZThick) + " mm )\r\n");
             sb.Append(";(Layer Time              = " + layertime_ms + " ms )\r\n");
-            sb.Append(";(Bottom Layers Time        = " + firstlayertime_ms + " ms )\r\n");
+            sb.Append(";(Render Outlines         = " + createoutlines.ToString() + "\r\n");
+            sb.Append(";(Bottom Layers Time      = " + firstlayertime_ms + " ms )\r\n");
             sb.Append(";(Number of Bottom Layers = " + numfirstlayers + " )\r\n");
             sb.Append(";(Blanking Layer Time     = " + blanktime_ms + " ms )\r\n");
             sb.Append(";(Build Direction         = " + direction.ToString() + ")\r\n");

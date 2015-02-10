@@ -20,6 +20,14 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             UpdateSceneTree();
             ignorerefresh = false;
         }
+        /// <summary>
+        /// this is for a 2-toned foregrtound color
+        /// </summary>
+        /// <param name="clr"></param>
+        public void FixForeColor(Color clr)
+        {
+            treeScene.ForeColor = clr;
+        }
         private void AppEventDel(eAppEvent ev, String Message) 
         {
             if (InvokeRequired)

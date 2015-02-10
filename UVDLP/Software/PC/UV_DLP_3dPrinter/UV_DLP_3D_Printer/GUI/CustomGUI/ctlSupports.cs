@@ -31,6 +31,18 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             numDownAngle.IntVal = 45;
             ListSupports();
         }
+        public void FixForeColor(Color clr) 
+        {
+            label1.ForeColor = clr;
+            label2.ForeColor = clr;
+            label3.ForeColor = clr;
+            label4.ForeColor = clr;
+            label6.ForeColor = clr;
+            label7.ForeColor = clr;
+            labelAutoSup.ForeColor = clr;
+            label9.ForeColor = clr;
+            lbSupports.ForeColor = clr;
+        }
         private void AppEvent(eAppEvent ev,string message)
         {
             switch (ev) 

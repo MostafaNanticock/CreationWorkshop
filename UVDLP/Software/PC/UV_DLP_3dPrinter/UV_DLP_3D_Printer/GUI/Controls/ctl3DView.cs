@@ -368,8 +368,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     //Visible = true;
                 }
 
-                Set3DView();               
-
+                Set3DView();
+                UVDLPApp.Instance().PerformPluginCommand("AfterThemingDone", true);
                 firstTime = false;
             }
             catch (Exception ex)

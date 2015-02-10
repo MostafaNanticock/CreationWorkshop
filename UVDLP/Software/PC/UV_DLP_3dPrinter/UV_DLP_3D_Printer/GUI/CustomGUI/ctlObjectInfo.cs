@@ -21,7 +21,17 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             InitializeComponent();
             UVDLPApp.Instance().AppEvent += new AppEventDelegate(AppEventDel);
         }
-
+        public void FixForeColor(Color clr)
+        {
+            //treeScene.ForeColor = clr;
+            tVolume.FixForeColor(clr);
+            tCost.FixForeColor(clr);
+            tPoints.FixForeColor(clr);
+            tPolys.FixForeColor(clr);
+            tMin.FixForeColor(clr);
+            tMax.FixForeColor(clr);
+            tSize.FixForeColor(clr);
+        }
         private void AppEventDel(eAppEvent ev, String Message)
         {
             try
