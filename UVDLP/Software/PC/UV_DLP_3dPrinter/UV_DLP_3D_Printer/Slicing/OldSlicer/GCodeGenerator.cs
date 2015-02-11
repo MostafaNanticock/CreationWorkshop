@@ -94,8 +94,9 @@ namespace UV_DLP_3D_Printer
             int c;
             for (c = 0; c < numslices; c++)
             {
-                preSliceGCode = pp.Process(sf.m_config.PreSliceCode);
                 pp.SetVar("$CURSLICE", c);
+                preSliceGCode = pp.Process(sf.m_config.PreSliceCode);
+                //pp.SetVar("$CURSLICE", c);
                 sb.Append(preSliceGCode);//add in the pre-slice code
                 // this is the marker the BuildManager uses to display the correct slice
                 sb.Append(";<Slice> " + c + " \r\n");

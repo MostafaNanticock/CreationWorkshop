@@ -554,7 +554,7 @@ namespace UV_DLP_3D_Printer
                     //see if we're exporting this to a zip file 
                     //if (sf.m_config.m_exportopt.Contains("ZIP") && sf.m_config.export)
                     if (sf.m_config.export)
-                        {
+                    {
                         // open the existing scene file
                         //store the gcode
                         MemoryStream stream = new MemoryStream(System.Text.Encoding.ASCII.GetBytes(m_gcode.RawGCode));

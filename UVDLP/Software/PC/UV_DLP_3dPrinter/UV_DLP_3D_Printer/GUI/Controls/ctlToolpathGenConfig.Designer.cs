@@ -30,6 +30,7 @@
         {
             this.tabOptions = new System.Windows.Forms.TabControl();
             this.tbOptions = new System.Windows.Forms.TabPage();
+            this.cmdHelp = new System.Windows.Forms.Button();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.comboExportPreview = new System.Windows.Forms.ComboBox();
             this.labelExportPreview = new System.Windows.Forms.Label();
@@ -98,7 +99,7 @@
             this.lstSliceProfiles = new System.Windows.Forms.ListBox();
             this.cmdDelete = new System.Windows.Forms.Button();
             this.cmdNew = new System.Windows.Forms.Button();
-            this.cmdHelp = new System.Windows.Forms.Button();
+            this.chkOutlines = new System.Windows.Forms.CheckBox();
             this.tabOptions.SuspendLayout();
             this.tbOptions.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -145,6 +146,16 @@
             this.tbOptions.TabIndex = 0;
             this.tbOptions.Text = "Options";
             this.tbOptions.UseVisualStyleBackColor = true;
+            // 
+            // cmdHelp
+            // 
+            this.cmdHelp.Location = new System.Drawing.Point(671, 18);
+            this.cmdHelp.Name = "cmdHelp";
+            this.cmdHelp.Size = new System.Drawing.Size(75, 34);
+            this.cmdHelp.TabIndex = 70;
+            this.cmdHelp.Text = "Help";
+            this.cmdHelp.UseVisualStyleBackColor = true;
+            this.cmdHelp.Click += new System.EventHandler(this.cmdHelp_Click);
             // 
             // groupBox6
             // 
@@ -243,6 +254,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.chkOutlines);
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Controls.Add(this.txtFirstLayerTime);
             this.groupBox5.Controls.Add(this.txtZThick);
@@ -260,12 +272,12 @@
             this.groupBox5.Size = new System.Drawing.Size(345, 234);
             this.groupBox5.TabIndex = 68;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Exposure Settings";
+            this.groupBox5.Text = "Settings";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 103);
+            this.label2.Location = new System.Drawing.Point(11, 97);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(159, 18);
@@ -274,7 +286,7 @@
             // 
             // txtFirstLayerTime
             // 
-            this.txtFirstLayerTime.Location = new System.Drawing.Point(244, 100);
+            this.txtFirstLayerTime.Location = new System.Drawing.Point(244, 94);
             this.txtFirstLayerTime.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.txtFirstLayerTime.Name = "txtFirstLayerTime";
             this.txtFirstLayerTime.Size = new System.Drawing.Size(84, 24);
@@ -295,7 +307,7 @@
             // lblLayerTime
             // 
             this.lblLayerTime.AutoSize = true;
-            this.lblLayerTime.Location = new System.Drawing.Point(11, 66);
+            this.lblLayerTime.Location = new System.Drawing.Point(11, 63);
             this.lblLayerTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLayerTime.Name = "lblLayerTime";
             this.lblLayerTime.Size = new System.Drawing.Size(143, 18);
@@ -304,7 +316,7 @@
             // 
             // txtLayerTime
             // 
-            this.txtLayerTime.Location = new System.Drawing.Point(244, 63);
+            this.txtLayerTime.Location = new System.Drawing.Point(244, 60);
             this.txtLayerTime.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.txtLayerTime.Name = "txtLayerTime";
             this.txtLayerTime.Size = new System.Drawing.Size(84, 24);
@@ -324,7 +336,7 @@
             // 
             // txtAAVal
             // 
-            this.txtAAVal.Location = new System.Drawing.Point(244, 181);
+            this.txtAAVal.Location = new System.Drawing.Point(244, 169);
             this.txtAAVal.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.txtAAVal.Name = "txtAAVal";
             this.txtAAVal.Size = new System.Drawing.Size(84, 24);
@@ -335,7 +347,7 @@
             // 
             // txtnumbottom
             // 
-            this.txtnumbottom.Location = new System.Drawing.Point(244, 139);
+            this.txtnumbottom.Location = new System.Drawing.Point(244, 130);
             this.txtnumbottom.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.txtnumbottom.Name = "txtnumbottom";
             this.txtnumbottom.Size = new System.Drawing.Size(87, 24);
@@ -346,7 +358,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(11, 143);
+            this.label8.Location = new System.Drawing.Point(11, 134);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(117, 18);
@@ -356,7 +368,7 @@
             // chkantialiasing
             // 
             this.chkantialiasing.AutoSize = true;
-            this.chkantialiasing.Location = new System.Drawing.Point(11, 181);
+            this.chkantialiasing.Location = new System.Drawing.Point(11, 169);
             this.chkantialiasing.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.chkantialiasing.Name = "chkantialiasing";
             this.chkantialiasing.Size = new System.Drawing.Size(158, 22);
@@ -946,15 +958,16 @@
             this.cmdNew.UseVisualStyleBackColor = true;
             this.cmdNew.Click += new System.EventHandler(this.cmdNew_Click);
             // 
-            // cmdHelp
+            // chkOutlines
             // 
-            this.cmdHelp.Location = new System.Drawing.Point(671, 18);
-            this.cmdHelp.Name = "cmdHelp";
-            this.cmdHelp.Size = new System.Drawing.Size(75, 34);
-            this.cmdHelp.TabIndex = 70;
-            this.cmdHelp.Text = "Help";
-            this.cmdHelp.UseVisualStyleBackColor = true;
-            this.cmdHelp.Click += new System.EventHandler(this.cmdHelp_Click);
+            this.chkOutlines.AutoSize = true;
+            this.chkOutlines.Location = new System.Drawing.Point(11, 201);
+            this.chkOutlines.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.chkOutlines.Name = "chkOutlines";
+            this.chkOutlines.Size = new System.Drawing.Size(169, 22);
+            this.chkOutlines.TabIndex = 61;
+            this.chkOutlines.Text = "Enable Slice Outlines";
+            this.chkOutlines.UseVisualStyleBackColor = true;
             // 
             // ctlToolpathGenConfig
             // 
@@ -1065,5 +1078,6 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TextBox txtbottomliftfeed;
         private System.Windows.Forms.Button cmdHelp;
+        private System.Windows.Forms.CheckBox chkOutlines;
     }
 }

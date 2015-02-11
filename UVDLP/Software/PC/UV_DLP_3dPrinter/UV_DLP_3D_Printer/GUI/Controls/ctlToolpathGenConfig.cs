@@ -186,6 +186,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             chkReflectX.Checked = m_config.m_flipX;
             chkReflectY.Checked = m_config.m_flipY;
             txtNotes.Text = m_config.m_notes;
+            chkOutlines.Checked = m_config.createoutlines;
 
             // resin
             UpdateResinList();
@@ -262,6 +263,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 m_config.firstlayertime_ms = int.Parse(txtFirstLayerTime.Text);
                 m_config.numfirstlayers = int.Parse(txtnumbottom.Text);
                 m_config.m_resinprice = double.Parse(txtResinPriceL.Text);
+                m_config.createoutlines = chkOutlines.Checked;
                 m_config.UpdateCurrentInk();
                 return true;
             }
@@ -272,14 +274,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             }
         }
 
-
-        
-        /*
-        private void chkgengcode_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-        */
         private void cmdAutoCalc_Click(object sender, EventArgs e)
         {
             try

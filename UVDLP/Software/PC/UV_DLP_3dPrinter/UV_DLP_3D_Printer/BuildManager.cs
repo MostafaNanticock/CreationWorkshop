@@ -55,6 +55,7 @@ namespace UV_DLP_3D_Printer
         public const int SLICE_BLANK                   = -1;
         public const int SLICE_CALIBRATION             = -2;
         public const int SLICE_SPECIAL                 = -3; // pulled from a plugin by name
+        public const int SLICE_OUTLINE                 = -4; // this is a outline slice
 
         
 
@@ -79,6 +80,7 @@ namespace UV_DLP_3D_Printer
         private DateTime m_buildstarttime;
         private string estimatedbuildtime = "";
         bool callbackinited = false;
+        private static int outlinelayer = 0;
         // the pause request and cancel request are used to ensure that
         // the build stops on a blank image, and not on exposing a slice
         private bool m_pause_request;
@@ -206,37 +208,7 @@ namespace UV_DLP_3D_Printer
                 }
             }            
         }
-        /*
-        public Bitmap MakeCalibration(int xres, int yres, SliceBuildConfig sc)
-        {
-            // if (m_calibimage == null)  // blank image is null, create it
-            {
-                m_calibimage = new Bitmap(xres, yres);
-                // fill it with black
-                using (Graphics gfx = Graphics.FromImage(m_calibimage))
-                using (SolidBrush brush = new SolidBrush(Color.Black))
-                {
-                    gfx.FillRectangle(brush, 0, 0, xres, yres);
-                    int xpos = 0, ypos = 0;
-                    Pen pen = new Pen(new SolidBrush(Color.Red));
-                    for (xpos = 0; xpos < xres; xpos += (int)(sc.dpmmX * 10.0))
-                    {
-                        Point p1 = new Point(xpos, 0);
-                        Point p2 = new Point(xpos, yres);
-                        gfx.DrawLine(pen, p1, p2);
-                    }
-                    for (ypos = 0; ypos < yres; ypos += (int)(sc.dpmmY * 10.0))
-                    {
-                        Point p1 = new Point(0, ypos);
-                        Point p2 = new Point(xres, ypos);
-                        gfx.DrawLine(pen, p1, p2);
-                    }
 
-                }
-            }
-            return m_calibimage;
-        }
-         * */
         /// <summary>
         /// Make and show a new calibration image
         /// </summary>
@@ -419,10 +391,18 @@ namespace UV_DLP_3D_Printer
                 else if(lines[1].Contains("Special_"))
                 {
                     val = -3; // special image
-                }    
-                else 
+                }
+                else if (lines[1].Contains("outline")) 
+                { //;<slice> outline XXX
+                    // 
+                    val = SLICE_OUTLINE;
+                    //still need to pull the number
+                    String[] lns2 = lines[1].Trim().Split(' ');
+                    outlinelayer = int.Parse(lns2[1].Trim()); // second should be variable
+                }
+                else
                 {
-                    String []lns2 = lines[1].Trim().Split(' ');
+                    String[] lns2 = lines[1].Trim().Split(' ');
                     val = int.Parse(lns2[0].Trim()); // first should be variable
                 }
                 
@@ -676,11 +656,6 @@ namespace UV_DLP_3D_Printer
                                         bmp = m_blankimage;
                                         curtype = BuildManager.SLICE_BLANK;
                                         bltime = GetTimerValue();
-                                        //DebugLogger.Instance().LogInfo("Showing Blank image at :" + bltime.ToString());
-                                        //if (sltime != -1 && bltime != -1)
-                                          //  DebugLogger.Instance().LogInfo("Time between Blank and Slice :" + (bltime - sltime).ToString());
-
-
                                     }
                                     else if (layer == SLICE_SPECIAL) // plugins can override special images by named resource
                                     {
@@ -694,6 +669,29 @@ namespace UV_DLP_3D_Printer
                                             bmp = m_blankimage;
                                         }
                                         curtype = BuildManager.SLICE_BLANK;
+                                    }
+                                    else if (layer == SLICE_OUTLINE) 
+                                    {
+                                        // we're rendering the layer in an outline image
+                                        // get the curlayer from the line
+                                        m_curlayer = outlinelayer;
+                                        if (m_sf != null)
+                                        {
+                                            bmp = m_sf.GetSliceImage(m_curlayer,true); // get the rendered image slice or load it if already rendered                                                                                
+                                            if (bmp == null)
+                                            {
+                                                DebugLogger.Instance().LogError("Buildmanager bitmap is null layer = " + m_curlayer + " ");
+                                            }
+                                            else // not null
+                                            {
+                                                bmp.Tag = BuildManager.SLICE_NORMAL;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            DebugLogger.Instance().LogWarning("Slice File is null during build and slice image is specified");
+                                        }
+                                        sltime = GetTimerValue();
                                     }
                                     else
                                     {
@@ -716,8 +714,8 @@ namespace UV_DLP_3D_Printer
                                         }
                                         sltime = GetTimerValue();
                                         //DebugLogger.Instance().LogInfo("Showing Slice image at :" + sltime.ToString());
-                                       // if (sltime != -1 && bltime != -1)
-                                         //   DebugLogger.Instance().LogInfo("Time between slice and blank :" + (sltime - bltime).ToString());
+                                        // if (sltime != -1 && bltime != -1)
+                                        //   DebugLogger.Instance().LogInfo("Time between slice and blank :" + (sltime - bltime).ToString());
 
 
                                     }
