@@ -18,10 +18,12 @@ namespace UV_DLP_3D_Printer
     /// </summary>
     public class ServerContact
     {
+        public delegate void Servercontacted(string id); // should raise an event that data was sent from the server to us..
+        public event Servercontacted ServerContactEvenet;
         public class VersionInfo 
         {
             string mLink; // download link
-            DateTime mTimestamp; // when was this created?
+            DateTime mTimestamp; // when was this version created?
             string mVersion; // in the form of '1.0.0.X' or similar so we can compare version numbers to this one.
             public VersionInfo() 
             {
@@ -44,12 +46,24 @@ namespace UV_DLP_3D_Printer
 
             return vi;
         }
+
         public ServerContact() 
         {
             ContactServer();// this will kick off contacting the server
         }
+        
 
-        public void ContactServer() 
+        public void CheckForUpdate()
+        {
+        
+        }
+
+        public void UpdateRegInfo() 
+        {
+            ContactServer();
+        }
+
+        private void ContactServer() 
         {
             m_thread = new Thread(new ThreadStart(ContactServerThread));
             m_thread.Start();
@@ -134,6 +148,10 @@ namespace UV_DLP_3D_Printer
         private void ParseResponse(string response) 
         {
             string resp = response;
+            if (ServerContactEvenet != null) 
+            {
+                ServerContactEvenet("reginfo");
+            }
         }
     }
 }

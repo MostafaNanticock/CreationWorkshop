@@ -54,11 +54,12 @@ namespace UV_DLP_3D_Printer
         eReDraw, // this is used when an application action needs to re-draw the 3d display
         eReDraw2D, // update only the top 2D layer of the 3D display
         eUpdateSelectedObject, // this will update object information and will perform a redraw.
-        eShowLogWindow,
+        eShowLogWindow,  
         eSceneFileNameChanged,
         eNewVersionAvailable, // the app contacted the server and saw there was a new version available
         eSceneSaved, // scene was saved to disk. message contains the file type (cws or stl)
         eMachineConfigLoaded,  // Machine config was just loaded
+        eLicenseUpdate, // server sent a response after we contacted them with license info
     }
     public delegate void AppEventDelegate(eAppEvent ev, String Message);
     /*
@@ -72,9 +73,9 @@ namespace UV_DLP_3D_Printer
         public String m_PathProfiles;
         public String m_apppath;
         private String m_scenefilename;
+        public string appconfigname; // the full filename
         // the current application configuration object
         public AppConfig m_appconfig;
-        public string appconfigname; // the full filename
         // the simple 3d graphic engine we're using along with OpenGL
         public Engine3d m_engine3d = new Engine3d();
         // the current model we're working with
@@ -115,7 +116,7 @@ namespace UV_DLP_3D_Printer
         public Undoer m_undoer;
         public frmMain2 m_mainform; // reference to the main application form       
 
-        private ServerContact m_sc;
+        public ServerContact m_sc;
         public AuxBuildCmds m_AuxBuildCmds;
 
         #region SupportModes
@@ -850,8 +851,15 @@ namespace UV_DLP_3D_Printer
             // initialize the plugins, the main form will send a secondary init after the main app gui is created
             PerformPluginCommand("InitCommand", true);
             m_sc = new ServerContact();
+            m_sc.ServerContactEvenet += new ServerContact.Servercontacted(m_sc_ServerContactEvenet);
+            m_sc.UpdateRegInfo();
             m_undoer.RegisterCallback();
 
+        }
+
+        void m_sc_ServerContactEvenet(string id)
+        {
+            //throw new NotImplementedException();
         }
         #region Plug-in management and licensing
         private void LoadLicenseKeys() 

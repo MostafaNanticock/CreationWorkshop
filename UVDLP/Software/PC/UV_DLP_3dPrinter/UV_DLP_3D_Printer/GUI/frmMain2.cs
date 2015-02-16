@@ -1187,5 +1187,11 @@ namespace UV_DLP_3D_Printer.GUI
                 DebugLogger.Instance().LogError(ex);
             }
         }
+
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //check for an update, contact the server
+            UVDLPApp.Instance().m_sc.CheckForUpdate();
+        }
     }
 }

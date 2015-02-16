@@ -416,12 +416,6 @@
     <Compile Include="GUI\frmConnection.Designer.cs">
       <DependentUpon>frmConnection.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\frmLicense.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\frmLicense.Designer.cs">
-      <DependentUpon>frmLicense.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\frmMain2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -644,9 +638,6 @@
     <EmbeddedResource Include="GUI\frmConnection.resx">
       <DependentUpon>frmConnection.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\frmLicense.resx">
-      <DependentUpon>frmLicense.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmDLP.resx">
       <DependentUpon>frmDLP.cs</DependentUpon>
     </EmbeddedResource>
@@ -831,6 +822,7 @@
     <None Include="resources\MachineControl\mc_onoff.png" />
     <None Include="resources\MachineControl\mc_onoffbgnd.png" />
     <None Include="resources\MachineControl\mc_onoffslide.png" />
+    <None Include="resources\Splash1.png" />
     <Content Include="Slicing\OldSlicer\OldSliceNotes.txt" />
     <Content Include="Slicing\SlicerNotes1.txt" />
     <None Include="resources\Load.jpg" />
