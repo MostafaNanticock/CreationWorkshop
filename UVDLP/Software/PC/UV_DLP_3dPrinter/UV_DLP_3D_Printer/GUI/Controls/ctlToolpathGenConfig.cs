@@ -186,8 +186,9 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             chkReflectX.Checked = m_config.m_flipX;
             chkReflectY.Checked = m_config.m_flipY;
             txtNotes.Text = m_config.m_notes;
-            chkOutlines.Checked = m_config.createoutlines;
-
+            chkOutlines.Checked = m_config.m_createoutlines;
+            txtOutlineWidth.Text = m_config.m_outlinewidth.ToString();
+            txtOutlineWidth.Enabled = chkOutlines.Checked;
             // resin
             UpdateResinList();
             SetResinValues();
@@ -263,7 +264,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 m_config.firstlayertime_ms = int.Parse(txtFirstLayerTime.Text);
                 m_config.numfirstlayers = int.Parse(txtnumbottom.Text);
                 m_config.m_resinprice = double.Parse(txtResinPriceL.Text);
-                m_config.createoutlines = chkOutlines.Checked;
+                m_config.m_createoutlines = chkOutlines.Checked;
+                m_config.m_outlinewidth = double.Parse(txtOutlineWidth.Text);
                 m_config.UpdateCurrentInk();
                 return true;
             }
@@ -580,6 +582,11 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             frmSliceProfileHelp frm = new frmSliceProfileHelp();
             frm.ShowDialog();
 
+        }
+
+        private void chkOutlines_CheckedChanged(object sender, EventArgs e)
+        {
+            txtOutlineWidth.Enabled = chkOutlines.Checked;
         }
 
     }

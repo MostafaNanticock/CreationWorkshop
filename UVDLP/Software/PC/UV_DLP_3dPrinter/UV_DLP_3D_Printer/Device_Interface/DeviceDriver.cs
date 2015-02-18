@@ -183,10 +183,19 @@ namespace UV_DLP_3D_Printer.Drivers
         /// </summary>
         public void Reset() 
         {
-            //bool dtr
-            m_serialport.DtrEnable = true;
-            Thread.Sleep(100);
-            m_serialport.DtrEnable = false;
+            try
+            {
+                //bool dtr
+                //toggle it
+                m_serialport.DtrEnable = !m_serialport.DtrEnable;
+                Thread.Sleep(100); // wait
+                //toggle it back
+                m_serialport.DtrEnable = !m_serialport.DtrEnable;
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
         }
         public void Configure(ConnectionConfig cc) 
         {

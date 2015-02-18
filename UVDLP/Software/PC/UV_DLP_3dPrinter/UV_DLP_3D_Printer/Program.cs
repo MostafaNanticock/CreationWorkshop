@@ -28,6 +28,7 @@ namespace UV_DLP_3D_Printer
             UVDLPApp.Instance().DoAppStartup(); // start the app and load the plug-ins
             //iterate through the plugins
             bool showlicensedialog = false;
+            bool nosplash = false;
             //iterate through all plugins,
             // if they are un-licensed and enabled - show licensing dialog.
             foreach (PluginEntry pe in UVDLPApp.Instance().m_plugins) 
@@ -53,6 +54,10 @@ namespace UV_DLP_3D_Printer
                             
                         }
                     }
+                    if ((options & PluginOptions.OPTION_NOSPLASH) != 0) 
+                    {
+                        nosplash = true;
+                    }
                 }
                 
             }
@@ -64,9 +69,11 @@ namespace UV_DLP_3D_Printer
             try
             {
 #if !DEBUG  // no splash screen under debug release
-
-                frmSplash splash = new frmSplash(); // should pull from a licensed plug-in if need-be
-                splash.Show();
+                if (!nosplash)
+                {
+                    frmSplash splash = new frmSplash(); // should pull from a licensed plug-in if need-be
+                    splash.Show();
+                }
 #endif
                 Application.Run(new frmMain2());
             }

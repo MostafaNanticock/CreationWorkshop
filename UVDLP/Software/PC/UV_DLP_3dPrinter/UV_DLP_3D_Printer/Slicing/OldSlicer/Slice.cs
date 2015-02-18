@@ -395,14 +395,23 @@ namespace UV_DLP_3D_Printer
             return mm;
         }
 
-        private void Render2dlines(Graphics g, List<Line2d> lines, SliceBuildConfig sp) 
+        private void Render2dlines(Graphics g, List<Line2d> lines, SliceBuildConfig sp, bool outlineonly = false) 
         {
             try
             {
                 Point pnt1 = new Point(); // create some points for drawing
                 Point pnt2 = new Point();
 
-                Pen pen = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, 1);
+                Pen pen;//= new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, 1);
+                if (sp.m_createoutlines && outlineonly)
+                {
+                    pen = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor,(float) sp.m_outlinewidth);
+                    pen.Alignment = PenAlignment.Outset;//PenAlignment.Inset;
+                }
+                else 
+                {
+                    pen = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, 1);
+                }
 
                 int hxres = sp.xres / 2;
                 int hyres = sp.yres / 2;
@@ -418,6 +427,7 @@ namespace UV_DLP_3D_Printer
                     //g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                     g.DrawLine(pen, pnt1, pnt2);
                 }
+                pen.Dispose();
             }
             catch (Exception ex) 
             {
@@ -440,6 +450,7 @@ namespace UV_DLP_3D_Printer
                 Graphics graph = Graphics.FromImage(bmp);
                 Point pnt1 = new Point(); // create some points for drawing
                 Point pnt2 = new Point();
+
                 Pen pen = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, 1);
                 //convert all to 2d lines
                 int hxres = sp.xres / 2;
@@ -447,13 +458,26 @@ namespace UV_DLP_3D_Printer
 
                 List<Line2d> lines2d = Get2dLines(sp, m_segments);
                 if (lines2d.Count == 0) 
-                    return; 
-                Render2dlines(graph, lines2d, sp);
+                    return;
 
+                if (outlineonly)
+                {
+                    Optimize();
+                    List<Line2d> linesopt2d = Get2dLines(sp, m_opsegs);
+                    Render2dlines(graph, linesopt2d, sp);
+                }
+                else
+                {
+                    // this renders the outline of the object
+                    Render2dlines(graph, lines2d, sp);
+                }
                 // find the x/y min/max
                 MinMax_XY mm = CalcMinMax_XY(lines2d);
                 if (outlineonly)
+                {
+                    pen.Dispose();
                     return;
+                }
                 // iterate from the ymin to the ymax
                 for (int y = mm.ymin; y < mm.ymax; y++) // this needs to be in scaled value 
                 {
@@ -533,6 +557,8 @@ namespace UV_DLP_3D_Printer
                         }
                     }
                 }
+                //clean up
+                pen.Dispose();
             }
             catch (Exception ex) 
             {
@@ -650,6 +676,31 @@ namespace UV_DLP_3D_Printer
             // this can be changed at some point to assume that the 3d polyline has more than 2 points
             // I'll need to do this when I want to properly generate inside / outside countours
             foreach (PolyLine3d ply in segments)  
+            {
+                for (int c = 0; c < ply.m_points.Count - 1; c++ )
+                {
+                    Line2d ln = new Line2d();
+                    ln.SetParent(ply);
+                    //get the 3d points of the line
+                    Point3d p3d1 = (Point3d)ply.m_points[c];
+                    Point3d p3d2 = (Point3d)ply.m_points[c + 1];
+                    //convert them to 2d (probably should add an offset to center them)
+                    ln.p1.x = (int)(p3d1.x * sp.dpmmX);
+                    ln.p1.y = (int)(p3d1.y * sp.dpmmY);
+                    ln.p2.x = (int)(p3d2.x * sp.dpmmX);
+                    ln.p2.y = (int)(p3d2.y * sp.dpmmY);
+                    lst.Add(ln);
+
+                }
+            }
+            return lst; // return the list
+        }
+        private List<Line2d> Get2dLines_Save(SliceBuildConfig sp, List<PolyLine3d> segments)
+        {
+            List<Line2d> lst = new List<Line2d>();
+            // this can be changed at some point to assume that the 3d polyline has more than 2 points
+            // I'll need to do this when I want to properly generate inside / outside countours
+            foreach (PolyLine3d ply in segments)
             {
                 Line2d ln = new Line2d();
                 ln.SetParent(ply);

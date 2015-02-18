@@ -851,13 +851,13 @@ namespace UV_DLP_3D_Printer
             // initialize the plugins, the main form will send a secondary init after the main app gui is created
             PerformPluginCommand("InitCommand", true);
             m_sc = new ServerContact();
-            m_sc.ServerContactEvenet += new ServerContact.Servercontacted(m_sc_ServerContactEvenet);
+            m_sc.ServerContactEvenet += new ServerContact.Servercontacted(m_sc_ServerContactEvent);
             m_sc.UpdateRegInfo();
             m_undoer.RegisterCallback();
 
         }
 
-        void m_sc_ServerContactEvenet(string id)
+        void m_sc_ServerContactEvent(string id)
         {
             //throw new NotImplementedException();
         }
