@@ -16,7 +16,12 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             InitializeComponent();
             //UVDLPApp.Instance().m_gui_config.AddButton("rotate", ctlTitle1.Button); // get style from control
         }
-
+        public void FixForeColor(Color clr) 
+        {
+            label9.ForeColor = clr;
+            label10.ForeColor = clr;
+            label11.ForeColor = clr;
+        }
         protected void RotateObject(ctlTextBox var, float x, float y, float z)
         {
             try

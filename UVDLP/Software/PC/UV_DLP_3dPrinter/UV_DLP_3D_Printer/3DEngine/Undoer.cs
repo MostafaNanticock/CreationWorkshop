@@ -35,7 +35,16 @@ namespace Engine3D
         {
             m_undoItemList = new List<UndoItem>();
             m_undopointer = 0;
+            //RegisterCallback();
         }
+        public void RegisterCallback() 
+        {
+            //undoButt_Click
+            //UVDLPApp.Instance().m_callbackhandler.RegisterCallback("undo", undoButt_Click, "undo");
+            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("undo", undoButt_Click, null, "Undo");
+            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("redo", redoButt_Click, null,"Redo");
+        }
+
 
         protected void AddItem(eOperationType type, Object3d obj, double x, double y, double z)
         {
@@ -199,6 +208,14 @@ namespace Engine3D
             }
         }
 
+        void undoButt_Click(object sender, object e)
+        {
+            Undo();
+        }
+        void redoButt_Click(object sender, object e)
+        {
+            Redo();
+        }
         void m_undoButt_Click(object sender, EventArgs e)
         {
             Undo();

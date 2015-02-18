@@ -23,7 +23,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             mGap = 1;
             PlaceElements();
         }
-
+        public void FixForeColor(Color clr)
+        {
+            labelData.ForeColor = clr;
+        }
         // get/set properties
         [DefaultValue(1)]
         [Description("Width of border arround text in pixels"), Category("Data")]

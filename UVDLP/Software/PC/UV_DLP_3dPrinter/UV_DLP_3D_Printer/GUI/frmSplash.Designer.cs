@@ -28,14 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSplash));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblbuilddate = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.version = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.lblbuilddate = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -43,7 +45,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = global::UV_DLP_3D_Printer.Properties.Resources._9_6_2013_12_05_11_AM;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(706, 468);
@@ -54,6 +56,7 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.lblbuilddate);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label3);
@@ -66,6 +69,36 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(708, 470);
             this.panel1.TabIndex = 5;
+            // 
+            // lblbuilddate
+            // 
+            this.lblbuilddate.AutoSize = true;
+            this.lblbuilddate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblbuilddate.Location = new System.Drawing.Point(3, 122);
+            this.lblbuilddate.Name = "lblbuilddate";
+            this.lblbuilddate.Size = new System.Drawing.Size(101, 25);
+            this.lblbuilddate.TabIndex = 6;
+            this.lblbuilddate.Text = "Build Date";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(3, 147);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(164, 25);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "Steve Hernandez";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(3, 172);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(110, 25);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Shai Segar";
             // 
             // version
             // 
@@ -97,35 +130,16 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Creation Workshop";
             // 
-            // label3
+            // label5
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(3, 203);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(110, 25);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Shai Segar";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(3, 167);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(164, 25);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "Steve Hernandez";
-            // 
-            // lblbuilddate
-            // 
-            this.lblbuilddate.AutoSize = true;
-            this.lblbuilddate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblbuilddate.Location = new System.Drawing.Point(3, 131);
-            this.lblbuilddate.Name = "lblbuilddate";
-            this.lblbuilddate.Size = new System.Drawing.Size(101, 25);
-            this.lblbuilddate.TabIndex = 6;
-            this.lblbuilddate.Text = "Build Date";
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(2, 65);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(260, 25);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Free for non-commercial use";
             // 
             // frmSplash
             // 
@@ -157,5 +171,6 @@
         private System.Windows.Forms.Label lblbuilddate;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label5;
     }
 }

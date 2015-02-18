@@ -128,7 +128,7 @@ namespace UV_DLP_3D_Printer.Slicing
         /*
          This function get the slice from the cache/drive 
          */
-        public Bitmap GetSliceImage(int layer) // 0 based index
+        public Bitmap GetSliceImage(int layer, bool outline = false) // 0 based index
         {
             
             try
@@ -136,22 +136,30 @@ namespace UV_DLP_3D_Printer.Slicing
                 if (m_mode == SFMode.eImmediate)
                 {
                     if (m_modeltype == ModelType.eResinTest1)
+                    {
                         return UVDLPApp.Instance().m_slicer.GetTestModelV1Slice(layer);
-                    else {
-                        float zlev = (float)(((double)layer + 0.5) * m_config.ZThick);
-                        return UVDLPApp.Instance().m_slicer.SliceImmediate(zlev);;
+                    }
+                    else
+                    {
+                        //float zlev = (float)(((double)layer + 0.5) * m_config.ZThick);
+                        float zlev = (float)(((double)layer + (m_config.ZThick / 2)) * m_config.ZThick);
+                        return UVDLPApp.Instance().m_slicer.SliceImmediate(zlev, outline);
                     }
                 }
                 else
                 {
                     string path = UVDLPApp.Instance().SceneFileName;// GetSliceFilePath();
                     try
-                    {
-                        
+                    {                        
                         // try first to load from zip
                         // read the bitmap from the zip
                         m_zip = ZipFile.Read(path);
-                        string fname = Path.GetFileNameWithoutExtension(path) + String.Format("{0:0000}", layer) + ".png";
+                        string outlinename = "";
+                        if (outline) 
+                        {
+                            outlinename = "_outline";
+                        }
+                        string fname = Path.GetFileNameWithoutExtension(path) + outlinename + String.Format("{0:0000}", layer) + ".png";
                         ZipEntry ze = m_zip[fname];
                         Stream stream = new MemoryStream();
                         ze.Extract(stream);

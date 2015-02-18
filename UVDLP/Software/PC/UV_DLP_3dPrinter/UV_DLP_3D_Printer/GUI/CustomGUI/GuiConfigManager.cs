@@ -478,8 +478,18 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     // remove this control from it's parent
                     if (ct.Parent != null)
                     {
-                        ct.Parent.Controls.Remove(ct);
-                        ct.Parent = null;
+                        try
+                        {
+                            if (ct.Parent.Controls.Contains(ct))
+                            {
+                                ct.Parent.Controls.Remove(ct);
+                                ct.Parent = null;
+                            }
+                        }
+                        catch (Exception ex) 
+                        {
+                            DebugLogger.Instance().LogError(ex);
+                        }
                     }
                 }
                 else if (action.Contains("hide")) // this handles hiding

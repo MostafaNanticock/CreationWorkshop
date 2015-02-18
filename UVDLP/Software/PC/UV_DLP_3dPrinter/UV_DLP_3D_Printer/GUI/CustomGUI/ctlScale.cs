@@ -16,7 +16,13 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             InitializeComponent();
             //UVDLPApp.Instance().m_gui_config.AddButton("scale", ctlTitle1.Button); // get its style from control
         }
-
+        public void FixForeColor(Color clr)
+        {
+            label5.ForeColor = clr;
+            label6.ForeColor = clr;
+            label7.ForeColor = clr;
+            label12.ForeColor = clr;
+        }
         protected void ScaleObject(ctlTextBox var, float x, float y, float z)
         {
             try

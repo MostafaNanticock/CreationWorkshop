@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace UV_DLP_3D_Printer.GUI
 {
-    public partial class frmLicense : Form
+    public partial class frmSliceProfileHelp : Form
     {
-        public frmLicense()
+        public frmSliceProfileHelp()
         {
             InitializeComponent();
         }

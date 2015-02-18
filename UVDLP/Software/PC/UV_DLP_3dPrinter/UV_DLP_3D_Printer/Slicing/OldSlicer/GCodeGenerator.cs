@@ -33,6 +33,7 @@ namespace UV_DLP_3D_Printer
             pp.SetVar("$LayerThickness", sf.m_config.ZThick); // the thickenss of the layer in mm
             pp.SetVar("$ZLiftDist", sf.m_config.liftdistance); // how far we're lifting
             pp.SetVar("$ZLiftRate", sf.m_config.liftfeedrate); // the rate at which we're lifting
+            pp.SetVar("$ZBottomLiftRate", sf.m_config.bottomliftfeedrate); // the rate at which we're lifting for the bottom layers
             pp.SetVar("$ZRetractRate", sf.m_config.liftretractrate); // how fast we'r retracting
             pp.SetVar("$SlideTiltVal", sf.m_config.slidetiltval); // any used slide / tilt value on the x axis
             pp.SetVar("$BlankTime", sf.m_config.blanktime_ms); // how long to show the blank in ms
@@ -54,6 +55,8 @@ namespace UV_DLP_3D_Printer
             double zdist = 0.0;
            // double feedrate = pi.ZMaxFeedrate; // 10mm/min
             double liftfeed = sf.m_config.liftfeedrate;
+            double bottomliftfeed = sf.m_config.bottomliftfeedrate;
+
             double retractfeed = sf.m_config.liftretractrate;
             double zdir = 1.0; // assume a bottom up machine
             int numbottom = sf.m_config.numfirstlayers;
@@ -91,8 +94,9 @@ namespace UV_DLP_3D_Printer
             int c;
             for (c = 0; c < numslices; c++)
             {
-                preSliceGCode = pp.Process(sf.m_config.PreSliceCode);
                 pp.SetVar("$CURSLICE", c);
+                preSliceGCode = pp.Process(sf.m_config.PreSliceCode);
+                //pp.SetVar("$CURSLICE", c);
                 sb.Append(preSliceGCode);//add in the pre-slice code
                 // this is the marker the BuildManager uses to display the correct slice
                 sb.Append(";<Slice> " + c + " \r\n");

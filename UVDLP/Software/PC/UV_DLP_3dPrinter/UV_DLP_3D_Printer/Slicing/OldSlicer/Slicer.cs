@@ -36,7 +36,6 @@ namespace UV_DLP_3D_Printer
         private Thread m_slicethread;
         private bool m_cancel = false;
         private bool isslicing = false;
-        //private ZipFile m_zip; // for storing image slices
         public eSliceMethod m_slicemethod = eSliceMethod.eEvenOdd;
 
         public Slicer() 
@@ -53,16 +52,8 @@ namespace UV_DLP_3D_Printer
         {
             m_cancel = true;
             isslicing = false;
-            /* // no need to close the scene file anymore, all operations are now atomic
-            if (m_sf.m_config.export == true) // if we're exporting image slices
-            {
-                //if (m_sf.m_config.m_exportopt.ToUpper().Contains("ZIP")) // into the scene cws file
-                {
-                    SceneFile.Instance().CloseSceneFile(true);
-                }
-            }
-             * */
         }
+
         public void RaiseSliceEvent(eSliceEvent ev, int curlayer, int totallayers)
         {
             if (Slice_Event != null) 
@@ -227,7 +218,7 @@ namespace UV_DLP_3D_Printer
         /// <param name="lstPoly"></param>
         /// <returns></returns>
         //public Bitmap SliceImmediate(float curz, List<PolyLine3d> lstPoly = null)
-        public Bitmap SliceImmediate(float curz, List<PolyLine3d> allIntersections)
+        public Bitmap SliceImmediate(float curz, List<PolyLine3d> allIntersections, bool outline = false)
         {
             try
             {
@@ -244,9 +235,9 @@ namespace UV_DLP_3D_Printer
                 }
                 SliceBuildConfig sbf = new SliceBuildConfig(m_sf.m_config); // save it
 
-                Bitmap bmp = new Bitmap(m_sf.m_config.xres, m_sf.m_config.yres); // create a new bitmap on a per-slice basis                    
+                Bitmap bmp = new Bitmap(m_sf.m_config.xres, m_sf.m_config.yres); // create a new bitmap on a per-slice basis                         
                 Graphics graph = Graphics.FromImage(bmp);
-                graph.Clear(UVDLPApp.Instance().m_appconfig.m_backgroundcolor);//clear the image for rendering
+                graph.Clear(UVDLPApp.Instance().m_appconfig.m_backgroundcolor);//clear the image for rendering               
 
                 //convert all to 2d lines
                 Bitmap savebm = null;
@@ -261,12 +252,7 @@ namespace UV_DLP_3D_Printer
                         List<PolyLine3d> lstintersections = GetZIntersections(lstply, curz);//iterate through all the polygons and generate x/y line segments at this 3d z level
                         Slice sl = new Slice();//create a new slice
                         sl.m_segments = lstintersections;// Set the list of intersections 
-                        sl.RenderSlice(m_sf.m_config, ref bmp);
-                        /*if (vectorPath != null)
-                        {
-                            sl.Optimize();
-                            lstPoly.AddRange(sl.m_opsegs);
-                        }*/
+                        sl.RenderSlice(m_sf.m_config, ref bmp,outline);
                         if (allIntersections != null)
                             allIntersections.AddRange(lstintersections);
                         savebm = bmp;
@@ -298,17 +284,18 @@ namespace UV_DLP_3D_Printer
 
         }
 
-        public Bitmap SliceImmediate(float curz)
+        public Bitmap SliceImmediate(float curz, bool outline = false)
         {
-            return SliceImmediate(curz, null);
+            return SliceImmediate(curz, null,outline);
         }
 
 
         int CalcNumSlices(double height, double zThick)
         {
             int numslices = (int)(height / zThick);
-            if ((((double)numslices + 0.5) * zThick) <= height)
-                numslices++;
+            //if ((((double)numslices + 0.5) * zThick) <= height)
+            if ((((double)numslices + (zThick/2)) * zThick) <= height)
+                    numslices++;
             return numslices;
         }
 
@@ -324,7 +311,6 @@ namespace UV_DLP_3D_Printer
                 // a little housework here...
                 foreach (Object3d obj in UVDLPApp.Instance().Engine3D.m_objects)
                 {
-                    //obj.CalcMinMaxes();
                     obj.FindMinMax();
                 }
 
@@ -349,6 +335,12 @@ namespace UV_DLP_3D_Printer
                     if (m_sf.m_config.exportsvg != 0)
                         lstintersections = new List<PolyLine3d>();
                     Bitmap savebm = SliceImmediate(curz, lstintersections);
+                    Bitmap outlinebm = null;
+                    //check to see if we're rendering the outline BM too
+                    if (m_sf.m_config.createoutlines == true)
+                    {
+                        outlinebm = SliceImmediate(curz, lstintersections, true);
+                    }
                     if (m_cancel || (savebm == null))
                     {
                         isslicing = false;
@@ -361,6 +353,10 @@ namespace UV_DLP_3D_Printer
                     curz += (float)m_sf.m_config.ZThick;// move the slice for the next layer
                     //raise an event to say we've finished a slice
                     LayerSliced(scenename, c, numslices, savebm, lstintersections);
+                    if (m_sf.m_config.createoutlines == true) // make sure we export the slice too
+                    {
+                        LayerSliced(scenename, c, numslices, outlinebm, lstintersections, true);
+                    }
                 }
                 // restore the original
                 m_sf.m_config.CopyFrom(m_saved);
@@ -540,7 +536,7 @@ namespace UV_DLP_3D_Printer
         /// <param name="numslices"></param>
         /// <param name="bmp"></param>
         /// <param name="lstPoly"></param>
-        private void LayerSliced(string scenename, int layer, int numslices, Bitmap bmp, List<PolyLine3d> lstintersections) 
+        private void LayerSliced(string scenename, int layer, int numslices, Bitmap bmp, List<PolyLine3d> lstintersections, bool outline =false) 
         {
             string path;
             try
@@ -549,21 +545,24 @@ namespace UV_DLP_3D_Printer
                 {
                     // get the model name
                     String modelname = scenename;
+                    String outlinename = "";
                     // strip off the file extension
                     path = SliceFile.GetSliceFilePath(modelname);
-                    String imname = Path.GetFileNameWithoutExtension(modelname) + String.Format("{0:0000}", layer) + ".png";
-                    String imagename = path + UVDLPApp.m_pathsep + imname;
-                    //if (m_sf.m_config.m_exportopt.ToUpper().Contains("ZIP"))
+                    if (outline) 
                     {
-                        // create a memory stream for this to save into
-                        MemoryStream ms = new MemoryStream();
-                        bmp.Save(ms, ImageFormat.Png);
-                        ms.Seek(0, SeekOrigin.Begin); // seek back to beginning
-                        if (!m_cancel) // if we're not in the process of cancelling
-                        {
-                            SceneFile.Instance().AddSlice(UVDLPApp.Instance().SceneFileName,ms, imname);
-                        }
+                        outlinename = "_outline";
                     }
+                    String imname = Path.GetFileNameWithoutExtension(modelname) + outlinename + String.Format("{0:0000}", layer) + ".png";
+                    String imagename = path + UVDLPApp.m_pathsep + imname;
+                    // create a memory stream for this to save into
+                    MemoryStream ms = new MemoryStream();
+                    bmp.Save(ms, ImageFormat.Png);
+                    ms.Seek(0, SeekOrigin.Begin); // seek back to beginning
+                    if (!m_cancel) // if we're not in the process of cancelling
+                    {
+                        SceneFile.Instance().AddSlice(UVDLPApp.Instance().SceneFileName,ms, imname);
+                    }
+                    
                     if (m_sf.m_config.exportpng) 
                     {
                         //imagename
@@ -602,12 +601,12 @@ namespace UV_DLP_3D_Printer
                 DebugLogger.Instance().LogError(ex.Message);
             }
         }
-
+        /*
         private void LayerSliced(string scenename, int layer, int numslices, Bitmap bmp)
         {
             LayerSliced(scenename, layer, numslices, bmp, null);
         }
-
+        */
         private void SliceCompleted(string scenename, int layer, int numslices) 
         {
             RaiseSliceEvent(eSliceEvent.eSliceCompleted, layer, numslices);

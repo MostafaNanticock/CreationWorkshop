@@ -42,7 +42,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -422,12 +422,6 @@
     <Compile Include="GUI\frmConnection.Designer.cs">
       <DependentUpon>frmConnection.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\frmLicense.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\frmLicense.Designer.cs">
-      <DependentUpon>frmLicense.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\frmMain2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -475,6 +469,12 @@
     </Compile>
     <Compile Include="GUI\frmSlice.Designer.cs">
       <DependentUpon>frmSlice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\frmSliceProfileHelp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\frmSliceProfileHelp.Designer.cs">
+      <DependentUpon>frmSliceProfileHelp.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\frmSplash.cs">
       <SubType>Form</SubType>
@@ -647,9 +647,6 @@
     <EmbeddedResource Include="GUI\frmConnection.resx">
       <DependentUpon>frmConnection.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\frmLicense.resx">
-      <DependentUpon>frmLicense.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmDLP.resx">
       <DependentUpon>frmDLP.cs</DependentUpon>
     </EmbeddedResource>
@@ -676,6 +673,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmSlice.resx">
       <DependentUpon>frmSlice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmSliceProfileHelp.resx">
+      <DependentUpon>frmSliceProfileHelp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmSplash.resx">
       <DependentUpon>frmSplash.cs</DependentUpon>
@@ -719,7 +719,6 @@
     <None Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Left1Blue.png" />
     <None Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Right1Blue.png" />
     <None Include="resources\9-4-2013 12-40-20 PM.png" />
-    <None Include="resources\9-6-2013 12-05-11 AM.png" />
     <None Include="resources\9-6-2013 12-05-50 AM.png" />
     <None Include="resources\rounded_blue_home_button_4805.jpg" />
     <None Include="resources\animatedTurningHelix.gif" />
@@ -832,6 +831,7 @@
     <None Include="resources\MachineControl\mc_onoff.png" />
     <None Include="resources\MachineControl\mc_onoffbgnd.png" />
     <None Include="resources\MachineControl\mc_onoffslide.png" />
+    <None Include="resources\Splash1.png" />
     <Content Include="Slicing\OldSlicer\OldSliceNotes.txt" />
     <Content Include="Slicing\SlicerNotes1.txt" />
     <None Include="resources\Load.jpg" />
@@ -865,6 +865,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(ProjectDir)resources\dist_rsc\*.* $(TargetDir) /s /y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

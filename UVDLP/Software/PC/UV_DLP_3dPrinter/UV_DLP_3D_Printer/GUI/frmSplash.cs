@@ -25,6 +25,9 @@ namespace UV_DLP_3D_Printer.GUI
             label3.BackColor = Color.Transparent;
             label4.Parent = pictureBox1;
             label4.BackColor = Color.Transparent;
+            label5.Parent = pictureBox1;
+            label5.BackColor = Color.Transparent;
+
             version.Parent = pictureBox1;
             version.BackColor = Color.Transparent;
             lblbuilddate.Parent = pictureBox1;
@@ -57,6 +60,7 @@ namespace UV_DLP_3D_Printer.GUI
                 lblbuilddate.Visible = false;
                 label3.Visible = false;
                 label4.Visible = false;
+                label5.Visible = false;
                 Refresh();
             }
         }

@@ -127,6 +127,8 @@ namespace UV_DLP_3D_Printer.GUI
             UVDLPApp.Instance().m_gui_config.AddButton("openfile", buttOpenFile);
             UVDLPApp.Instance().m_gui_config.AddButton("play", buttPlay);
             UVDLPApp.Instance().m_gui_config.AddButton("pause", buttPause);
+            UVDLPApp.Instance().m_gui_config.AddButton("save", buttSaveScene);
+
             UVDLPApp.Instance().m_gui_config.AddButton("stop", buttStop);
             UVDLPApp.Instance().m_gui_config.AddButton("connect", buttConnect);
             UVDLPApp.Instance().m_gui_config.AddButton("disconnect", buttDisconnect);
@@ -147,8 +149,8 @@ namespace UV_DLP_3D_Printer.GUI
         private void AddControls() 
         {
             // the main title buttons
-            
-            UVDLPApp.Instance().m_gui_config.AddControl("ctlTitle3dView", ctlTitle3dView);
+
+            UVDLPApp.Instance().m_gui_config.AddControl("ctlTitle3dView", ctlTitle3dView); //ctlTitle3dView
             UVDLPApp.Instance().m_gui_config.AddControl("ctlTitleViewSlice", ctlTitleViewSlice);
             UVDLPApp.Instance().m_gui_config.AddControl("ctlTitleViewControls", ctlTitleViewControls);
             UVDLPApp.Instance().m_gui_config.AddControl("ctlTitleConfigure", ctlTitleConfigure);
@@ -173,7 +175,9 @@ namespace UV_DLP_3D_Printer.GUI
 
             // main form panel
             UVDLPApp.Instance().m_gui_config.AddControl("pnlMain", splitContainer1.Panel1);
-
+            // menu bar
+            UVDLPApp.Instance().m_gui_config.AddControl("MainMenu", menuStrip1);
+            
             // panels on the main form
             UVDLPApp.Instance().m_gui_config.AddControl("pnlTopIcons", pnlTopIcons);
             UVDLPApp.Instance().m_gui_config.AddControl("pnlTopTabs", pnlTopTabs);
@@ -599,6 +603,11 @@ namespace UV_DLP_3D_Printer.GUI
            // This one callback handler replaces the 4 previous
             UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickSwitchTabView", ClickSwitchTabView_Click, null, "Switch Tab Display");
 
+            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickView3d", ClickView3d, null, "Switch Tab Display");
+            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickViewSlice", ClickViewSlice, null, "Switch Tab Display");
+            UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickViewConfig", ClickViewConfig, null, "Switch Tab Display");
+
+
             UVDLPApp.Instance().m_callbackhandler.RegisterCallback("ClickExpandLeft", ClickExpandLeft_Click, null, "Expand / retract left panel");
             //load model click
             UVDLPApp.Instance().m_callbackhandler.RegisterCallback("LoadSTLModel_Click", LoadSTLModel_Click, null, "Load Model");
@@ -968,19 +977,48 @@ namespace UV_DLP_3D_Printer.GUI
         }
         private void ClickExpandLeft_Click(object sender, object vars)
         {
-            if (buttExpandLeft.Checked)
+            try
             {
-                //expand
-                flowLayoutPanel2.Width = 381;
-                ctlSupports1.Visible = true;
+                int opened = Convert.ToInt32(flowLayoutPanel2.Tag);
+
+
+                if (opened == 0)
+                {
+                    flowLayoutPanel2.Tag = 1; // set opened
+                    //expand
+                    flowLayoutPanel2.Width = 381;
+                    ctlSupports1.Visible = true;
+                }
+                else
+                {
+                    //retract
+                    flowLayoutPanel2.Tag = 0;
+                    flowLayoutPanel2.Width = 50;
+                    ctlSupports1.Visible = false;
+                }
             }
-            else 
+            catch (Exception ex) 
             {
-                //retract
-                flowLayoutPanel2.Width = 50;
-                ctlSupports1.Visible = false;
+                DebugLogger.Instance().LogError(ex);
             }
         }
+
+        // move the tab to the 3d view
+        private void ClickView3d(object sender, object e) 
+        {
+            ShowView(0);
+        }
+        // move the tab to the 3d view
+        private void ClickViewSlice(object sender, object e)
+        {
+            ShowView(1);
+        }
+        // move the tab to the 3d view
+        private void ClickViewConfig(object sender, object e)
+        {
+            ShowView(3);
+        }
+
         private void ClickSwitchTabView_Click(object sender, object e) 
         {
             try
@@ -1148,6 +1186,12 @@ namespace UV_DLP_3D_Printer.GUI
             {
                 DebugLogger.Instance().LogError(ex);
             }
+        }
+
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //check for an update, contact the server
+            UVDLPApp.Instance().m_sc.CheckForUpdate();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             if (ctlTitle1.Checked)
             {
-                this.Height = ctlTitle1.Height + flowLayoutPanel1.Height + (3 * 6);
+                this.Height = ctlTitle1.Height + flowLayoutPanel1.Height + (3 * 5);
             }
             else
             {

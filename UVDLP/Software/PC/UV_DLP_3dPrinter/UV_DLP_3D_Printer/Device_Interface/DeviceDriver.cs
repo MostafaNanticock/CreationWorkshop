@@ -177,8 +177,17 @@ namespace UV_DLP_3D_Printer.Drivers
         public abstract bool Disconnect();
         public abstract int Write(byte[] data, int len);
         public abstract int Write(String line);
-
-
+        /// <summary>
+        /// From what I hear, this reset function should work with most Arduinos
+        /// to reset the microcontroller
+        /// </summary>
+        public void Reset() 
+        {
+            //bool dtr
+            m_serialport.DtrEnable = true;
+            Thread.Sleep(100);
+            m_serialport.DtrEnable = false;
+        }
         public void Configure(ConnectionConfig cc) 
         {
             m_config = cc;

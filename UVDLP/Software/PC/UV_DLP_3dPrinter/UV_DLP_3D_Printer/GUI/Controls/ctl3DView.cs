@@ -156,6 +156,9 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         protected void RegisterCallbacks() 
         {
             CallbackHandler cb = UVDLPApp.Instance().m_callbackhandler;
+            //buttUndo
+           // cb.RegisterCallback("undo", buttConfig_Click, null, "Undo");
+           // cb.RegisterCallback("redo", buttConfig_Click, null, "Redo");
             //cb.RegisterCallback("ConfigDialog", buttConfig_Click, null, "Open the system configuration form");
             //cb.RegisterCallback("ConfigDialog", ShowMainConfig, null, "Show the Config View");
 //            cb.RegisterCallback("ShowMachineConfig", ShowMachineConfig, null, "Show the machine configuration window");
@@ -369,8 +372,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     //Visible = true;
                 }
 
-                Set3DView();               
-
+                Set3DView();
+                UVDLPApp.Instance().PerformPluginCommand("AfterThemingDone", true);
                 firstTime = false;
             }
             catch (Exception ex)

@@ -180,10 +180,13 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             //chkmainliftgcode.Checked = m_config.usemainliftgcode;
             //grpLift.Enabled = !chkmainliftgcode.Checked;
             txtliftfeed.Text = m_config.liftfeedrate.ToString();
+            txtbottomliftfeed.Text = m_config.bottomliftfeedrate.ToString();
+
             txtretractfeed.Text = m_config.liftretractrate.ToString();
             chkReflectX.Checked = m_config.m_flipX;
             chkReflectY.Checked = m_config.m_flipY;
             txtNotes.Text = m_config.m_notes;
+            chkOutlines.Checked = m_config.createoutlines;
 
             // resin
             UpdateResinList();
@@ -241,6 +244,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 m_config.antialiasing = chkantialiasing.Checked;
                 //m_config.usemainliftgcode = chkmainliftgcode.Checked;
                 m_config.liftfeedrate = double.Parse(txtliftfeed.Text);
+                m_config.bottomliftfeedrate = double.Parse(txtbottomliftfeed.Text);
                 m_config.liftretractrate = double.Parse(txtretractfeed.Text);
                 //  m_config.raise_time_ms = int.Parse(txtRaiseTime.Text);
                 //grpLift.Enabled = !chkmainliftgcode.Checked;
@@ -259,6 +263,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 m_config.firstlayertime_ms = int.Parse(txtFirstLayerTime.Text);
                 m_config.numfirstlayers = int.Parse(txtnumbottom.Text);
                 m_config.m_resinprice = double.Parse(txtResinPriceL.Text);
+                m_config.createoutlines = chkOutlines.Checked;
                 m_config.UpdateCurrentInk();
                 return true;
             }
@@ -269,14 +274,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             }
         }
 
-
-        
-        /*
-        private void chkgengcode_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-        */
         private void cmdAutoCalc_Click(object sender, EventArgs e)
         {
             try
@@ -575,6 +572,13 @@ namespace UV_DLP_3D_Printer.GUI.Controls
 
         private void txtAAVal_TextChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private void cmdHelp_Click(object sender, EventArgs e)
+        {
+            frmSliceProfileHelp frm = new frmSliceProfileHelp();
+            frm.ShowDialog();
 
         }
 
