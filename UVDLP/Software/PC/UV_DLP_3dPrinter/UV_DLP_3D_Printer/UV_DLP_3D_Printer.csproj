@@ -378,6 +378,12 @@
     <Compile Include="GUI\Controls\Expanding\ctlMoveExpand.Designer.cs">
       <DependentUpon>ctlMoveExpand.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\CustomGUI\ctlVScroll.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\CustomGUI\ctlVScroll.Designer.cs">
+      <DependentUpon>ctlVScroll.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\CustomGUI\frmBmpSplash.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -619,6 +625,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Controls\Expanding\ctlMoveExpand.resx">
       <DependentUpon>ctlMoveExpand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CustomGUI\ctlVScroll.resx">
+      <DependentUpon>ctlVScroll.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\CustomGUI\frmBmpSplash.resx">
       <DependentUpon>frmBmpSplash.cs</DependentUpon>

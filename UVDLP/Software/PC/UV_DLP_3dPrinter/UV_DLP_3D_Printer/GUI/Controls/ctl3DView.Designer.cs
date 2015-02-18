@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.mainViewSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.scrollLayer = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlVScroll();
             this.buttGLTop = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttRedo = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttUndo = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
@@ -50,6 +51,7 @@
             // 
             // mainViewSplitContainer.Panel2
             // 
+            this.mainViewSplitContainer.Panel2.Controls.Add(this.scrollLayer);
             this.mainViewSplitContainer.Panel2.Controls.Add(this.buttGLTop);
             this.mainViewSplitContainer.Panel2.Controls.Add(this.buttRedo);
             this.mainViewSplitContainer.Panel2.Controls.Add(this.buttUndo);
@@ -60,6 +62,27 @@
             this.mainViewSplitContainer.Size = new System.Drawing.Size(1200, 700);
             this.mainViewSplitContainer.SplitterDistance = 77;
             this.mainViewSplitContainer.TabIndex = 28;
+            // 
+            // scrollLayer
+            // 
+            this.scrollLayer.Checked = false;
+            this.scrollLayer.Gapx = 5;
+            this.scrollLayer.Gapy = 5;
+            this.scrollLayer.GLBackgroundImage = null;
+            this.scrollLayer.GLVisible = false;
+            this.scrollLayer.GuiAnchor = null;
+            this.scrollLayer.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.scrollLayer.Increment = 10;
+            this.scrollLayer.Location = new System.Drawing.Point(928, 153);
+            this.scrollLayer.Minimum = 1;
+            this.scrollLayer.Name = "scrollLayer";
+            this.scrollLayer.Size = new System.Drawing.Size(25, 320);
+            this.scrollLayer.StyleName = null;
+            this.scrollLayer.TabIndex = 32;
+            this.scrollLayer.Value = 1;
+            this.scrollLayer.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.scrollLayer.Visible = false;
+            this.scrollLayer.ValueChanged += new System.EventHandler(this.scrollLayer_ValueChanged);
             // 
             // buttGLTop
             // 
@@ -130,25 +153,24 @@
             this.numLayer.BackColor = System.Drawing.Color.RoyalBlue;
             this.numLayer.ButtonsColor = System.Drawing.Color.Navy;
             this.numLayer.Checked = false;
-            this.numLayer.EnableScroll = true;
             this.numLayer.ErrorColor = System.Drawing.Color.Red;
             this.numLayer.FloatVal = 10F;
             this.numLayer.Gapx = 0;
-            this.numLayer.Gapy = 80;
+            this.numLayer.Gapy = 200;
             this.numLayer.GLBackgroundImage = null;
             this.numLayer.GLVisible = false;
             this.numLayer.GuiAnchor = null;
             this.numLayer.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.Center;
             this.numLayer.Increment = 1F;
-            this.numLayer.IntVal = 1000;
-            this.numLayer.Location = new System.Drawing.Point(103, 514);
+            this.numLayer.IntVal = 99999;
+            this.numLayer.Location = new System.Drawing.Point(511, 476);
             this.numLayer.MaxFloat = 500F;
-            this.numLayer.MaxInt = 1000;
+            this.numLayer.MaxInt = 99999;
             this.numLayer.MinFloat = -500F;
             this.numLayer.MinimumSize = new System.Drawing.Size(20, 5);
             this.numLayer.MinInt = 1;
             this.numLayer.Name = "numLayer";
-            this.numLayer.Size = new System.Drawing.Size(425, 24);
+            this.numLayer.Size = new System.Drawing.Size(96, 24);
             this.numLayer.StyleName = null;
             this.numLayer.TabIndex = 27;
             this.numLayer.TextFont = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -194,7 +216,7 @@
             this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
             this.glControl1.Click += new System.EventHandler(this.glControl1_Click);
             this.glControl1.DoubleClick += new System.EventHandler(this.glControl1_DoubleClick);
-            this.glControl1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.glControl1_KeyDown);            
+            this.glControl1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.glControl1_KeyDown);
             this.glControl1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.glControl1_KeyUp);
             this.glControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl1_MouseDown);
             this.glControl1.MouseLeave += new System.EventHandler(this.glControl1_MouseLeave);
@@ -235,5 +257,6 @@
         private CustomGUI.ctlImageButton buttRedo;
         private ctlGL glControl1;
         private CustomGUI.ctlImageButton buttGLTop;
+        private CustomGUI.ctlVScroll scrollLayer;
     }
 }

@@ -1161,8 +1161,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             /* move to manager
             Point pt = new Point(px,py);
             ct.Location = pt;
-            // load docking style
             */
+            // load docking style
+            ct.dock = GetDockingParam(ctlnode, "dock", "cc");
+            
             ct.action = GetStrParam(ctlnode, "action", null);
             ct.parent = GetStrParam(ctlnode, "parent", null);
             /* move to manager

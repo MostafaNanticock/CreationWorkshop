@@ -26,7 +26,8 @@
 		<control name="pmachinecontrol" dock="bc" x="20" y="90" />
 		<control name="pmanualgcode" dock="tl" x="20" y="90" />		
 		<control name="pprojectorcontrol" dock="br" x="20" y="90" />
-		<control name="clayernum" dock="bc" x="0" y="80"/>
+		<control name="clayernum" dock="br" x="50" y="20"/>
+		<control name="clayerscroll" dock="tr" x="20" y="220"/>
 		<control name="progress" dock="br" x="10" y="80" style="gltext1"/>
 		<control name="mainmsg" dock="tr" x="100" y="8" style="gltext1" w="400"/>
 		<control name="timemsg" dock="tr" x="100" y="34" style="gltext1" w="400"/>

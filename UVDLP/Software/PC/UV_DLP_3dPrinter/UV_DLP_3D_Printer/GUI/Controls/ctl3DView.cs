@@ -218,12 +218,16 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 val = 0;
             if (UVDLPApp.Instance().m_appconfig.m_viewslice3d && (val > 0))
             {
-                numLayer.MaxInt = val;
+                numLayer.MaxInt = scrollLayer.Maximum = val;
                 numLayer.IntVal = 1;
                 numLayer.Visible = true;
+                scrollLayer.Visible = true;
             }
             else
+            {
                 numLayer.Visible = false;
+                scrollLayer.Visible = false;
+            }
             ViewLayer(0);
         }
 
@@ -950,13 +954,13 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         private void mainViewSplitContainer_Panel2_SizeChanged(object sender, EventArgs e)
         {
             // update inner control positions
-            foreach (Control ctl in mainViewSplitContainer.Panel2.Controls)
+            /*foreach (Control ctl in mainViewSplitContainer.Panel2.Controls)
             {
                 if (ctl.GetType() == typeof(ctlImageButton))
                     continue;
                 if (ctl.GetType().IsSubclassOf(typeof(ctlAnchorable)))
                     ((ctlAnchorable)ctl).UpdatePosition();
-            }
+            }*/
 
             RearrangeGui();
         }
@@ -1103,6 +1107,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             try
             {
                 int vscrollval = numLayer.IntVal - 1;
+                scrollLayer.Value = scrollLayer.Maximum - vscrollval;
                 numLayer.Refresh(); // redraw this
                 ViewLayer(vscrollval);
             }
@@ -1112,14 +1117,21 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             }
         }
 
+        private void scrollLayer_ValueChanged(object sender, EventArgs e)
+        {
+            numLayer.IntVal = scrollLayer.Maximum - scrollLayer.Value + 1;
+        }
+
+
         void UpdateButtonList()
         {
             // buttons
             guiconf.AddButton("home", buttGlHome);
             guiconf.AddButton("top", buttGLTop);
             guiconf.AddButton("undo", buttUndo); 
-            guiconf.AddButton("redo", buttRedo); 
+            guiconf.AddButton("redo", buttRedo);
             guiconf.AddControl("clayernum", numLayer);
+            guiconf.AddControl("clayerscroll", scrollLayer);
             guiconf.AddControl("glControl1", glControl1);
             
             //guiconf.AddControl("progress", textProgress);
@@ -1262,6 +1274,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 return;
             }            
         }
+
     }
 
     public class ctlBgnd

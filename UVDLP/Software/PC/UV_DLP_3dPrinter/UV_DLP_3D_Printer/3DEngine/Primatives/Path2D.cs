@@ -29,6 +29,20 @@ namespace Engine3D
             }
             return false;
         }
+
+        public int CompareTo(Point2D other)
+        {
+            if (ReferenceEquals(this, other))
+                return 0;
+
+            if (x < other.x)
+                return -1;
+
+            if (x > other.x)
+                return 1;
+
+            return y.CompareTo(other.y);
+        }
     }
     // this class represent a single sigment of a 2d path. the sigment goes from point p1
     // to point p2 such that the right side is inside the object and the left is outside.
@@ -153,6 +167,157 @@ namespace Engine3D
 
     }
 
+    // the following class is used for efficient search for intersections
+    // this class holds either the leftmost or the rightsmost point in a segment, and a pointer to the segment
+    // for left points, this class holds other data needed for list sorting
+    public class SegPoint : IComparable<SegPoint>
+    {
+        public Point2D pt;       // a point from a segment
+        public Segment2D seg;    // the segment this point belongs to
+        public int segix;        // the segment position in the source list
+        public int segpix;       // position in the segPoint list
+
+        // the following is needed only if pt is the left point of a segment
+        //public Point2D pt2;      // the other point
+        public SegPoint otherPoint;// the other point of this segment
+        public bool isLeft;      // is it the leftmost point of the segments (downmost if segment is vertical)
+        public double a,b;       // for y = a * x + b  
+
+        public SegPoint(Segment2D seg, int segix, bool isleft)
+        {
+            isLeft = isleft;
+            if (isleft)
+            {
+                pt = seg.p1.CompareTo(seg.p2) < 0 ? seg.p1 : seg.p2;
+                if (seg.p1.x == seg.p2.x)
+                {
+                    a = 0;
+                    b = pt.y;
+                }
+                else
+                {
+                    a = (seg.p2.y - seg.p1.y) / (seg.p2.x - seg.p1.x);
+                    b = seg.p2.y - a * seg.p2.x;
+                }
+            }
+            else
+                pt = seg.p1.CompareTo(seg.p2) < 0 ? seg.p2 : seg.p1;
+            this.seg = seg;
+            this.segix = segix;
+        }
+
+        public int CompareTo(SegPoint other)
+        {
+            int res = pt.CompareTo(other.pt);
+            if (res != 0) 
+                return res;
+            if (!isLeft)
+                return other.isLeft ? -1 : 0;
+            if (!other.isLeft)
+                return 1;
+            return otherPoint.pt.CompareTo(other.otherPoint.pt);
+        }
+
+        public double GetYPos(double x)
+        {
+            return a * x + b;
+        }
+
+        public static bool operator <(SegPoint pt1, SegPoint pt2)
+        {
+            return pt1.CompareTo(pt2) < 0;
+        }
+
+        public static bool operator >(SegPoint pt1, SegPoint pt2)
+        {
+            return pt1.CompareTo(pt2) > 0;
+        }
+    }
+
+    public class SegPointYComparer : IComparer<SegPoint>
+    {
+        public double x;
+
+        public int Compare(SegPoint sp1, SegPoint sp2)
+        {
+            if (Object.ReferenceEquals(sp1, sp2))
+                return 0;
+            int res = sp1.GetYPos(x).CompareTo(sp2.GetYPos(x));
+            if (res != 0)
+                return res;
+            return sp1.a.CompareTo(sp2.a);
+        }
+    }
+
+    public class SegPointList
+    {
+        public List<SegPoint> items;
+        private SegPointYComparer spYComparer = new SegPointYComparer();
+
+        public SegPointList()
+        {
+            items = new List<SegPoint>();
+        }
+
+        // add a point sorted by x position
+        public int Add(SegPoint sp)
+        {
+            int pos = items.BinarySearch(sp);
+            if (pos < 0)
+            {
+                pos = ~pos;
+                items.Insert(pos, sp);
+                sp.segpix = pos;
+            }
+            return pos;
+        }
+ 
+        /*/ remove a point sorted by x position
+        public void Remove(SegPoint sp)
+        {
+            int pos = items.BinarySearch(sp);
+            if (pos >= 0)
+                items.RemoveAt(pos);
+        }*/
+
+        // add a point sorted by intersection of all existing lines in the list with a vertical line positioned at x 
+        public int AddSweep(SegPoint sp, double x)
+        {
+            spYComparer.x = x;
+            int pos = items.BinarySearch(sp, spYComparer);
+            if (pos < 0)
+            {
+                pos = ~pos;
+                items.Insert(pos, sp);
+            }
+            return pos;
+        }
+
+        public int AddSweep(SegPoint sp)
+        {
+            return AddSweep(sp, sp.pt.x);
+        }
+
+        // remove a point from sorted sweep line 
+        public int RemoveSweep(SegPoint sp, double x)
+        {
+            spYComparer.x = x;
+            int pos = items.BinarySearch(sp, spYComparer);
+            if (pos >= 0)
+                items.RemoveAt(pos);
+            return pos;
+        }
+
+        public int RemoveSweep(SegPoint sp)
+        {
+            return RemoveSweep(sp, sp.pt.x);
+        }
+
+        public int Count
+        {
+            get { return items.Count; }
+        }
+    }
 
     // this class represent a single line polygon by list of points. It is ordered from points[0]
     // to points [n-1] such that the right side is inside the object and the left is outside.
@@ -341,6 +506,7 @@ namespace Engine3D
                     segments.Add(seg);
                 }
                 FindIntersections();
+                //FindIntersectionsFast();
                 RemoveRedundant();
                 ConstructPolyLines();
             }
@@ -377,6 +543,108 @@ namespace Engine3D
             }
         }
 
+        // a (hopefully) faster version of FindIntersections()
+        // based on article from: http://geomalgorithms.com/a09-_intersect-3.html
+        public void FindIntersectionsFast()
+        {
+            // 1. add endpoints sorted leftmost to rightmost
+            SegPointList segPoints = new SegPointList();
+            for (int i = 0; i < segments.Count; i++)
+            {
+                SegPoint sp1 = new SegPoint(segments[i], i, true);
+                SegPoint sp2 = new SegPoint(segments[i], i, false);
+                sp1.otherPoint = sp2;
+                sp2.otherPoint = sp1;
+                segPoints.Add(sp1);
+                segPoints.Add(sp2);
+            }
+            SegPointList sweepPoints = new SegPointList();
+            int segix = 0;
+            while (segix < segPoints.Count)
+            {
+                SegPoint sp = segPoints.items[segix];
+                if (sp.isLeft)
+                {
+                    // add to sweep line and test intersections with upper and lower segments
+                    int sp_pos = sweepPoints.AddSweep(sp);
+                    if (sp_pos > 0)
+                        TestIntersections(segPoints, sweepPoints, sp_pos - 1, sp_pos);
+                    if (sp_pos < (sweepPoints.Count - 1))
+                        TestIntersections(segPoints, sweepPoints, sp_pos, sp_pos + 1);
+                }
+                else
+                {
+                    // remove segment from sweep file and test intersection of neighboring segments
+                    int sp_pos = sweepPoints.RemoveSweep(sp.otherPoint);
+                    if ((sp_pos > 0) && (sp_pos < sweepPoints.Count))
+                        TestIntersections(segPoints, sweepPoints, sp_pos - 1, sp_pos);
+                }
+                segix++;
+            }
+        }
+
+        private void TestIntersections(SegPointList segPoints, SegPointList sweepPoints, int sp_pos1, int sp_pos2)
+        {
+            SegPoint sp1 = sweepPoints.items[sp_pos1];
+            SegPoint sp2 = sweepPoints.items[sp_pos2];
+            List<Segment2D> splits = sp1.seg.Intersect(sp2.seg, this);
+            if (splits != null)
+            {
+                // splits must be >= 2
+                foreach (Segment2D seg in splits)
+                {
+                    SegPoint nspL = new SegPoint(seg, 0, true);
+                    SegPoint nspR = new SegPoint(seg, 0, false);
+                    nspR.otherPoint = nspL;
+                    nspL.otherPoint = nspR;
+                    if (Object.ReferenceEquals(nspL.pt, sp1.pt))
+                    {
+                        // matches begining of sp1, replace sp1 with new segment in all places
+                        nspL.segix = sp1.segix;
+                        nspL.segpix = sp1.segpix;
+                        segPoints.items[nspL.segpix] = nspL;
+                        segments[nspL.segix] = seg;
+                        sweepPoints.items[sp_pos1] = nspL;
+                    }
+                    else if (Object.ReferenceEquals(nspL.pt, sp2.pt))
+                    {
+                        // matches begining of sp2, replace sp2 with new segment in all places
+                        nspL.segix = sp2.segix;
+                        nspL.segpix = sp2.segpix;
+                        segPoints.items[nspL.segpix] = nspL;
+                        segments[nspL.segix] = seg;
+                        sweepPoints.items[sp_pos2] = nspL;
+                    }
+                    else
+                    {
+                        // new segment, add everywhere
+                        nspL.segix = segments.Count;
+                        segments.Add(seg);
+                        segPoints.Add(nspL);
+                    }
+                    nspR.segix = nspL.segix;
+                    if (Object.ReferenceEquals(nspR.pt, sp1.otherPoint.pt))
+                    {
+                        // matches ending of sp1, replace sp1 endings in all places
+                        nspR.segpix = sp1.otherPoint.segpix;
+                        segPoints.items[nspR.segpix] = nspR;
+                        //sweepPoints.items[sp_pos1] = nspL;
+                    }
+                    else if (Object.ReferenceEquals(nspR.pt, sp2.otherPoint.pt))
+                    {
+                        // matches ending of sp2, replace sp2 endings in all places
+                        nspR.segpix = sp2.otherPoint.segpix;
+                        segPoints.items[nspR.segpix] = nspR;
+                        //sweepPoints.items[sp_pos2] = nspL;
+                    }
+                    else
+                    {
+                        // new segment point, add to segment points
+                        segPoints.Add(nspR);
+                    }
+                }
+            }
+        }
 
         // this function finds intersection of seg with y line
         // if no intersection or intersecton too close to x, do nothing
@@ -440,6 +708,7 @@ namespace Engine3D
                 {
                     while ((i < n_nonhoriz) && (Math.Abs(segments[i].p1.y - segments[i].p2.y) <= Path2D.Epsilon))
                     {
+                        // possible performance enhancement: switch segments instead of push ???
                         Segment2D seg = segments[i];
                         segments.RemoveAt(i);
                         segments.Add(seg);
