@@ -59,16 +59,18 @@ namespace UV_DLP_3D_Printer
     }
     public delegate void SupportGeneratorEvent(SupportEvent evnt, string message, Object obj);
 
+    
     public class AdaptiveSupportParams
     {
-        public int [] lbm;
-        public int [] lbmz;
-        public bool[] lbms;
-        public int[] searchmap;
-        public int xres, yres;
+        public int[] lbm; // current slice bitmap. all pixel values are either 0 or num of current slice
+        public int[] lbmz; // z buffer of slices. all non zero pixel values show the closest slice seen from top.
+        public int[] lbms; // support map. each added support fiils a rectangle of pixels in this map. pixel value is the height of the support base
+        public int[] searchmap; // bitmap of pixels already processed. (no need to check them)
+        public int xres, yres; // actually the size of the slice bitmap
         public int mingap;
         public int noverlaped;
         public int nsupported;
+        public int minHeight; // minimum support height in number of layers
     }
 
     public class SupportGenerator
@@ -397,6 +399,7 @@ namespace UV_DLP_3D_Printer
 
         #region Adaptive Slicer ver 2
 
+        // an Island is an area with contiguous white pixels in a slive image
         class SliceIsland
         {
             public int sliceid;  // z location of the slice
@@ -424,6 +427,16 @@ namespace UV_DLP_3D_Printer
                 set { m_supportGap = value; supportRad = supportGap / 2; }
             }
 
+            // lbm = current slice bitmap. all pixel values are either 0 or num of current slice
+            // lbmz = z buffer of slices. all non zero pixel values show the closest slice seen from top.
+            // lbms = support map. each added support fiils a rectangle of pixels in this map
+            // searchmap = bitmap of pixels already processed. (no need to check them)
+            // pts = list of points arround which we want to continue flood algorithm.
+            
+
+            // check if a pixel is part of the current island. (true if its not zero, and not already tested)
+            // update min/max boundaries of island.
+            // using the z buffer see if this pixel position is supported by the layer below it.
             void CheckIslandPoint(int[] searchmap, int[] lbm, int[] lbmz, int x, int y, List<int> pts)
             {
                 if ((x < 0) || (y < 0) || (x >= xres) || (y >= yres))
@@ -444,6 +457,7 @@ namespace UV_DLP_3D_Printer
             }
 
             // find an island in a slice using flood fill
+            // start from a given point and iterate on all neighbours untill no neighbors left.
             public void FloodIsland(int [] searchmap, int[] lbm, int[] lbmz, int xp, int yp)
             {
                 List<int> fillPts = new List<int>();
@@ -465,6 +479,8 @@ namespace UV_DLP_3D_Printer
                 }
             }
 
+            // check if a pixel belongs to the currently flooded support area.
+            // it belongs if it is near the support spot and in the same island as the support 
             void CheckSupportPoint(int[] searchmap, int x, int y, int supx, int supy, List<int> pts)
             {
                 if ((x < 0) || (y < 0) || (x >= xres) || (y >= yres))
@@ -481,6 +497,8 @@ namespace UV_DLP_3D_Printer
             }
 
             // clear island surface near set support 
+            // whenever we decide to place a support, clear all the pixels in the same island
+            // that are close enough to this support, so no other supports will be added in this area.
             public void FloodSupport(int [] searchmap, int xp, int yp, int supx, int supy)
             {
                 List<int> fillPts = new List<int>();
@@ -501,8 +519,9 @@ namespace UV_DLP_3D_Printer
                     }
                 }
             }
-       }
+        }
 
+        // holds a support location: x,y position, and height of base and tip. 
         class SupportLocation
         {
             public int x, y;
@@ -516,7 +535,8 @@ namespace UV_DLP_3D_Printer
             }
         }
 
-        void UpdateSupportMap(bool[] lbms, int px, int py, int resx, int resy)
+        // fill a rectangle of "pixels" in the support bitmap arround a given support position
+        void UpdateSupportMap(int[] lbms, int px, int py, int resx, int resy, int zlevel)
         {
             int x1 = px - m_supportgap;
             if (x1 < 0)
@@ -535,10 +555,11 @@ namespace UV_DLP_3D_Printer
             int p = y1 * resx + x1;
             for (y1 = 0; y1 < y2; y1++, p += resx - y2)
                 for (x1 = 0; x1 < x2; x1++, p++)
-                    lbms[p] = true;
+                    lbms[p] = zlevel;
         }
 
-        void SupportLooseIsland(int[] searchmap, SliceIsland si, int[] lbm, int[] lbmz, bool[] lbms, List<SupportLocation> sl)
+        // calculate supports for islands that are completely unsupported by underneath layers. 
+        void SupportLooseIsland(int[] searchmap, SliceIsland si, int[] lbm, int[] lbmz, int[] lbms, List<SupportLocation> sl)
         {
             int l = si.maxx - si.minx;
             int w = si.maxy - si.miny;
@@ -553,11 +574,11 @@ namespace UV_DLP_3D_Printer
                 p = y * si.xres + x;
                 t = lbm[p];
                 b = lbmz[p];
-                if ((t != 0) && (b == 0)) // right now we support only base supports, so b must be 0;
+                if ((t != 0) && ((b == 0) || (si.sliceid - b >= m_asp.minHeight))) // disregard supports that are too low
                 {
                     s = new SupportLocation(x, y, t, b);
                     sl.Add(s);
-                    UpdateSupportMap(lbms, x, y, si.xres, si.yres);
+                    UpdateSupportMap(lbms, x, y, si.xres, si.yres, b);
                 }
             }
             if (s != null)
@@ -572,18 +593,19 @@ namespace UV_DLP_3D_Printer
                     if (searchmap[p] != si.islandid)
                         continue;
                     b = lbmz[p]; // &0xFFFFFF;
-                    if (b != 0)
-                        continue; // right now we support only base supports, so b must be 0;
+                    if ((b != 0) && (si.sliceid - b < m_asp.minHeight))
+                        continue; // disregard supports that are too low
                     // add support to current location, and mark this area as supported
                     s = new SupportLocation(x, y, si.sliceid, b);
                     sl.Add(s);
-                    UpdateSupportMap(lbms, x, y, si.xres, si.yres);
+                    UpdateSupportMap(lbms, x, y, si.xres, si.yres, b);
                     si.FloodSupport(searchmap, x, y, x, y);
                 }
             }
         }
 
-        void SupportSupportedIsland(int[] searchmap, SliceIsland si, int[] lbm, int[] lbmz, bool[] lbms, List<SupportLocation> sl)
+        // calculate supports for islands that are at least partially unsupported by underneath layers. 
+        void SupportSupportedIsland(int[] searchmap, SliceIsland si, int[] lbm, int[] lbmz, int[] lbms, List<SupportLocation> sl)
         {
             int l = si.maxx - si.minx;
             int w = si.maxy - si.miny;
@@ -594,21 +616,22 @@ namespace UV_DLP_3D_Printer
                 for (y = si.miny; y < si.maxy; y++)
                 {
                     p = y * si.xres + x;
-                    if (lbms[p] || (searchmap[p] != si.islandid)) // skip if area is already supported
-                        continue;
                     b = lbmz[p];
-                    if (b != 0)
-                        continue; // right now we support only base supports, so b must be 0;
+                    if ((lbms[p] >= b) || (searchmap[p] != si.islandid)) // skip if area is already supported
+                        continue;
+                    if ((b != 0) && (si.sliceid - b < m_asp.minHeight))
+                        continue; // disregard supports that are too low
                     // add support to current location, and mark this area as supported
                     s = new SupportLocation(x, y, si.sliceid, b);
                     sl.Add(s);
-                    UpdateSupportMap(lbms, x, y, si.xres, si.yres);
+                    UpdateSupportMap(lbms, x, y, si.xres, si.yres, b);
                     si.FloodSupport(searchmap, x, y, x, y);
                 }
             }
         }
 
-        void ProcessSlice(int[] lbm, int[] lbmz, bool[] lbms, int xres, int yres, List<SupportLocation> sl)
+        // analyze a single slice
+        void ProcessSlice(int[] lbm, int[] lbmz, int[] lbms, int xres, int yres, List<SupportLocation> sl)
         {
             int npix = xres * yres;
             int[] searchmap = new int[npix];
@@ -653,11 +676,6 @@ namespace UV_DLP_3D_Printer
 
         void CheckSupportPoint(int x, int y, int supx, int supy, int ptid, List<int> pts)
         {
-            if ((x == 493) && (y == 427))
-            {
-                m_asp.nsupported++;
-                m_asp.nsupported--;
-            }
             if ((x < 0) || (y < 0) || (x >= m_asp.xres) || (y >= m_asp.yres))
                 return;
             if (Math.Abs(supx - x) > m_asp.mingap)
@@ -673,7 +691,7 @@ namespace UV_DLP_3D_Printer
             m_asp.searchmap[p] = ptid;
             if (m_asp.lbmz[p] == (lyr - 1))
                 m_asp.noverlaped++;
-            if (m_asp.lbms[p])
+            if (m_asp.lbms[p] >= m_asp.lbmz[p])
                 m_asp.nsupported++;
             pts.Add(p);
         }
@@ -706,7 +724,7 @@ namespace UV_DLP_3D_Printer
         void ProcessSlice2(List<SupportLocation> sl)
         {
             int npix = m_asp.xres * m_asp.yres;
-            int x, y, p;
+            int b, x, y, p;
             for (p = 0; p < npix; p++)
                 m_asp.searchmap[p] = 0;
             int ptid = 0;
@@ -720,14 +738,15 @@ namespace UV_DLP_3D_Printer
                     int sid = m_asp.lbm[p];
                     if ((sid != 0) && (m_asp.lbmz[p] != sid - 1) && (m_asp.searchmap[p] == 0))
                     {
-                        if (m_asp.lbmz[p] != 0)
-                            continue;   // right now intra-object supports not supported
+                        b = m_asp.lbmz[p];
+                        if ((b != 0) && (sid - b < m_asp.minHeight))
+                            continue; // disregard supports that are too low
                         ptid++;
                         if (UpdateSearchMap(x, y, ptid))
                         {
-                            SupportLocation s = new SupportLocation(x, y, sid, m_asp.lbmz[p]);
+                            SupportLocation s = new SupportLocation(x, y, sid, b);
                             sl.Add(s);
-                            m_asp.lbms[p] = true;
+                            m_asp.lbms[p] = m_asp.lbmz[p];
                         }
                     }
                 }
@@ -814,12 +833,12 @@ namespace UV_DLP_3D_Printer
                 int npix = config.xres * config.yres;
                 int[] lbm = new int[npix];  // current slice
                 int[] lbmz = new int[npix]; // z buffer
-                bool[] lbms = new bool[npix]; // support map
+                int[] lbms = new int[npix]; // support map
                 int p;
                 for (p = 0; p < npix; p++)
                 {
                     lbmz[p] = 0;
-                    lbms[p] = false;
+                    lbms[p] = -1;
                 }
 
                 Bitmap bm = new Bitmap(config.xres, config.yres, System.Drawing.Imaging.PixelFormat.Format32bppArgb); // working bitmap
@@ -833,6 +852,7 @@ namespace UV_DLP_3D_Printer
                 m_asp.xres = config.xres;
                 m_asp.yres = config.yres;
                 m_asp.mingap = m_supportgap;
+                m_asp.minHeight = (int)(5.0 / config.ZThick); // equvalent of 5mm in layers. should be a parameter?
 
                 for (int c = 0; c < numslices; c++)
                 {
@@ -882,10 +902,20 @@ namespace UV_DLP_3D_Printer
                 {
                     float px = (float)(spl.x - hxres) / (float)config.dpmmX;
                     float py = (float)(spl.y - hyres) / (float)config.dpmmY;
-                    float pz = (float)(spl.ztop) * (float)config.ZThick;
-                    pz += .650f; // wtf?
-                    AddNewSupport(px, py, pz, scnt++, GetSupportParrent(px,py,pz), lstsupports);
-
+                    float pztop = ((float)spl.ztop + 0.51f) * (float)config.ZThick;
+                    float pzbase = (float)spl.zbottom * (float)config.ZThick;
+                    //pz += .650f; // wtf? 
+                    /*Object3d parent = null;
+                    ISectData idat = GetIntersection(px, py, pztop);
+                    if (idat != null)
+                        parent = idat.obj;
+                    Support sp = AddNewSupport(px, py, pztop, scnt++, GetSupportParrent(px, py, pztop), lstsupports);*/
+                    /*if (spl.zbottom != 0)
+                    {
+                        sp.PositionBottom(
+                    }
+                    */
+                    AddNewSupport(px, py, pzbase, pztop, scnt++, lstsupports);
                 }
                 RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eCompleted, "Support Generation Completed", lstsupports);
                 m_generating = false;
@@ -985,6 +1015,7 @@ namespace UV_DLP_3D_Printer
             return lstsupports;
         }
 
+        
         Support AddNewSupport(float x, float y, float lz, int scnt, Object3d parent, List<Object3d> lstsupports)
         {
             Support s = new Support();
@@ -998,6 +1029,62 @@ namespace UV_DLP_3D_Printer
             if (parent != null)
                 parent.AddSupport(s);
             
+            RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eSupportGenerated, s.Name, s);
+            return s;
+        }
+        
+
+        ISectData GetIntersection(float x, float y, float z)
+        {
+            Vector3d dir = new Vector3d(0, 0, 1);
+            Point3d origin = new Point3d(x, y, 0);
+            List<ISectData> lstISects = RTUtils.IntersectObjects(dir, origin, UVDLPApp.Instance().Engine3D.m_objects, false);
+            if (lstISects.Count == 0)
+                return null;
+            ISectData isectFound = null;
+            float minzdiff = 99999999f;
+            // find the intersection closest to z.
+            foreach (ISectData htd in lstISects)
+            {
+                float zdiff = Math.Abs(htd.intersect.z - z);
+                if ((zdiff < 1) && (zdiff < minzdiff))
+                {
+                    minzdiff = zdiff;
+                    isectFound = htd;
+                }
+            }
+            return isectFound;
+        }
+
+        Support AddNewSupport(float x, float y, float zbase, float ztop, int scnt, List<Object3d> lstsupports)
+        {
+            ISectData isectTop = GetIntersection(x, y, ztop);
+            if (isectTop == null)
+                return null;
+
+            Support s = new Support();
+            s.Create(m_sc, isectTop.obj, ztop * .2f, ztop * .6f, ztop * .2f);
+            s.Translate(x, y, 0);
+            s.SelectionType = Support.eSelType.eTip;
+            s.MoveFromTip(isectTop);
+
+            if (zbase > 0)
+            {
+                ISectData isectBase = GetIntersection(x, y, zbase);
+                if (isectBase != null)
+                {
+                    s.SelectionType = Support.eSelType.eBase;
+                    s.SubType = Support.eSubType.eIntra;
+                    s.PositionBottom(isectBase);
+                }
+            }
+
+            s.Name = "Support " + scnt;
+            s.SetColor(Color.Yellow);
+            lstsupports.Add(s);
+            if (isectTop.obj != null)
+                isectTop.obj.AddSupport(s);
+
             RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eSupportGenerated, s.Name, s);
             return s;
         }
