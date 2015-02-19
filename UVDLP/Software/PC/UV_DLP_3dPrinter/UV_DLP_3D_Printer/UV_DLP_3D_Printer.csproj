@@ -716,6 +716,7 @@
     <Compile Include="3DEngine\Primatives\Vector3d.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Release\GuiConfigTest.xml" />
     <Content Include="ccw_slice_icon_final.ico" />
     <Content Include="cwlogo_dl.ico" />
     <Content Include="Notes.txt" />
