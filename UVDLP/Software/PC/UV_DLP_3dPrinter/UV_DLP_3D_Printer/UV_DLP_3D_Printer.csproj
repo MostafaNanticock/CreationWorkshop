@@ -55,7 +55,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>resources\cwlogo_dl.ico</ApplicationIcon>
+    <ApplicationIcon>cwlogo_dl.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Releasex86|AnyCPU'">
     <OutputPath>bin\Releasex86\</OutputPath>
@@ -693,6 +693,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -715,6 +716,9 @@
     <Compile Include="3DEngine\Primatives\Vector3d.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Release\GuiConfigTest.xml" />
+    <Content Include="ccw_slice_icon_final.ico" />
+    <Content Include="cwlogo_dl.ico" />
     <Content Include="Notes.txt" />
     <None Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Left1Blue.png" />
     <None Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Right1Blue.png" />

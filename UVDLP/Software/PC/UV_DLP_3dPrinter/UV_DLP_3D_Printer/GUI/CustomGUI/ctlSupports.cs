@@ -17,7 +17,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         private bool m_settingData;
         private bool m_changingData;
         private bool m_numFBSelected;
-
+        private const int opensize = 622;
         public ctlSupports()
         {
             InitializeComponent();
@@ -233,23 +233,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
 
         }
-        /*
-        private void buttSetup_Click(object sender, EventArgs e)
-        {
-            if (buttSetup.Checked)
-            {
-                Width = widthopen;
-                Location = new Point(Location.X, Location.Y - (heightopen - Height));
-                Height = heightopen;
-            }
-            else
-            {
-                Width = 170;
-                Location = new Point(Location.X, Location.Y + (Height - 96));
-                Height = 96;
-            }
-        }
-        */
+
         private void chkDownPolys_Click(object sender, EventArgs e)
         {
             if (UVDLPApp.Instance().SelectedObject == null) return;
@@ -470,11 +454,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         }
 
-        private void buttManualEdit_Click(object sender, EventArgs e)
-        {
-            // the manual edit of support button is clicked
-        }
-
         private void lbSupports_SelectedIndexChanged(object sender, EventArgs e)
         {
             // get the selected item
@@ -487,8 +466,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     Object3d obj = (Object3d)lvi.Tag;
                     UVDLPApp.Instance().SelectedObject = obj;
                 }
-                //Object3d obj = (Object3d)lbSupports.SelectedItems[0].Tag;
-                //UVDLPApp.Instance().SelectedObject = obj;
             }
             catch (Exception ex) 
             {
@@ -505,29 +482,12 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             if (ctlTitle1.Checked)
             {
-                this.Height = 542 + 5;
+                this.Height = opensize + 5;
             }
             else
             {
                 this.Height = ctlTitle1.Height + 5;
             }
-        }
-
-        private void buttModifySupport_Click(object sender, EventArgs e)
-        {
-            /*
-            buttAddSupport.Checked = false; // uncheck the add
-            if (buttModifySupport.Checked)
-            {
-                // put the app in modify support
-                UVDLPApp.Instance().SupportEditMode = UVDLPApp.eSupportEditMode.eModifySupport;
-            }
-            else 
-            {
-                UVDLPApp.Instance().SupportEditMode = UVDLPApp.eSupportEditMode.eNone;
-            }
-             * */
-        }
-   
+        }  
     }
 }

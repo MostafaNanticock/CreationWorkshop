@@ -42,9 +42,9 @@
             this.flowLayoutPanel1.Controls.Add(this.lblX);
             this.flowLayoutPanel1.Controls.Add(this.lblY);
             this.flowLayoutPanel1.Controls.Add(this.lblZ);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 49);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 57);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(224, 64);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(224, 59);
             this.flowLayoutPanel1.TabIndex = 8;
             // 
             // lblX
@@ -115,7 +115,7 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.ctlTitle1);
             this.Name = "ctlMirror";
-            this.Size = new System.Drawing.Size(242, 51);
+            this.Size = new System.Drawing.Size(242, 55);
             this.Resize += new System.EventHandler(this.ctlMirror_Resize);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);

@@ -52,7 +52,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         bool ctrldown;// is the control key held down?
         bool Render3dSpace = true;
         uint mColorBuffer = 0;
-
+        SliceFile m_sf = null;
 
         //ctlImageButton imbtn;
         
@@ -141,7 +141,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     {
                         case Slicer.eSliceEvent.eSliceCompleted:
                             SetNumLayers(totallayers);
-                            //UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eReDraw, "");
+                            m_sf = sf;
                             this.Update();
                             break;
                     }
@@ -155,41 +155,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
 
         protected void RegisterCallbacks() 
         {
-            CallbackHandler cb = UVDLPApp.Instance().m_callbackhandler;
-            //buttUndo
-           // cb.RegisterCallback("undo", buttConfig_Click, null, "Undo");
-           // cb.RegisterCallback("redo", buttConfig_Click, null, "Redo");
-            //cb.RegisterCallback("ConfigDialog", buttConfig_Click, null, "Open the system configuration form");
-            //cb.RegisterCallback("ConfigDialog", ShowMainConfig, null, "Show the Config View");
-//            cb.RegisterCallback("ShowMachineConfig", ShowMachineConfig, null, "Show the machine configuration window");
-              
+            CallbackHandler cb = UVDLPApp.Instance().m_callbackhandler;              
         }
-
-
-/*
-        private void ShowSliceConfig(Object sender, Object v)
-        {
-            ShowPanel((ctlImageButton)sender, "psliceconfig");
-        }
-
-        private void ShowMachineConfig(Object sender, Object v) 
-        {
-            ShowPanel((ctlImageButton)sender, "pmachineconfig");
-        }
-
-        private void ShowMainConfig(Object sender, Object v)
-        {
-            ShowPanel((ctlImageButton)sender, "pconfig");
-        }
-        */
-        /*
-        private void ShowMainConfig(Object sender, Object v)
-        {
-            //ShowPanel((ctlImageButton)sender, "pconfig");
-            frmSettings frmset = new frmSettings();
-            frmset.ShowDialog();
-        }
-        */
 
         public GuiConfigManager GuiConfig
         {
@@ -224,11 +191,13 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 numLayer.MaxInt = scrollLayer.Maximum = val;
                 numLayer.IntVal = 1;
                 numLayer.Visible = true;
+                ctlInfoItemZLev.Visible = true;
                 scrollLayer.Visible = true;
             }
             else
             {
                 numLayer.Visible = false;
+                ctlInfoItemZLev.Visible = false;                
                 scrollLayer.Visible = false;
             }
             ViewLayer(0);
@@ -1112,6 +1081,10 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 int vscrollval = numLayer.IntVal - 1;
                 scrollLayer.Value = scrollLayer.Maximum - vscrollval;
                 numLayer.Refresh(); // redraw this
+                double zlev = ((double)vscrollval * m_sf.m_config.ZThick);
+                zlev = Math.Round(zlev, 3, MidpointRounding.ToEven);
+                ctlInfoItemZLev.DataText = zlev.ToString();
+                ctlInfoItemZLev.Refresh();
                 ViewLayer(vscrollval);
             }
             catch (Exception)
@@ -1134,12 +1107,9 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             guiconf.AddButton("undo", buttUndo); 
             guiconf.AddButton("redo", buttRedo);
             guiconf.AddControl("clayernum", numLayer);
+            guiconf.AddControl("clayerZ", ctlInfoItemZLev);            
             guiconf.AddControl("clayerscroll", scrollLayer);
             guiconf.AddControl("glControl1", glControl1);
-            
-            //guiconf.AddControl("progress", textProgress);
-
-
         }
 
         #endregion 3d View controls

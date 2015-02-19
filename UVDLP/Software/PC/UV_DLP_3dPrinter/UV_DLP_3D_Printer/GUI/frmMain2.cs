@@ -986,7 +986,17 @@ namespace UV_DLP_3D_Printer.GUI
                 {
                     flowLayoutPanel2.Tag = 1; // set opened
                     //expand
-                    flowLayoutPanel2.Width = 381;
+                    //should look into the controls and get the wideest control in there
+                    int maxwidth = 0;
+                    foreach (Control c in flowLayoutPanel2.Controls) 
+                    {
+                        if (c.Width > maxwidth) 
+                        {
+                            maxwidth = c.Width;
+                        }
+                    }
+
+                    flowLayoutPanel2.Width = maxwidth;
                     ctlSupports1.Visible = true;
                 }
                 else

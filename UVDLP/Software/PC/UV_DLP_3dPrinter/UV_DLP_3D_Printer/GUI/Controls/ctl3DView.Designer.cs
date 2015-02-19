@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.mainViewSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.ctlInfoItemZLev = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlInfoItem();
             this.scrollLayer = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlVScroll();
             this.buttGLTop = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttRedo = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
@@ -51,6 +52,7 @@
             // 
             // mainViewSplitContainer.Panel2
             // 
+            this.mainViewSplitContainer.Panel2.Controls.Add(this.ctlInfoItemZLev);
             this.mainViewSplitContainer.Panel2.Controls.Add(this.scrollLayer);
             this.mainViewSplitContainer.Panel2.Controls.Add(this.buttGLTop);
             this.mainViewSplitContainer.Panel2.Controls.Add(this.buttRedo);
@@ -63,6 +65,27 @@
             this.mainViewSplitContainer.SplitterDistance = 77;
             this.mainViewSplitContainer.TabIndex = 28;
             // 
+            // ctlInfoItemZLev
+            // 
+            this.ctlInfoItemZLev.BackColor = System.Drawing.Color.Navy;
+            this.ctlInfoItemZLev.DataBackColor = System.Drawing.Color.RoyalBlue;
+            this.ctlInfoItemZLev.DataColor = System.Drawing.Color.White;
+            this.ctlInfoItemZLev.DataText = "0";
+            this.ctlInfoItemZLev.Gapx = 0;
+            this.ctlInfoItemZLev.Gapy = 0;
+            this.ctlInfoItemZLev.GLBackgroundImage = null;
+            this.ctlInfoItemZLev.GLVisible = false;
+            this.ctlInfoItemZLev.GuiAnchor = null;
+            this.ctlInfoItemZLev.Location = new System.Drawing.Point(511, 506);
+            this.ctlInfoItemZLev.Name = "ctlInfoItemZLev";
+            this.ctlInfoItemZLev.Size = new System.Drawing.Size(96, 22);
+            this.ctlInfoItemZLev.StyleName = null;
+            this.ctlInfoItemZLev.TabIndex = 33;
+            this.ctlInfoItemZLev.TitleBackColor = System.Drawing.Color.Navy;
+            this.ctlInfoItemZLev.TitleColor = System.Drawing.Color.White;
+            this.ctlInfoItemZLev.TitleText = "ZLev";
+            this.ctlInfoItemZLev.Visible = false;
+            // 
             // scrollLayer
             // 
             this.scrollLayer.Checked = false;
@@ -74,6 +97,7 @@
             this.scrollLayer.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.scrollLayer.Increment = 10;
             this.scrollLayer.Location = new System.Drawing.Point(928, 153);
+            this.scrollLayer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.scrollLayer.Minimum = 1;
             this.scrollLayer.Name = "scrollLayer";
             this.scrollLayer.Size = new System.Drawing.Size(25, 320);
@@ -258,5 +282,6 @@
         private ctlGL glControl1;
         private CustomGUI.ctlImageButton buttGLTop;
         private CustomGUI.ctlVScroll scrollLayer;
+        private CustomGUI.ctlInfoItem ctlInfoItemZLev;
     }
 }

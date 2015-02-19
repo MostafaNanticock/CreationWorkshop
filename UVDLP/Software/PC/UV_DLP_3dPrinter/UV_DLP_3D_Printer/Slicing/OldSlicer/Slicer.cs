@@ -337,7 +337,7 @@ namespace UV_DLP_3D_Printer
                     Bitmap savebm = SliceImmediate(curz, lstintersections);
                     Bitmap outlinebm = null;
                     //check to see if we're rendering the outline BM too
-                    if (m_sf.m_config.createoutlines == true)
+                    if (m_sf.m_config.m_createoutlines == true)
                     {
                         outlinebm = SliceImmediate(curz, lstintersections, true);
                     }
@@ -353,7 +353,7 @@ namespace UV_DLP_3D_Printer
                     curz += (float)m_sf.m_config.ZThick;// move the slice for the next layer
                     //raise an event to say we've finished a slice
                     LayerSliced(scenename, c, numslices, savebm, lstintersections);
-                    if (m_sf.m_config.createoutlines == true) // make sure we export the slice too
+                    if (m_sf.m_config.m_createoutlines == true) // make sure we export the slice too
                     {
                         LayerSliced(scenename, c, numslices, outlinebm, lstintersections, true);
                     }
