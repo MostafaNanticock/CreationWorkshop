@@ -140,84 +140,7 @@ namespace UV_DLP_3D_Printer
                 return false;
             }
         }
-        public void ColorLines() 
-        {
-            int idx = 0;
-            foreach (PolyLine3d pl in m_opsegs) 
-            {                
-                /*
-                switch (idx % 3) 
-                {
-                    case 0:
-                        pl.m_color = Color.Red;
-                        break;
-                    case 1:
-                        pl.m_color = Color.Yellow;
-                        break;
-                    case 2:
-                        pl.m_color = Color.White;
-                        break;
 
-                } 
-                 * */
-                if (pl.tag == PolyLine3d.TAG_EXTERIOR)
-                {
-                    pl.m_color = Color.Red;
-                }
-                else 
-                {
-                    pl.m_color = Color.Yellow;
-                }
-                idx++;
-            }
-        }
-        /// <summary>
-        /// This function will iterate through the optimized loops
-        /// and determine if they are interior or exterior and tag them appropriately
-        /// </summary>
-        /*
-        public void DetermineInteriorExterior(SliceBuildConfig config) 
-        {
-            List<PolyLine3d> allsegments = new List<PolyLine3d>();
-            foreach (PolyLine3d pln in m_opsegs)
-            {
-                pln.tag = PolyLine3d.TAG_INTERIOR; // mark it as interior
-                List<PolyLine3d> segments = pln.Split(); // split them, retaining the parent
-                allsegments.AddRange(segments);                
-            }
-            List<Line2d> lines2d = Get2dLines(config, allsegments);
-            // find the x/y min/max
-            MinMax_XY mm = Slice.CalcMinMax_XY(lines2d);
-            // iterate from the ymin to the ymax
-            for (int y = mm.ymin; y < mm.ymax; y++) // this needs to be in scaled value 
-            {
-                //      get a line of lines that intersect this 2d line
-                List<Line2d> intersecting = Slice.GetIntersecting2dYLines(y, lines2d);
-                //      get the list of point intersections
-                List<Point2d> points = Slice.GetIntersectingPoints(y, intersecting);
-                // sort the points in increasing x order                           
-                points.Sort();
-                if (points.Count % 2 == 0)  // is even
-                {
-                    for (int cnt = 0; cnt < points.Count; cnt += 2)  // increment by 2
-                    {
-                        // the first point is always an exterior - really? why?
-                        Point2d p1 = (Point2d)points[cnt];
-                        if (p1.m_parent != null)
-                        {
-                            p1.m_parent.tag = PolyLine3d.TAG_EXTERIOR; // mark as exterior
-                        }
-                        // the second point could be an exterior or interior
-                        Point2d p2 = (Point2d)points[cnt + 1];
-                    }
-                }
-                else  // flag error
-                {
-                    DebugLogger.Instance().LogRecord("Row y=" + y + " odd # of points = " + points.Count + " - Model may have holes");
-                }
-            }// for y = startminY to endY            
-        }
-         */ 
         /// <summary>
         /// This function trys to join together the short line segments into 
         /// a set of longer 3d polyines
@@ -284,25 +207,6 @@ namespace UV_DLP_3D_Printer
                                 removelist.Add(pl);
                                 matchcount++;
                             }
-                                /* -- SHS: case 1 and case 3 will change the first segment
-                                 *  I need it to calculate correct path direction
-                            else if (curline.m_points[0].Matches(pl.m_points[pl.m_points.Count - 1])) //case 1
-                            {
-                                curline.m_points.Reverse();
-                                pl.m_points.Reverse();
-                                for (int i=1; i<pl.m_points.Count; i++)
-                                    curline.m_points.Add(pl.m_points[i]);
-                                removelist.Add(pl);
-                                matchcount++;
-                            }
-                            else if (curline.m_points[0].Matches(pl.m_points[0])) // case 3
-                            {
-                                curline.m_points.Reverse();
-                                for (int i = 1; i < pl.m_points.Count; i++)
-                                    curline.m_points.Add(pl.m_points[i]);
-                                removelist.Add(pl);
-                                matchcount++;
-                            }*/
                         }
                     }
                     // now remove all the matched segments from all segment list
@@ -406,7 +310,32 @@ namespace UV_DLP_3D_Printer
                 if (sp.m_createoutlines && outlineonly)
                 {
                     pen = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor,(float) sp.m_outlinewidth);
-                    pen.Alignment = PenAlignment.Outset;//PenAlignment.Inset;
+                    //pen.Alignment = PenAlignment.Outset; // it looks like outset is really inset because of the winding order
+                    pen.Alignment = PenAlignment.Inset; // it looks like outset is really inset because of the winding order
+                    pen.EndCap = LineCap.Round;
+                    pen.StartCap = LineCap.Round;
+                    /*
+                    int hxres1 = sp.xres / 2;
+                    int hyres1 = sp.yres / 2;
+
+                    Point[] pntlst = new Point[2*lines.Count]; // 2 points in each line
+
+                    int idx = 0;
+                    foreach (Line2d ln in lines)
+                    {
+                        Point2d p1a = (Point2d)ln.p1;
+                        Point2d p2a = (Point2d)ln.p2;
+                        pnt1.X = (int)(p1a.x) + sp.XOffset + hxres1;
+                        pnt1.Y = (int)(p1a.y) + sp.YOffset + hyres1;
+                        pnt2.X = (int)(p2a.x) + sp.XOffset + hxres1;
+                        pnt2.Y = (int)(p2a.y) + sp.YOffset + hyres1;
+                        pntlst[idx++] = new Point(pnt1.X, pnt1.Y);
+                        pntlst[idx++] = new Point(pnt2.X, pnt2.Y);
+                    }
+                    g.DrawPolygon(pen, pntlst);
+                    pen.Dispose();
+                    return;
+                     * */
                 }
                 else 
                 {
@@ -450,7 +379,7 @@ namespace UV_DLP_3D_Printer
                 Graphics graph = Graphics.FromImage(bmp);
                 Point pnt1 = new Point(); // create some points for drawing
                 Point pnt2 = new Point();
-
+                // in the future, the forecolor and backcolor should be pulled from the slice profile, not the app config
                 Pen pen = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, 1);
                 //convert all to 2d lines
                 int hxres = sp.xres / 2;
@@ -462,9 +391,12 @@ namespace UV_DLP_3D_Printer
 
                 if (outlineonly)
                 {
+                    //optimize the polylines to join short segements into longer segments in correct winding order
                     Optimize();
+                    //convert to 2d
                     List<Line2d> linesopt2d = Get2dLines(sp, m_opsegs);
-                    Render2dlines(graph, linesopt2d, sp);
+                    //render the list of optimized 2d lines
+                    Render2dlines(graph, linesopt2d, sp,true);
                 }
                 else
                 {
@@ -486,7 +418,6 @@ namespace UV_DLP_3D_Printer
                     //      get the list of point intersections
                     List<Point2d> points = GetIntersectingPoints(y, intersecting);
                     // sort the points in increasing x order
-                    //SortXIncreasing(points);
                     points.Sort();
                     SortBackfaces(points);
 
@@ -600,10 +531,6 @@ namespace UV_DLP_3D_Printer
             }
         }
 
-        private void SortXIncreasing(ArrayList points) 
-        {
-            points.Sort();            
-        }
         // this function will return a list of 2d point intersections on the specified y line
         public static List<Point2d> GetIntersectingPoints(int ypos, List<Line2d> lines) 
         {
@@ -668,8 +595,6 @@ namespace UV_DLP_3D_Printer
         private List<Line2d> Get2dLines(SliceBuildConfig sp, List<PolyLine3d> segments) 
         {
             List<Line2d> lst = new List<Line2d>();
-            // this can be changed at some point to assume that the 3d polyline has more than 2 points
-            // I'll need to do this when I want to properly generate inside / outside countours
             foreach (PolyLine3d ply in segments)  
             {
                 for (int c = 0; c < ply.m_points.Count - 1; c++ )
@@ -685,11 +610,11 @@ namespace UV_DLP_3D_Printer
                     ln.p2.x = (int)(p3d2.x * sp.dpmmX);
                     ln.p2.y = (int)(p3d2.y * sp.dpmmY);
                     lst.Add(ln);
-
                 }
             }
             return lst; // return the list
         }
+
         private List<Line2d> Get2dLines_Save(SliceBuildConfig sp, List<PolyLine3d> segments)
         {
             List<Line2d> lst = new List<Line2d>();
