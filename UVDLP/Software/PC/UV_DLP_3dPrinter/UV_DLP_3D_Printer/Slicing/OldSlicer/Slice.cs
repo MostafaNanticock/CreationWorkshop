@@ -566,11 +566,6 @@ namespace UV_DLP_3D_Printer
             }
         }
 
-        // original slicer using even odd algorithm
-        private void fillLinesEvenOdd(Graphics graph, List<Point2d> points, int y)
-        {
-        }
-
         private void SortBackfaces(List<Point2d> points)
         {
             bool lastBackface = false;

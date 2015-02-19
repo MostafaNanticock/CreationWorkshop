@@ -352,7 +352,7 @@
             this.ctlSupports1.Location = new System.Drawing.Point(51, 2);
             this.ctlSupports1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ctlSupports1.Name = "ctlSupports1";
-            this.ctlSupports1.Size = new System.Drawing.Size(381, 542);
+            //this.ctlSupports1.Size = new System.Drawing.Size(381, 542);
             this.ctlSupports1.StyleName = null;
             this.ctlSupports1.TabIndex = 1;
             this.ctlSupports1.Visible = false;
