@@ -25,8 +25,22 @@ namespace UV_DLP_3D_Printer.GUI
             version.Parent = pictureBox1;
             version.BackColor = Color.Transparent;
             version.Text = "Version " + Application.ProductVersion;
-        }
 
+        }
+        private void LoadAbout() 
+        {
+             Bitmap bmp = UVDLPApp.Instance().GetPluginImage("About");
+             if (bmp != null)
+             {
+                 label1.Hide();
+                 label2.Hide();
+                 label3.Hide();
+                 label4.Hide();
+                 version.Hide();
+                 cmdDonate.Hide();
+                 pictureBox1.Image = bmp;
+             }
+        }
         private void cmdDonate_Click(object sender, EventArgs e)
         {
             try
