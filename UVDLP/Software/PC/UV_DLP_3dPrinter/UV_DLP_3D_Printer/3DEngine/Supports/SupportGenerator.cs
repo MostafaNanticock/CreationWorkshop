@@ -795,6 +795,32 @@ namespace UV_DLP_3D_Printer
             return objFound;
         }
 
+        // shring the slice bitmap, to minimize edge efects. thick = thickness of border to shrink
+        void ShrinkSlice(int[] lbm, int xres, int yres, int thick)
+        {
+            // process all bitmap but first and last lines to enhance performance by reducing edge checks
+            int bsize = xres * (yres - 1) -1;
+            int diag1 = xres + 1;
+            int diag2 = xres - 1;
+            List<int> delpoints = new List<int>();
+            for (int j = 0; j < thick; j++)
+            {
+                delpoints.Clear();
+                for (int i = xres + 1; i < bsize; i++)
+                {
+                    bool candidate = false;
+                    if (lbm[i] == 0)
+                        continue;
+                    if ( ((lbm[i - 1] == 0) && (lbm[i + 1] != 0))
+                        || ((lbm[i - xres] == 0) && (lbm[i + xres] != 0))
+                        || ((lbm[i - diag1] == 0) && (lbm[i + diag1] != 0))
+                        || ((lbm[i - diag2] == 0) && (lbm[i + diag2] != 0)) )
+                       delpoints.Add(i);
+                }
+                foreach (int p in delpoints)
+                    lbm[p] = 0;
+            }
+        }
 
         /// <summary>
         /// This is the adaptive support generation, it should automatically 
@@ -827,7 +853,7 @@ namespace UV_DLP_3D_Printer
                 List<SupportLocation> supLocs = new List<SupportLocation>(); // temporary list of support locations.
 
                 int numslices = UVDLPApp.Instance().m_slicer.GetNumberOfSlices(config);
-                float zlev = (float)(config.ZThick + 0.5);
+                float zlev = (float)(config.ZThick * 0.5);
                 int hxres = config.xres / 2;
                 int hyres = config.yres / 2;
                 int npix = config.xres * config.yres;
@@ -881,6 +907,7 @@ namespace UV_DLP_3D_Printer
                     Marshal.Copy(data.Scan0, lbm, 0, lbm.Length);
                     for (p = 0; p < npix; p++)
                         lbm[p] &= 0xFFFFFF;
+                    ShrinkSlice(lbm, bm.Width, bm.Height, 1);
                     bm.UnlockBits(data);
                     if (c > 0)
                     {
@@ -904,7 +931,7 @@ namespace UV_DLP_3D_Printer
                     float py = (float)(spl.y - hyres) / (float)config.dpmmY;
                     float pztop = ((float)spl.ztop + 0.51f) * (float)config.ZThick;
                     float pzbase = (float)spl.zbottom * (float)config.ZThick;
-                    //pz += .650f; // wtf? 
+                    //pz += .650f; // wtf? indeed WTF!! found the bug... 
                     /*Object3d parent = null;
                     ISectData idat = GetIntersection(px, py, pztop);
                     if (idat != null)
@@ -1046,6 +1073,8 @@ namespace UV_DLP_3D_Printer
             // find the intersection closest to z.
             foreach (ISectData htd in lstISects)
             {
+                if (htd.obj.tag != Object3d.OBJ_NORMAL)
+                    continue;
                 float zdiff = Math.Abs(htd.intersect.z - z);
                 if ((zdiff < 1) && (zdiff < minzdiff))
                 {
