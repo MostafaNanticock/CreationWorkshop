@@ -41,6 +41,7 @@ namespace UV_DLP_3D_Printer.Configs
         public double ftrad; // foot top radius
         public double fbrad; // foot bottom radius
         public double fbrad2; // foot bottom radius 2
+        public double downwardAngle;
         public int vdivs; // vertical divisions, not used
         public int cdivs; // circular divisions - used for cylinderical supports
         public bool m_onlydownward; // generate supports only on the downward facing polygons in the scene / object
@@ -60,6 +61,7 @@ namespace UV_DLP_3D_Printer.Configs
             fbrad2 = .2; // for intra-object support
             //vdivs = 1; // divisions vertically
             m_onlydownward = false;
+            downwardAngle = 45;
             cdivs = 11; // a prime number
             eSectionShape = eCrossSectionShape.eCircle;
         }
@@ -74,6 +76,7 @@ namespace UV_DLP_3D_Printer.Configs
             sc.hbrad = hbrad;
             sc.htrad = htrad;
             sc.m_onlydownward = m_onlydownward;
+            sc.downwardAngle = downwardAngle;
             sc.mingap = mingap;
             sc.vdivs = vdivs;
             sc.xspace = xspace;
@@ -95,6 +98,8 @@ namespace UV_DLP_3D_Printer.Configs
             ftrad = xh.GetDouble(sc, "FootTopRadiusMM", 0.5);
             fbrad = xh.GetDouble(sc, "FootBottomRadiusMM", 2.0);
             fbrad2 = xh.GetDouble(sc, "FootBottomIntraRadiusMM", 0.2);
+            downwardAngle = xh.GetDouble(sc, "DownwardAngle", 45.0);
+            m_onlydownward = xh.GetBool(sc, "GenerateOnDownward", false);
 
             if (!fileExist)
             {
@@ -115,6 +120,8 @@ namespace UV_DLP_3D_Printer.Configs
             xh.SetParameter(sc, "FootTopRadiusMM", ftrad);
             xh.SetParameter(sc, "FootBottomRadiusMM", fbrad);
             xh.SetParameter(sc, "FootBottomIntraRadiusMM", fbrad2);
+            xh.SetParameter(sc, "DownwardAngle", downwardAngle);
+            xh.SetParameter(sc, "GenerateOnDownward", m_onlydownward);
             xh.Save(FILE_VERSION);
         }
 

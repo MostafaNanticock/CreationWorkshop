@@ -27,8 +27,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             SetData();
             m_changingData = false;
             m_numFBSelected = true;
-            numDownAngle.FloatVal = 45;
-            numDownAngle.IntVal = 45;
             ListSupports();
         }
         public void FixForeColor(Color clr) 
@@ -94,6 +92,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 numX.FloatVal = (float)m_sc.xspace;
                 numGap.FloatVal = (float)m_sc.mingap;
                 chkOnlyDownward.Checked = m_sc.m_onlydownward;
+                numDownAngle.FloatVal = (float)m_sc.downwardAngle;
                 switch (m_sc.eSupType)
                 {
                     case SupportConfig.eAUTOSUPPORTTYPE.eBON:
@@ -127,6 +126,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 m_sc.xspace = (double)numX.FloatVal;
                 m_sc.mingap = (double)numGap.FloatVal;
                 m_sc.m_onlydownward = chkOnlyDownward.Checked;
+                m_sc.downwardAngle = numDownAngle.FloatVal;
                 pictureSupport.Invalidate();
                 switch (cmbSupType.SelectedIndex) 
                 {
@@ -380,7 +380,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     break;
                 case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE:
                 //case SupportConfig.eAUTOSUPPORTTYPE.eADAPTIVE2:
-                    chkOnlyDownward.Visible = false;
+                    chkOnlyDownward.Visible = true;
                     //labelAutoSup.Visible = false;
                     labelAutoSup.Text = "Minimum Gap (mm)";
                     label6.Visible = false;

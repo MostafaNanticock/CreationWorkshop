@@ -578,7 +578,7 @@ namespace UV_DLP_3D_Printer
                 {
                     s = new SupportLocation(x, y, t, b);
                     sl.Add(s);
-                    UpdateSupportMap(lbms, x, y, si.xres, si.yres, b);
+                    UpdateSupportMap(lbms, x, y, si.xres, si.yres, t);
                 }
             }
             if (s != null)
@@ -593,12 +593,13 @@ namespace UV_DLP_3D_Printer
                     if (searchmap[p] != si.islandid)
                         continue;
                     b = lbmz[p]; // &0xFFFFFF;
+                    t = lbm[p];
                     if ((b != 0) && (si.sliceid - b < m_asp.minHeight))
                         continue; // disregard supports that are too low
                     // add support to current location, and mark this area as supported
                     s = new SupportLocation(x, y, si.sliceid, b);
                     sl.Add(s);
-                    UpdateSupportMap(lbms, x, y, si.xres, si.yres, b);
+                    UpdateSupportMap(lbms, x, y, si.xres, si.yres, t);
                     si.FloodSupport(searchmap, x, y, x, y);
                 }
             }
@@ -609,7 +610,7 @@ namespace UV_DLP_3D_Printer
         {
             int l = si.maxx - si.minx;
             int w = si.maxy - si.miny;
-            int x, y, b, p;
+            int x, y, b, p, t;
             SupportLocation s = null;
             for (x = si.minx; x <= si.maxx; x++)
             {
@@ -617,6 +618,7 @@ namespace UV_DLP_3D_Printer
                 {
                     p = y * si.xres + x;
                     b = lbmz[p];
+                    t = lbm[p];
                     if ((lbms[p] >= b) || (searchmap[p] != si.islandid)) // skip if area is already supported
                         continue;
                     if ((b != 0) && (si.sliceid - b < m_asp.minHeight))
@@ -624,7 +626,7 @@ namespace UV_DLP_3D_Printer
                     // add support to current location, and mark this area as supported
                     s = new SupportLocation(x, y, si.sliceid, b);
                     sl.Add(s);
-                    UpdateSupportMap(lbms, x, y, si.xres, si.yres, b);
+                    UpdateSupportMap(lbms, x, y, si.xres, si.yres, t);
                     si.FloodSupport(searchmap, x, y, x, y);
                 }
             }
@@ -664,7 +666,7 @@ namespace UV_DLP_3D_Printer
                 // case 1: island is not supported at all.
                 if (si.supportedCount == 0)
                 {
-                    SupportLooseIsland(searchmap, si, lbm, lbmz, lbms, sl);
+                    //SupportLooseIsland(searchmap, si, lbm, lbmz, lbms, sl);
                 }
                 // case 2: island is partially supported
                 else
@@ -927,6 +929,7 @@ namespace UV_DLP_3D_Printer
                 int scnt = 0;
                 foreach (SupportLocation spl in supLocs)
                 {
+                    RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eProgress, "" + scnt + "/" + supLocs.Count, null);
                     float px = (float)(spl.x - hxres) / (float)config.dpmmX;
                     float py = (float)(spl.y - hyres) / (float)config.dpmmY;
                     float pztop = ((float)spl.ztop + 0.51f) * (float)config.ZThick;
@@ -1018,13 +1021,20 @@ namespace UV_DLP_3D_Printer
                         return lstsupports;
                     }
 
+                    
+                    Vector3d upvec = new Vector3d();
+                    double inc = 1.0 / 90.0;
+                    double angle = -(1 - (m_sc.downwardAngle * inc));
+                    upvec.Set(new Point3d(0, 0, 1));
 
                     foreach (ISectData htd in lstISects)
                     {
                         if (htd.obj.tag == Object3d.OBJ_NORMAL)  // if this is not another support or the ground
                         {
-                            if (m_sc.m_onlydownward && htd.poly.tag != Polygon.TAG_MARKDOWN)
-                                break; // not a downward facing and we're only doing downward
+                            htd.poly.CalcNormal();
+                            double d = htd.poly.m_normal.Dot(upvec);
+                            if (m_sc.m_onlydownward && d >= angle) // this makes sure downward works even if polygons are not tagged
+                                    break; // not a downward facing and we're only doing downward
                             // this should be the closest intersected
                             Support sup = AddNewSupport(x, y, (float)htd.intersect.z, scnt++, htd.obj, lstsupports);
                             sup.SelectionType = Support.eSelType.eTip;
@@ -1090,6 +1100,18 @@ namespace UV_DLP_3D_Printer
             ISectData isectTop = GetIntersection(x, y, ztop);
             if (isectTop == null)
                 return null;
+
+            if (m_sc.m_onlydownward)
+            {
+                Vector3d upvec = new Vector3d();
+                double inc = 1.0 / 90.0;
+                double angle = -(1 - (m_sc.downwardAngle * inc));
+                upvec.Set(new Point3d(0, 0, 1));
+                isectTop.poly.CalcNormal();
+                double d = isectTop.poly.m_normal.Dot(upvec);
+                if (m_sc.m_onlydownward && d >= angle) // this makes sure downward works even if polygons are not tagged
+                    return null;
+            }
 
             Support s = new Support();
             s.Create(m_sc, isectTop.obj, ztop * .2f, ztop * .6f, ztop * .2f);
