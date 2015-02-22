@@ -81,8 +81,8 @@
             this.plugInsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userManualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hardwareGuideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.pnlTopIcons.SuspendLayout();
             this.pnl3dview.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -352,7 +352,7 @@
             this.ctlSupports1.Location = new System.Drawing.Point(51, 2);
             this.ctlSupports1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ctlSupports1.Name = "ctlSupports1";
-            //this.ctlSupports1.Size = new System.Drawing.Size(381, 542);
+            this.ctlSupports1.Size = new System.Drawing.Size(310, 622);
             this.ctlSupports1.StyleName = null;
             this.ctlSupports1.TabIndex = 1;
             this.ctlSupports1.Visible = false;

@@ -172,7 +172,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(827, 220);
+            this.ClientSize = new System.Drawing.Size(827, 232);
             this.Controls.Add(this.grpDebug);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.cmdCancel);

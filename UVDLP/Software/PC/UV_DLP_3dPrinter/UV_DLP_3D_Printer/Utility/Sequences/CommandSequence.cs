@@ -13,6 +13,7 @@ namespace UV_DLP_3D_Printer.Util.Sequence
 
         public const int COMMAND_TYPE_SCRIPT = 0; // script sequence
         public const int COMMAND_TYPE_GCODE = 1; // gcode sequence
+        public const int COMMAND_TYPE_SPAWN_PROCESS = 2; // spawn a new process 
         public string m_name; // the name of the sequence
         public int m_seqtype; // type of sequence
         public string m_seq; // the raw stringified sequence as read from the xml
@@ -22,6 +23,7 @@ namespace UV_DLP_3D_Printer.Util.Sequence
             {
                 case COMMAND_TYPE_GCODE: return "GCode Sequence";
                 case COMMAND_TYPE_SCRIPT: return "Script Sequence";
+                case COMMAND_TYPE_SPAWN_PROCESS: return "Process Sequence";
             }
             return "Unknown Sequence";
         }

@@ -78,6 +78,15 @@ namespace UV_DLP_3D_Printer.Util.Sequence
                             UVDLPApp.Instance().m_buildmgr.StartPrint(UVDLPApp.Instance().m_slicefile, gcf, true);
                         }
                         break;
+                    case CommandSequence.COMMAND_TYPE_SPAWN_PROCESS:
+                        //use the parameter variables to fill in the args, then spawn the process
+                        // a flag can be to wait for the process to end , or simply start it.
+                        ProcessSequence psc = (ProcessSequence)seq;
+                        foreach (ProcessEntry pe in psc.m_entries) 
+                        {
+                            pe.RunProcess();
+                        }
+                        break;
                 }
                 return true;
             }

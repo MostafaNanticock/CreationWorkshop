@@ -60,7 +60,8 @@ namespace UV_DLP_3D_Printer
         public int minExposure; // for resin test model
         public int exposureStep; // for resin test model
         public bool m_createoutlines; // render the slices additionallyt as outlines in separate bitmaps
-        public double m_outlinewidth;
+        public double m_outlinewidth_inset;
+        public double m_outlinewidth_outset;
         public PreviewGenerator.ePreview exportpreview; // generate a preview file and image
         //need some parms here for auto support
 
@@ -202,7 +203,8 @@ namespace UV_DLP_3D_Printer
             m_resinprice = source.m_resinprice;
             selectedInk = source.selectedInk;
             m_createoutlines = source.m_createoutlines;
-            m_outlinewidth = source.m_outlinewidth;
+            m_outlinewidth_inset = source.m_outlinewidth_inset;
+            m_outlinewidth_outset = source.m_outlinewidth_outset;
             if (source.inks != null)
             {
                 inks = new Dictionary<string, InkConfig>();
@@ -289,7 +291,8 @@ namespace UV_DLP_3D_Printer
             inks[selectedInk] = new InkConfig(selectedInk);
             minExposure = 500;
             m_createoutlines = false;
-            m_outlinewidth = 2.0;
+            m_outlinewidth_inset = 2.0;
+            m_outlinewidth_outset = 0.0;
             exposureStep = 200;
             exportpreview = PreviewGenerator.ePreview.None;
             userParams = new UserParameterList();
@@ -364,7 +367,8 @@ namespace UV_DLP_3D_Printer
             m_flipY = xh.GetBool(sbc, "FlipY", false);
             m_notes = xh.GetString(sbc, "Notes", "");
             m_createoutlines = xh.GetBool(sbc, "RenderOutlines", false);
-            m_outlinewidth = xh.GetDouble(sbc, "OutlineWidth", 2.0);
+            m_outlinewidth_inset = xh.GetDouble(sbc, "OutlineWidth_Inset", 2.0);
+            m_outlinewidth_outset = xh.GetDouble(sbc, "OutlineWidth_Outset", 0.0);
             
             //m_resinprice = xh.GetDouble(sbc, "ResinPriceL", 0.0);
 
@@ -496,7 +500,8 @@ namespace UV_DLP_3D_Printer
             xh.SetParameter(sbc, "LiftRetractRate", liftretractrate);
             xh.SetParameter(sbc, "ExportOption", m_exportopt);
             xh.SetParameter(sbc, "RenderOutlines", m_createoutlines);
-            xh.SetParameter(sbc, "OutlineWidth", m_outlinewidth);
+            xh.SetParameter(sbc, "OutlineWidth_Inset", m_outlinewidth_inset);
+            xh.SetParameter(sbc, "OutlineWidth_Outset", m_outlinewidth_outset);
             
             xh.SetParameter(sbc, "FlipX", m_flipX);
             xh.SetParameter(sbc, "FlipY", m_flipY);
@@ -560,7 +565,8 @@ namespace UV_DLP_3D_Printer
             sb.Append(";(Layer Thickness         = " + String.Format("{0:0.00000}", ZThick) + " mm )\r\n");
             sb.Append(";(Layer Time              = " + layertime_ms + " ms )\r\n");
             sb.Append(";(Render Outlines         = " + m_createoutlines.ToString() + "\r\n");
-            sb.Append(";(Outline Width           = " + m_outlinewidth.ToString() + "\r\n");
+            sb.Append(";(Outline Width Inset     = " + m_outlinewidth_inset.ToString() + "\r\n");
+            sb.Append(";(Outline Width Outset    = " + m_outlinewidth_outset.ToString() + "\r\n");
             sb.Append(";(Bottom Layers Time      = " + firstlayertime_ms + " ms )\r\n");
             sb.Append(";(Number of Bottom Layers = " + numfirstlayers + " )\r\n");
             sb.Append(";(Blanking Layer Time     = " + blanktime_ms + " ms )\r\n");

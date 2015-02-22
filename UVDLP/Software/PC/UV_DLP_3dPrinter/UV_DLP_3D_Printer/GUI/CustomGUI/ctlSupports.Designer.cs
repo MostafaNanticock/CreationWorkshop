@@ -30,8 +30,8 @@
         {
             this.progressTitle = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlProgress();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttAddSupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttGenBase = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.buttAddSupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttAutoSupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.panelSuppotShape = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -100,29 +100,6 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(297, 46);
             this.flowLayoutPanel1.TabIndex = 5;
             // 
-            // buttAddSupport
-            // 
-            this.buttAddSupport.BackColor = System.Drawing.Color.Navy;
-            this.buttAddSupport.Checked = false;
-            this.buttAddSupport.CheckImage = global::UV_DLP_3D_Printer.Properties.Resources.buttChecked;
-            this.buttAddSupport.Gapx = 5;
-            this.buttAddSupport.Gapy = 5;
-            this.buttAddSupport.GLBackgroundImage = null;
-            this.buttAddSupport.GLImage = null;
-            this.buttAddSupport.GLVisible = false;
-            this.buttAddSupport.GuiAnchor = null;
-            this.buttAddSupport.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.buttAddSupport.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttAddSupport;
-            this.buttAddSupport.Location = new System.Drawing.Point(50, 5);
-            this.buttAddSupport.Margin = new System.Windows.Forms.Padding(5);
-            this.buttAddSupport.Name = "buttAddSupport";
-            this.buttAddSupport.Size = new System.Drawing.Size(40, 40);
-            this.buttAddSupport.StyleName = null;
-            this.buttAddSupport.TabIndex = 23;
-            this.ctlToolTip1.SetToolTip(this.buttAddSupport, "Add Support");
-            this.buttAddSupport.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
-            this.buttAddSupport.Click += new System.EventHandler(this.buttAddSupport_Click);
-            // 
             // buttGenBase
             // 
             this.buttGenBase.BackColor = System.Drawing.Color.Navy;
@@ -145,6 +122,29 @@
             this.ctlToolTip1.SetToolTip(this.buttGenBase, "Add Support Base Plate");
             this.buttGenBase.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttGenBase.Click += new System.EventHandler(this.buttGenBase_Click);
+            // 
+            // buttAddSupport
+            // 
+            this.buttAddSupport.BackColor = System.Drawing.Color.Navy;
+            this.buttAddSupport.Checked = false;
+            this.buttAddSupport.CheckImage = global::UV_DLP_3D_Printer.Properties.Resources.buttChecked;
+            this.buttAddSupport.Gapx = 5;
+            this.buttAddSupport.Gapy = 5;
+            this.buttAddSupport.GLBackgroundImage = null;
+            this.buttAddSupport.GLImage = null;
+            this.buttAddSupport.GLVisible = false;
+            this.buttAddSupport.GuiAnchor = null;
+            this.buttAddSupport.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttAddSupport.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttAddSupport;
+            this.buttAddSupport.Location = new System.Drawing.Point(50, 5);
+            this.buttAddSupport.Margin = new System.Windows.Forms.Padding(5);
+            this.buttAddSupport.Name = "buttAddSupport";
+            this.buttAddSupport.Size = new System.Drawing.Size(40, 40);
+            this.buttAddSupport.StyleName = null;
+            this.buttAddSupport.TabIndex = 23;
+            this.ctlToolTip1.SetToolTip(this.buttAddSupport, "Add Support");
+            this.buttAddSupport.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttAddSupport.Click += new System.EventHandler(this.buttAddSupport_Click);
             // 
             // buttAutoSupport
             // 
@@ -190,7 +190,6 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Arial", 17.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.label1.Location = new System.Drawing.Point(3, 2);
             this.label1.Name = "label1";
@@ -650,9 +649,9 @@
             // 
             this.label3.Font = new System.Drawing.Font("Arial", 17.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(3, 2);
+            this.label3.Location = new System.Drawing.Point(0, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(194, 22);
+            this.label3.Size = new System.Drawing.Size(291, 22);
             this.label3.TabIndex = 29;
             this.label3.Text = "Automatic Supports";
             // 
@@ -706,9 +705,9 @@
             // 
             this.label9.Font = new System.Drawing.Font("Arial", 17.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(5, 7);
+            this.label9.Location = new System.Drawing.Point(5, 4);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(125, 22);
+            this.label9.Size = new System.Drawing.Size(285, 22);
             this.label9.TabIndex = 29;
             this.label9.Text = "Supports";
             // 
@@ -756,7 +755,6 @@
             this.Size = new System.Drawing.Size(310, 622);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.panelSuppotShape.ResumeLayout(false);
-            this.panelSuppotShape.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSupport)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -768,40 +766,40 @@
 
         #endregion
 
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private ctlImageButton buttAddSupport;
+        public System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        public ctlImageButton buttAddSupport;
         public ctlImageButton buttAutoSupport;
-        private ctlProgress progressTitle;
-        private ctlToolTip ctlToolTip1;
-        private System.Windows.Forms.Panel panelSuppotShape;
-        private ctlNumber numHT;
-        private System.Windows.Forms.PictureBox pictureSupport;
-        private ctlNumber numFB;
-        private ctlNumber numFT;
-        private ctlNumber numHB;
-        private ctlNumber numFB1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel1;
-        private ctlNumber numDownAngle;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label3;
-        private ctlImageButton chkDownPolys;
-        private ctlNumber numY;
-        private ctlNumber numX;
-        private ctlImageButton chkOnlyDownward;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label labelAutoSup;
-        private System.Windows.Forms.ComboBox cmbSupType;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.ListView lbSupports;
-        private System.Windows.Forms.ColumnHeader Supports;
-        private System.Windows.Forms.Button cmdRemoveSupports;
-        private ctlTitle ctlTitle1;
-        private ctlImageButton buttGenBase;
-        private ctlNumber numGap;
-        private System.Windows.Forms.Label label4;
+        public ctlProgress progressTitle;
+        public ctlToolTip ctlToolTip1;
+        public System.Windows.Forms.Panel panelSuppotShape;
+        public ctlNumber numHT;
+        public System.Windows.Forms.PictureBox pictureSupport;
+        public ctlNumber numFB;
+        public ctlNumber numFT;
+        public ctlNumber numHB;
+        public ctlNumber numFB1;
+        public System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Panel panel1;
+        public ctlNumber numDownAngle;
+        public System.Windows.Forms.Label label2;
+        public System.Windows.Forms.Panel panel2;
+        public System.Windows.Forms.Label label3;
+        public ctlImageButton chkDownPolys;
+        public ctlNumber numY;
+        public ctlNumber numX;
+        public ctlImageButton chkOnlyDownward;
+        public System.Windows.Forms.Label label7;
+        public System.Windows.Forms.Label label6;
+        public System.Windows.Forms.Label labelAutoSup;
+        public System.Windows.Forms.ComboBox cmbSupType;
+        public System.Windows.Forms.Panel panel3;
+        public System.Windows.Forms.Label label9;
+        public System.Windows.Forms.ListView lbSupports;
+        public System.Windows.Forms.ColumnHeader Supports;
+        public System.Windows.Forms.Button cmdRemoveSupports;
+        public ctlTitle ctlTitle1;
+        public ctlImageButton buttGenBase;
+        public ctlNumber numGap;
+        public System.Windows.Forms.Label label4;
     }
 }

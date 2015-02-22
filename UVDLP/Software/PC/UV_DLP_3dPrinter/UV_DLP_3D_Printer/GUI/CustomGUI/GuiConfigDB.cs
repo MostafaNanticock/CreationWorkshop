@@ -12,6 +12,7 @@ using System.Xml;
 using UV_DLP_3D_Printer._3DEngine;
 using UV_DLP_3D_Printer.Plugin;
 using UV_DLP_3D_Printer.Util.Sequence;
+using System.Diagnostics;
 
 namespace UV_DLP_3D_Printer.GUI.CustomGUI
 {
@@ -782,31 +783,54 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         // then the name should be: plugPro.goHome
         void LoadSequence(XmlNode seqnode) 
         {
-            //get name
-            GuiParam<string> name = GetStrParam(seqnode, "name", "");
-            if (!name.IsExplicit())
+            try
             {
-                DebugLogger.Instance().LogWarning("Sequence must have a name in GUIConfig");
-                return;
+                //get name
+                GuiParam<string> name = GetStrParam(seqnode, "name", "");
+                if (!name.IsExplicit())
+                {
+                    DebugLogger.Instance().LogWarning("Sequence must have a name in GUIConfig");
+                    return;
+                }
+                //get sequence
+                string seq = GetStrParam(seqnode, "seqdata", "");
+                //get type
+                string seqtype = GetStrParam(seqnode, "seqtype", "");
+                if (seqtype.ToLower().Equals("gcode"))
+                {                    
+                    CommandSequence gcs = new GCodeSequence(name, seq);
+                    CmdSequenceList.Add(gcs);
+                }
+                if (seqtype.ToLower().Equals("process"))
+                {
+                    // no sequence string - this is handled by individual sequence entris for processes
+                    ProcessSequence psc = new ProcessSequence(name);
+                    CmdSequenceList.Add(psc);
+                    //read other variables from xml...
+                    //read processentry nodes
+                    foreach (XmlNode nd in seqnode)
+                    {
+                        switch (nd.Name.ToLower())
+                        {
+                            case "processentry":
+                                ProcessEntry pe = new ProcessEntry();
+                                pe.args = GetStrParam(nd, "args", "");
+                                pe.processname = GetStrParam(nd, "processname", "");
+                                pe.wait = GetBoolParam(nd, "waitfor", false);
+                                pe.windowstyle = GetStrParam(nd, "windowstyle", "normal");
+                                psc.m_entries.Add(pe);
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    DebugLogger.Instance().LogWarning("Unknown sequence type " + seqtype + " in GUIConfig");
+                }
             }
-            //get sequence
-            string seq = GetStrParam(seqnode, "seqdata", "");
-            //get type
-            string seqtype = GetStrParam(seqnode, "seqtype", "");
-            if (seqtype.ToLower().Equals("gcode"))
+            catch (Exception ex) 
             {
-                //smhzc gotta fix this
-                CommandSequence gcs = new GCodeSequence(name, seq);
-                CmdSequenceList.Add(gcs);
-                //CmdSequenceList.Add(new CommandSequence(name, CommandSequence.COMMAND_TYPE_GCODE, seq));
-                /* move to manager
-                GCodeSequence gcseq = new GCodeSequence(name, seq);
-                SequenceManager.Instance().Add(gcseq);
-                 */
-            }
-            else
-            {
-                DebugLogger.Instance().LogWarning("Unknown sequence type " + seqtype + " in GUIConfig");
+                DebugLogger.Instance().LogError(ex);
             }
         }
 

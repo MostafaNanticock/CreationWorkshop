@@ -298,49 +298,64 @@ namespace UV_DLP_3D_Printer
             }
             return mm;
         }
+        private void RenderOutlines(Graphics g, SliceBuildConfig sp) 
+        {
+            //optimize the polylines to join short segements into longer segments in correct winding order
+            Optimize();
+            Pen pen_inset = null;
+            Pen pen_outset = null;
+            //create the appropriate pen
+            pen_inset = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, (float)sp.m_outlinewidth_inset);
+            pen_inset.Alignment = PenAlignment.Inset;
+            pen_outset = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, (float)sp.m_outlinewidth_outset);
+            pen_outset.Alignment = PenAlignment.Outset;
+            //outset lines by definition will not meet at the corners, try to add some rounding to account for this.
+            pen_outset.EndCap = LineCap.Round;
+            pen_outset.StartCap = LineCap.Round;
 
-        private void Render2dlines(Graphics g, List<Line2d> lines, SliceBuildConfig sp, bool outlineonly = false) 
+            //get the half resolution for offsetting
+            int hxres = sp.xres / 2;
+            int hyres = sp.yres / 2;
+            // iterate through all the polylines in m_opsegs
+            //m_opsegs now contains 0 or more 3d polylines
+            foreach(PolyLine3d pln in m_opsegs)
+            {
+                Point[] pntlst = new Point[pln.m_points.Count];
+                //iterate through all the 3d points in this polyline segment
+                for (int c = 0; c < pln.m_points.Count ; c++)
+                {
+                    // we must project these to 2d similar to Get2dLines
+                    //3d to 2d conversion
+                    Point3d p3d1 = (Point3d)pln.m_points[c];
+                    Point pnt2d = new Point();
+                    pnt2d.X = (int)(p3d1.x * sp.dpmmX);
+                    pnt2d.Y = (int)(p3d1.y * sp.dpmmY);
+                    // 2d offseting
+                    pnt2d.X = (int)(pnt2d.X) + sp.XOffset + hxres;
+                    pnt2d.Y = (int)(pnt2d.Y) + sp.YOffset + hyres;
+                    pntlst[c] = pnt2d; // set the item in the array                    
+                }
+                //now render it
+                g.DrawPolygon(pen_inset, pntlst);
+                if (sp.m_outlinewidth_outset > 0)
+                {
+                    g.DrawPolygon(pen_outset, pntlst);
+                }
+            }
+            // dispose of the pen
+            pen_inset.Dispose();
+            pen_outset.Dispose();
+        }
+        private void Render2dlines(Graphics g, List<Line2d> lines, SliceBuildConfig sp) 
         {
             try
             {
                 Point pnt1 = new Point(); // create some points for drawing
                 Point pnt2 = new Point();
 
-                Pen pen;//= new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, 1);
-                if (sp.m_createoutlines && outlineonly)
-                {
-                    pen = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor,(float) sp.m_outlinewidth);
-                    //pen.Alignment = PenAlignment.Outset; // it looks like outset is really inset because of the winding order
-                    pen.Alignment = PenAlignment.Inset; // it looks like outset is really inset because of the winding order
-                    pen.EndCap = LineCap.Round;
-                    pen.StartCap = LineCap.Round;
-                    /*
-                    int hxres1 = sp.xres / 2;
-                    int hyres1 = sp.yres / 2;
-
-                    Point[] pntlst = new Point[2*lines.Count]; // 2 points in each line
-
-                    int idx = 0;
-                    foreach (Line2d ln in lines)
-                    {
-                        Point2d p1a = (Point2d)ln.p1;
-                        Point2d p2a = (Point2d)ln.p2;
-                        pnt1.X = (int)(p1a.x) + sp.XOffset + hxres1;
-                        pnt1.Y = (int)(p1a.y) + sp.YOffset + hyres1;
-                        pnt2.X = (int)(p2a.x) + sp.XOffset + hxres1;
-                        pnt2.Y = (int)(p2a.y) + sp.YOffset + hyres1;
-                        pntlst[idx++] = new Point(pnt1.X, pnt1.Y);
-                        pntlst[idx++] = new Point(pnt2.X, pnt2.Y);
-                    }
-                    g.DrawPolygon(pen, pntlst);
-                    pen.Dispose();
-                    return;
-                     * */
-                }
-                else 
-                {
-                    pen = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, 1);
-                }
+                Pen pen;//= new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, 1);                
+                pen = new Pen(UVDLPApp.Instance().m_appconfig.m_foregroundcolor, 1);
+                
 
                 int hxres = sp.xres / 2;
                 int hyres = sp.yres / 2;
@@ -389,18 +404,13 @@ namespace UV_DLP_3D_Printer
                 if (lines2d.Count == 0) 
                     return;
 
-                if (outlineonly)
+                if (sp.m_createoutlines && outlineonly)
                 {
-                    //optimize the polylines to join short segements into longer segments in correct winding order
-                    Optimize();
-                    //convert to 2d
-                    List<Line2d> linesopt2d = Get2dLines(sp, m_opsegs);
-                    //render the list of optimized 2d lines
-                    Render2dlines(graph, linesopt2d, sp,true);
+                    RenderOutlines(graph, sp);
                 }
                 else
                 {
-                    // this renders the outline of the object
+                    // this renders the outline of the object for a filled slice
                     Render2dlines(graph, lines2d, sp);
                 }
                 // find the x/y min/max

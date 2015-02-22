@@ -39,6 +39,10 @@
             this.comboExportSvg = new System.Windows.Forms.ComboBox();
             this.labelExportSvg = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.txtOutlineWidthOutset = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.txtOutlineWidthInset = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.chkOutlines = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtFirstLayerTime = new System.Windows.Forms.TextBox();
@@ -100,8 +104,6 @@
             this.lstSliceProfiles = new System.Windows.Forms.ListBox();
             this.cmdDelete = new System.Windows.Forms.Button();
             this.cmdNew = new System.Windows.Forms.Button();
-            this.txtOutlineWidth = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
             this.tabOptions.SuspendLayout();
             this.tbOptions.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -256,7 +258,9 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.txtOutlineWidth);
+            this.groupBox5.Controls.Add(this.txtOutlineWidthOutset);
+            this.groupBox5.Controls.Add(this.label21);
+            this.groupBox5.Controls.Add(this.txtOutlineWidthInset);
             this.groupBox5.Controls.Add(this.label20);
             this.groupBox5.Controls.Add(this.chkOutlines);
             this.groupBox5.Controls.Add(this.label2);
@@ -273,15 +277,55 @@
             this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.groupBox5.Size = new System.Drawing.Size(345, 250);
+            this.groupBox5.Size = new System.Drawing.Size(345, 266);
             this.groupBox5.TabIndex = 68;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Settings";
             // 
+            // txtOutlineWidthOutset
+            // 
+            this.txtOutlineWidthOutset.Location = new System.Drawing.Point(244, 232);
+            this.txtOutlineWidthOutset.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.txtOutlineWidthOutset.Name = "txtOutlineWidthOutset";
+            this.txtOutlineWidthOutset.Size = new System.Drawing.Size(87, 24);
+            this.txtOutlineWidthOutset.TabIndex = 64;
+            this.txtOutlineWidthOutset.Text = "0";
+            this.txtOutlineWidthOutset.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(37, 236);
+            this.label21.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(176, 18);
+            this.label21.TabIndex = 65;
+            this.label21.Text = "Outline Width Outset (pix)";
+            // 
+            // txtOutlineWidthInset
+            // 
+            this.txtOutlineWidthInset.Location = new System.Drawing.Point(244, 202);
+            this.txtOutlineWidthInset.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.txtOutlineWidthInset.Name = "txtOutlineWidthInset";
+            this.txtOutlineWidthInset.Size = new System.Drawing.Size(87, 24);
+            this.txtOutlineWidthInset.TabIndex = 62;
+            this.txtOutlineWidthInset.Text = "2.0";
+            this.txtOutlineWidthInset.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(37, 206);
+            this.label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(163, 18);
+            this.label20.TabIndex = 63;
+            this.label20.Text = "Outline Width Inset (pix)";
+            // 
             // chkOutlines
             // 
             this.chkOutlines.AutoSize = true;
-            this.chkOutlines.Location = new System.Drawing.Point(11, 191);
+            this.chkOutlines.Location = new System.Drawing.Point(11, 177);
             this.chkOutlines.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.chkOutlines.Name = "chkOutlines";
             this.chkOutlines.Size = new System.Drawing.Size(169, 22);
@@ -293,7 +337,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 93);
+            this.label2.Location = new System.Drawing.Point(11, 85);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(159, 18);
@@ -302,7 +346,7 @@
             // 
             // txtFirstLayerTime
             // 
-            this.txtFirstLayerTime.Location = new System.Drawing.Point(244, 90);
+            this.txtFirstLayerTime.Location = new System.Drawing.Point(244, 82);
             this.txtFirstLayerTime.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.txtFirstLayerTime.Name = "txtFirstLayerTime";
             this.txtFirstLayerTime.Size = new System.Drawing.Size(84, 24);
@@ -312,7 +356,7 @@
             // 
             // txtZThick
             // 
-            this.txtZThick.Location = new System.Drawing.Point(244, 28);
+            this.txtZThick.Location = new System.Drawing.Point(244, 20);
             this.txtZThick.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.txtZThick.Name = "txtZThick";
             this.txtZThick.Size = new System.Drawing.Size(84, 24);
@@ -323,7 +367,7 @@
             // lblLayerTime
             // 
             this.lblLayerTime.AutoSize = true;
-            this.lblLayerTime.Location = new System.Drawing.Point(11, 61);
+            this.lblLayerTime.Location = new System.Drawing.Point(11, 53);
             this.lblLayerTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLayerTime.Name = "lblLayerTime";
             this.lblLayerTime.Size = new System.Drawing.Size(143, 18);
@@ -332,7 +376,7 @@
             // 
             // txtLayerTime
             // 
-            this.txtLayerTime.Location = new System.Drawing.Point(244, 58);
+            this.txtLayerTime.Location = new System.Drawing.Point(244, 50);
             this.txtLayerTime.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.txtLayerTime.Name = "txtLayerTime";
             this.txtLayerTime.Size = new System.Drawing.Size(84, 24);
@@ -343,7 +387,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 32);
+            this.label1.Location = new System.Drawing.Point(11, 24);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(152, 18);
@@ -352,7 +396,7 @@
             // 
             // txtAAVal
             // 
-            this.txtAAVal.Location = new System.Drawing.Point(244, 161);
+            this.txtAAVal.Location = new System.Drawing.Point(244, 151);
             this.txtAAVal.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.txtAAVal.Name = "txtAAVal";
             this.txtAAVal.Size = new System.Drawing.Size(84, 24);
@@ -363,7 +407,7 @@
             // 
             // txtnumbottom
             // 
-            this.txtnumbottom.Location = new System.Drawing.Point(244, 124);
+            this.txtnumbottom.Location = new System.Drawing.Point(244, 116);
             this.txtnumbottom.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.txtnumbottom.Name = "txtnumbottom";
             this.txtnumbottom.Size = new System.Drawing.Size(87, 24);
@@ -374,7 +418,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(11, 128);
+            this.label8.Location = new System.Drawing.Point(11, 120);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(117, 18);
@@ -384,7 +428,7 @@
             // chkantialiasing
             // 
             this.chkantialiasing.AutoSize = true;
-            this.chkantialiasing.Location = new System.Drawing.Point(11, 161);
+            this.chkantialiasing.Location = new System.Drawing.Point(11, 151);
             this.chkantialiasing.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.chkantialiasing.Name = "chkantialiasing";
             this.chkantialiasing.Size = new System.Drawing.Size(158, 22);
@@ -759,7 +803,7 @@
             // 
             // cmdApply
             // 
-            this.cmdApply.Location = new System.Drawing.Point(84, 545);
+            this.cmdApply.Location = new System.Drawing.Point(84, 556);
             this.cmdApply.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.cmdApply.Name = "cmdApply";
             this.cmdApply.Size = new System.Drawing.Size(221, 52);
@@ -974,26 +1018,6 @@
             this.cmdNew.UseVisualStyleBackColor = true;
             this.cmdNew.Click += new System.EventHandler(this.cmdNew_Click);
             // 
-            // txtOutlineWidth
-            // 
-            this.txtOutlineWidth.Location = new System.Drawing.Point(244, 216);
-            this.txtOutlineWidth.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.txtOutlineWidth.Name = "txtOutlineWidth";
-            this.txtOutlineWidth.Size = new System.Drawing.Size(87, 24);
-            this.txtOutlineWidth.TabIndex = 62;
-            this.txtOutlineWidth.Text = "2.0";
-            this.txtOutlineWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(37, 220);
-            this.label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(96, 18);
-            this.label20.TabIndex = 63;
-            this.label20.Text = "Outline Width";
-            // 
             // ctlToolpathGenConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1104,7 +1128,9 @@
         private System.Windows.Forms.TextBox txtbottomliftfeed;
         private System.Windows.Forms.Button cmdHelp;
         private System.Windows.Forms.CheckBox chkOutlines;
-        private System.Windows.Forms.TextBox txtOutlineWidth;
+        private System.Windows.Forms.TextBox txtOutlineWidthInset;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox txtOutlineWidthOutset;
+        private System.Windows.Forms.Label label21;
     }
 }
