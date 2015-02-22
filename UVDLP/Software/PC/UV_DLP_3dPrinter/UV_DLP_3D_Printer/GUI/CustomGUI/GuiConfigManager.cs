@@ -256,6 +256,11 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     GCodeSequence gcseq = new GCodeSequence(cmdseq.m_name, cmdseq.m_seq);
                     SequenceManager.Instance().Add(gcseq);
                 }
+                if (cmdseq.m_seqtype == CommandSequence.COMMAND_TYPE_SPAWN_PROCESS) 
+                {
+                    ProcessSequence cast = (ProcessSequence)cmdseq;
+                    SequenceManager.Instance().Add(cast.Clone()); // insert a cloned copy into the sequencemanager
+                }
             }
 
         }

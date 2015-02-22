@@ -333,7 +333,7 @@ namespace UV_DLP_3D_Printer
                 String command = "G1 Z" + zpos + " F" + rate + "\r\n";
                 SendCommandToDevice("G91\r\n");
                 SendCommandToDevice(command);
-                SendCommandToDevice("G90\r\n");
+                //SendCommandToDevice("G90\r\n");
             }
         }
 
@@ -370,7 +370,7 @@ namespace UV_DLP_3D_Printer
                 String command = "G1 X" + xpos + " F" + rate + "\r\n";
                 SendCommandToDevice("G91\r\n");
                 SendCommandToDevice(command);
-                SendCommandToDevice("G90\r\n");
+                //SendCommandToDevice("G90\r\n");
             }
         }
         /*
@@ -382,7 +382,7 @@ namespace UV_DLP_3D_Printer
             String command = "G1 Y" + ypos + " F" + rate + "\r\n";
             SendCommandToDevice("G91\r\n");
             SendCommandToDevice(command);
-            SendCommandToDevice("G90\r\n");
+            //SendCommandToDevice("G90\r\n");
         }
         public bool Disconnect()
         {
