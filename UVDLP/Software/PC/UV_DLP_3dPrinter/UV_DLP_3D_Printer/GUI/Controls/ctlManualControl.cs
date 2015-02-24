@@ -85,6 +85,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             cOnOffPlatform.Visible = false;
             cOnOffMotors.Visible = false; // turn off for now... - smh 08/19/2014
             cOnOffManGcode.Visible = false;
+            cShutter.Visible = false;
 
             ctlParamXYrate.Visible = false;
             ctlParamZrate.Visible = false;
@@ -143,7 +144,10 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                         cGCodeManual.Visible = cOnOffManGcode.IsOn;
                         break;
                     case 'D':
-                            cOnOffMotors.Visible = true;// turn on the motor on/off switch
+                        cOnOffMotors.Visible = true;// turn on the motor on/off switch
+                        break;
+                    case 'S':
+                        cShutter.Visible = true;
                         break;
                 }
             }
@@ -255,6 +259,12 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             Callback.Activate(cmd, this);
         }
 
+        private void cShutter_StateChange(object obj, bool state)
+        {
+            string cmd = state ? "MCCmdShutterOpen" : "MCCmdShutterClose";
+            Callback.Activate(cmd, this);
+        }
+        
         private void ctlOnOffHeater_StateChange(object obj, bool state)
         {
         }
@@ -323,5 +333,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         {
 
         }
+
     }
 }

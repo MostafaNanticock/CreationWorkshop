@@ -899,7 +899,9 @@
             "Start",
             "Pre-Slice",
             "Lift",
-            "End"});
+            "End",
+						"Open-Shutter",
+						"Close-Shutter"});
             this.lbGCodeSection.Location = new System.Drawing.Point(5, 52);
             this.lbGCodeSection.Margin = new System.Windows.Forms.Padding(4);
             this.lbGCodeSection.Name = "lbGCodeSection";

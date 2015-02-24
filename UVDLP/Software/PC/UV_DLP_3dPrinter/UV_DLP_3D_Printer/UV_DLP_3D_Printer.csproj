@@ -240,6 +240,9 @@
     <Compile Include="GUI\CustomGUI\ctlMCBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="GUI\CustomGUI\ctlMCShutter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GUI\CustomGUI\ctlMCTemp.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -837,6 +840,8 @@
     <None Include="resources\MachineControl\mc_onoffbgnd.png" />
     <None Include="resources\MachineControl\mc_onoffslide.png" />
     <None Include="resources\Splash1.png" />
+    <None Include="resources\MachineControl\mc_shuttclose.png" />
+    <None Include="resources\MachineControl\mc_shuttopen.png" />
     <Content Include="Slicing\OldSlicer\OldSliceNotes.txt" />
     <Content Include="Slicing\SlicerNotes1.txt" />
     <None Include="resources\Load.jpg" />

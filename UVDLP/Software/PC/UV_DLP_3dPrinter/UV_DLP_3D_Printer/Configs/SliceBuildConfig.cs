@@ -49,6 +49,8 @@ namespace UV_DLP_3D_Printer
         private String m_footercode; // inserted at end of file
         private String m_preslicecode; // inserted before each slice
         private String m_liftcode; // inserted before each slice
+        private String m_shutteropencode; // inserted before each slice
+        private String m_shutterclosecode; // inserted after each slice
         public int XOffset, YOffset; // the X/Y pixel offset used 
         public String m_exportopt; // export sliced images in ZIP or SUBDIR
         public bool m_flipX; // mirror the x axis
@@ -93,7 +95,7 @@ namespace UV_DLP_3D_Printer
             ";Set up any GCode here to be executed before a lift\r\n",
             ";********** Pre-Slice End **********\r\n",
         };
-        
+
         private String[] m_deflift = 
         {
             ";********** Lift Sequence ********\r\n",// 
@@ -101,6 +103,16 @@ namespace UV_DLP_3D_Printer
             "G1{$SlideTiltVal != 0? X($SlideTiltVal * -1):} Z(($LayerThickness-$ZLiftDist) * $ZDir) F$ZRetractRate\r\n",
             ";<Delay> %d$BlankTime\r\n",
             ";********** Lift Sequence **********\r\n", // 
+        };
+
+        private String[] m_defshutteropen = 
+        {
+            ";********** Shutter open Sequence ********\r\n",// 
+        };
+
+        private String[] m_defshutterclose = 
+        {
+            ";********** Shutter close Sequence ********\r\n",// 
         };
 
         private string DefGCodeHeader() 
@@ -132,6 +144,22 @@ namespace UV_DLP_3D_Printer
                 sb.Append(s);
             return sb.ToString();
         }
+
+        private string DefGCodeOpenShutter()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (String s in m_defshutteropen)
+                sb.Append(s);
+            return sb.ToString();
+        }
+
+        private string DefGCodeCloseShutter()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (String s in m_defshutterclose)
+                sb.Append(s);
+            return sb.ToString();
+        }
         
         public String HeaderCode
         {
@@ -154,6 +182,18 @@ namespace UV_DLP_3D_Printer
         {
             get { return m_preslicecode; }
             set { m_preslicecode = value; }
+        }
+
+        public String ShutterOpenCode
+        {
+            get { return m_shutteropencode; }
+            set { m_shutteropencode = value; }
+        }
+
+        public String ShutterCloseCode
+        {
+            get { return m_shutterclosecode; }
+            set { m_shutterclosecode = value; }
         }
 
         /*
@@ -182,6 +222,8 @@ namespace UV_DLP_3D_Printer
             m_footercode = source.m_footercode; // inserted at end of file
             m_preslicecode = source.m_preslicecode; // inserted before each slice
             m_liftcode = source.m_liftcode; // its the main lift code
+            m_shutterclosecode = source.m_shutterclosecode;
+            m_shutteropencode = source.m_shutteropencode;
 
             liftdistance = source.liftdistance;
             direction = source.direction;
@@ -286,6 +328,8 @@ namespace UV_DLP_3D_Printer
             m_footercode = DefGCodeFooter();
             m_liftcode = DefGCodeLift();
             m_preslicecode = DefGCodePreslice();
+            m_shutteropencode = DefGCodeOpenShutter();
+            m_shutterclosecode = DefGCodeCloseShutter();
             inks = new Dictionary<string, InkConfig>();
             selectedInk = "Default";
             inks[selectedInk] = new InkConfig(selectedInk);
@@ -376,6 +420,8 @@ namespace UV_DLP_3D_Printer
             m_footercode = xh.GetString(sbc, "GCodeFooter", DefGCodeFooter());
             m_preslicecode = xh.GetString(sbc, "GCodePreslice", DefGCodePreslice());
             m_liftcode = xh.GetString(sbc, "GCodeLift", DefGCodeLift());
+            m_shutterclosecode = xh.GetString(sbc, "GCodeShutterClose", DefGCodeCloseShutter());
+            m_shutteropencode = xh.GetString(sbc, "GCodeShutterOpen", DefGCodeOpenShutter());
             selectedInk = xh.GetString(sbc, "SelectedInk", "Default");
             inks = new Dictionary<string, InkConfig>();
             List<XmlNode> inkNodes = xh.FindAllChildElement(sbc, "InkConfig");
@@ -511,6 +557,8 @@ namespace UV_DLP_3D_Printer
             xh.SetParameter(sbc, "GCodeFooter", m_footercode);
             xh.SetParameter(sbc, "GCodePreslice", m_preslicecode);
             xh.SetParameter(sbc, "GCodeLift", m_liftcode);
+            xh.SetParameter(sbc, "GCodeShutterOpen", m_shutteropencode);
+            xh.SetParameter(sbc, "GCodeShutterClose", m_shutterclosecode);
 
             xh.SetParameter(sbc, "SelectedInk", selectedInk);
             foreach (KeyValuePair<string, InkConfig> entry in inks)

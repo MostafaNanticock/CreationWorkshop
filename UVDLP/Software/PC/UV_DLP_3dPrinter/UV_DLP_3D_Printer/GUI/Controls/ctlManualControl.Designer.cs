@@ -41,6 +41,7 @@
             this.cOnOffHeater = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlOnOff();
             this.cOnOffPlatform = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlOnOff();
             this.cOnOffMonitorTemp = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlOnOff();
+            this.cShutter = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlMCShutter();
             this.flowData2 = new System.Windows.Forms.FlowLayoutPanel();
             this.ctlParamZrate = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlParameter();
             this.ctlParamXYrate = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlParameter();
@@ -225,6 +226,7 @@
             this.flowData1.Controls.Add(this.cOnOffHeater);
             this.flowData1.Controls.Add(this.cOnOffPlatform);
             this.flowData1.Controls.Add(this.cOnOffMonitorTemp);
+            this.flowData1.Controls.Add(this.cShutter);
             this.flowData1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowData1.Location = new System.Drawing.Point(0, 0);
             this.flowData1.Margin = new System.Windows.Forms.Padding(0);
@@ -341,6 +343,28 @@
             this.cOnOffMonitorTemp.StyleName = null;
             this.cOnOffMonitorTemp.TabIndex = 3;
             this.cOnOffMonitorTemp.Title = "Monitor Temp:";
+            // 
+            // cShutter
+            // 
+            this.cShutter.Font = new System.Drawing.Font("Arial", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
+            this.cShutter.FrameColor = System.Drawing.Color.RoyalBlue;
+            this.cShutter.Gapx = 0;
+            this.cShutter.Gapy = 0;
+            this.cShutter.GLBackgroundImage = null;
+            this.cShutter.GLVisible = false;
+            this.cShutter.GuiAnchor = null;
+            this.cShutter.Location = new System.Drawing.Point(3, 183);
+            this.cShutter.Name = "cShutter";
+            this.cShutter.ReturnValues = new float[] {
+        0F,
+        0F,
+        0F,
+        0F};
+            this.cShutter.Size = new System.Drawing.Size(202, 50);
+            this.cShutter.StyleName = null;
+            this.cShutter.TabIndex = 5;
+            this.cShutter.Title = "Shutter:";
+            this.cShutter.StateChange += new UV_DLP_3D_Printer.GUI.CustomGUI.ctlMCShutter.StateChangeDelegate(this.cShutter_StateChange);
             // 
             // flowData2
             // 
@@ -536,5 +560,6 @@
         private ManualControls.ctlGCodeManual cGCodeManual;
         private ctlProjectorControl cProjectorControl;
         private CustomGUI.ctlParameter ctlParamExtrudeRate;
+        private CustomGUI.ctlMCShutter cShutter;
     }
 }

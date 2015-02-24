@@ -103,6 +103,8 @@ namespace UV_DLP_3D_Printer.Device_Interface
             cb.RegisterCallback("MCCmdAllHome", cmd_HomeAll, null, "Move all axis to the home position");
             cb.RegisterCallback("MCCmdMotorOn", cmdMotorsOn, null, "Turn motors ON");
             cb.RegisterCallback("MCCmdMotorOff", cmdMotorsOff, null, "Turn motors OFF");
+            cb.RegisterCallback("MCCmdShutterOpen", cmdShutterOpen, null, "Open Shutter");
+            cb.RegisterCallback("MCCmdShutterClose", cmdShutterClose, null, "Close Shutter");
             cb.RegisterRetCallback("MCCmdGetZRate", cmdGetZRate, null, typeof(double), "Get Z-axis movement rate");
             cb.RegisterRetCallback("MCCmdGetXYRate", cmdGetXYRate, null, typeof(double), "Get XY-axis movement rate");
             //cb.RegisterCallback("", , null, "");
@@ -276,6 +278,23 @@ namespace UV_DLP_3D_Printer.Device_Interface
             UVDLPApp.Instance().m_deviceinterface.SendCommandToDevice(gcode);
         }
 
+        private void cmdShutterOpen(object sender, object e)
+        {
+            foreach (string gcode in UVDLPApp.Instance().m_buildparms.ShutterOpenCode.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if ((gcode[0] != ';') && (gcode[0] != '<'))
+                    UVDLPApp.Instance().m_deviceinterface.SendCommandToDevice(gcode);
+            }
+        }
+
+        private void cmdShutterClose(object sender, object e)
+        {
+            foreach (string gcode in UVDLPApp.Instance().m_buildparms.ShutterCloseCode.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if ((gcode[0] != ';') && (gcode[0] != '<'))
+                    UVDLPApp.Instance().m_deviceinterface.SendCommandToDevice(gcode);
+            }
+        }
 
         private Object cmdGetZRate(object sender, object e)
         {

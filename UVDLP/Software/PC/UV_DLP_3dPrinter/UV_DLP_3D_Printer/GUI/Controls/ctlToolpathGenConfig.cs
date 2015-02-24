@@ -452,10 +452,12 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             if (lbGCodeSection.SelectedIndex == -1) return "";
             switch (lbGCodeSection.SelectedItem.ToString())
             {
-                case "Start":     return m_config.HeaderCode;
-                case "Pre-Slice": return m_config.PreSliceCode;
-                case "Lift":      return m_config.LiftCode;
-                case "End":       return m_config.FooterCode;
+                case "Start":           return m_config.HeaderCode;
+                case "Pre-Slice":       return m_config.PreSliceCode;
+                case "Lift":            return m_config.LiftCode;
+                case "End":             return m_config.FooterCode;
+                case "Open-Shutter":    return m_config.ShutterOpenCode;
+                case "Close-Shutter":   return m_config.ShutterCloseCode;
             }
             return "";
         }
@@ -465,10 +467,12 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             if (lbGCodeSection.SelectedIndex == -1) return "";
             switch (lbGCodeSection.SelectedItem.ToString()) 
             {
-                case "Start":       return "start.gcode";
-                case "Pre-Slice":   return "preslice.gcode";
-                case "Lift":        return "lift.gcode";
-                case "End":         return "end.gcode";
+                case "Start":           return "start.gcode";
+                case "Pre-Slice":       return "preslice.gcode";
+                case "Lift":            return "lift.gcode";
+                case "End":             return "end.gcode";
+                case "Open-Shutter":    return "openshutter.gcode";
+                case "Close-Shutter":   return "closeshutter.gcode";
             }
             return "";
         }
@@ -486,6 +490,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     case "Pre-Slice": m_config.PreSliceCode = gcode; break;
                     case "Lift": m_config.LiftCode = gcode; break;
                     case "End": m_config.FooterCode = gcode; break;
+                    case "Open-Shutter": m_config.ShutterOpenCode = gcode; break;
+                    case "Close-Shutter": m_config.ShutterCloseCode = gcode; break;
                 }
                // m_config.SaveFile(CurPrefGcodePath() + GCodeSection2FName(), gcode);
                 //really just need to save the profile name here.
