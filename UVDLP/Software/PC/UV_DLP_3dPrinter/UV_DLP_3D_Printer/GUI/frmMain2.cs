@@ -992,11 +992,11 @@ namespace UV_DLP_3D_Printer.GUI
                     {
                         if (c.Width > maxwidth) 
                         {
-                            maxwidth = c.Width;
+                            maxwidth = c.Width ;
                         }
                     }
 
-                    flowLayoutPanel2.Width = maxwidth;
+                    flowLayoutPanel2.Width = maxwidth + 8;
                     ctlSupports1.Visible = true;
                 }
                 else

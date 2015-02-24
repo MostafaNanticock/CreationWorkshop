@@ -52,6 +52,7 @@
             // 
             // mainViewSplitContainer.Panel2
             // 
+            this.mainViewSplitContainer.Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(247)))), ((int)(((byte)(247)))));
             this.mainViewSplitContainer.Panel2.Controls.Add(this.ctlInfoItemZLev);
             this.mainViewSplitContainer.Panel2.Controls.Add(this.scrollLayer);
             this.mainViewSplitContainer.Panel2.Controls.Add(this.buttGLTop);

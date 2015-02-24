@@ -25,6 +25,7 @@ namespace UV_DLP_3D_Printer.GUI
             version.Parent = pictureBox1;
             version.BackColor = Color.Transparent;
             version.Text = "Version " + Application.ProductVersion;
+            LoadAbout();
 
         }
         private void LoadAbout() 
