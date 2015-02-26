@@ -429,6 +429,13 @@ namespace UV_DLP_3D_Printer.Properties {
             }
         }
         
+        public static System.Drawing.Bitmap buttScene {
+            get {
+                object obj = ResourceManager.GetObject("buttScene", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         public static System.Drawing.Bitmap buttSendGcode {
             get {
                 object obj = ResourceManager.GetObject("buttSendGcode", resourceCulture);

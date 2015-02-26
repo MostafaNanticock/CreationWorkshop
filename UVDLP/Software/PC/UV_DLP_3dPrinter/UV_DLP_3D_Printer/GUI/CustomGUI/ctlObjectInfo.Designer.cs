@@ -30,6 +30,8 @@
         {
             this.layoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ctlTitle1 = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlTitle();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.buttScene = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.tName = new System.Windows.Forms.Label();
             this.tVolume = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlInfoItem();
             this.tCost = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlInfoItem();
@@ -39,13 +41,14 @@
             this.tMax = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlInfoItem();
             this.tSize = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlInfoItem();
             this.layoutPanel.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // layoutPanel
             // 
             this.layoutPanel.BackColor = System.Drawing.Color.Navy;
             this.layoutPanel.Controls.Add(this.ctlTitle1);
-            this.layoutPanel.Controls.Add(this.tName);
+            this.layoutPanel.Controls.Add(this.panel1);
             this.layoutPanel.Controls.Add(this.tVolume);
             this.layoutPanel.Controls.Add(this.tCost);
             this.layoutPanel.Controls.Add(this.tPoints);
@@ -56,7 +59,7 @@
             this.layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layoutPanel.Location = new System.Drawing.Point(0, 0);
             this.layoutPanel.Name = "layoutPanel";
-            this.layoutPanel.Size = new System.Drawing.Size(232, 225);
+            this.layoutPanel.Size = new System.Drawing.Size(232, 227);
             this.layoutPanel.TabIndex = 0;
             this.layoutPanel.Resize += new System.EventHandler(this.layoutPanel_Resize);
             // 
@@ -78,15 +81,44 @@
             this.ctlTitle1.Text = "Object Info";
             this.ctlTitle1.Click += new System.EventHandler(this.ctlTitle1_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.buttScene);
+            this.panel1.Controls.Add(this.tName);
+            this.panel1.Location = new System.Drawing.Point(3, 54);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(217, 24);
+            this.panel1.TabIndex = 4;
+            // 
+            // buttScene
+            // 
+            this.buttScene.Checked = false;
+            this.buttScene.CheckImage = global::UV_DLP_3D_Printer.Properties.Resources.buttChecked;
+            this.buttScene.Gapx = 5;
+            this.buttScene.Gapy = 5;
+            this.buttScene.GLBackgroundImage = null;
+            this.buttScene.GLImage = null;
+            this.buttScene.GLVisible = false;
+            this.buttScene.GuiAnchor = null;
+            this.buttScene.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttScene.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttScene;
+            this.buttScene.Location = new System.Drawing.Point(194, 2);
+            this.buttScene.Name = "buttScene";
+            this.buttScene.Size = new System.Drawing.Size(20, 20);
+            this.buttScene.StyleName = null;
+            this.buttScene.TabIndex = 3;
+            this.buttScene.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttScene.Click += new System.EventHandler(this.buttScene_Click);
+            // 
             // tName
             // 
             this.tName.BackColor = System.Drawing.Color.RoyalBlue;
             this.tName.Font = new System.Drawing.Font("Arial", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.tName.ForeColor = System.Drawing.Color.White;
-            this.tName.Location = new System.Drawing.Point(3, 53);
+            this.tName.Location = new System.Drawing.Point(3, 2);
             this.tName.Margin = new System.Windows.Forms.Padding(3, 2, 4, 3);
             this.tName.Name = "tName";
-            this.tName.Size = new System.Drawing.Size(215, 20);
+            this.tName.Size = new System.Drawing.Size(184, 20);
             this.tName.TabIndex = 0;
             this.tName.Text = "Object Info";
             // 
@@ -102,7 +134,7 @@
             this.tVolume.GLBackgroundImage = null;
             this.tVolume.GLVisible = false;
             this.tVolume.GuiAnchor = null;
-            this.tVolume.Location = new System.Drawing.Point(3, 76);
+            this.tVolume.Location = new System.Drawing.Point(3, 81);
             this.tVolume.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.tVolume.Name = "tVolume";
             this.tVolume.Size = new System.Drawing.Size(215, 20);
@@ -125,7 +157,7 @@
             this.tCost.GLBackgroundImage = null;
             this.tCost.GLVisible = false;
             this.tCost.GuiAnchor = null;
-            this.tCost.Location = new System.Drawing.Point(3, 96);
+            this.tCost.Location = new System.Drawing.Point(3, 101);
             this.tCost.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.tCost.Name = "tCost";
             this.tCost.Size = new System.Drawing.Size(215, 20);
@@ -148,7 +180,7 @@
             this.tPoints.GLBackgroundImage = null;
             this.tPoints.GLVisible = false;
             this.tPoints.GuiAnchor = null;
-            this.tPoints.Location = new System.Drawing.Point(3, 116);
+            this.tPoints.Location = new System.Drawing.Point(3, 121);
             this.tPoints.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.tPoints.Name = "tPoints";
             this.tPoints.Size = new System.Drawing.Size(215, 20);
@@ -171,7 +203,7 @@
             this.tPolys.GLBackgroundImage = null;
             this.tPolys.GLVisible = false;
             this.tPolys.GuiAnchor = null;
-            this.tPolys.Location = new System.Drawing.Point(3, 136);
+            this.tPolys.Location = new System.Drawing.Point(3, 141);
             this.tPolys.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.tPolys.Name = "tPolys";
             this.tPolys.Size = new System.Drawing.Size(215, 20);
@@ -194,7 +226,7 @@
             this.tMin.GLBackgroundImage = null;
             this.tMin.GLVisible = false;
             this.tMin.GuiAnchor = null;
-            this.tMin.Location = new System.Drawing.Point(3, 156);
+            this.tMin.Location = new System.Drawing.Point(3, 161);
             this.tMin.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.tMin.Name = "tMin";
             this.tMin.Size = new System.Drawing.Size(215, 20);
@@ -217,7 +249,7 @@
             this.tMax.GLBackgroundImage = null;
             this.tMax.GLVisible = false;
             this.tMax.GuiAnchor = null;
-            this.tMax.Location = new System.Drawing.Point(3, 176);
+            this.tMax.Location = new System.Drawing.Point(3, 181);
             this.tMax.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.tMax.Name = "tMax";
             this.tMax.Size = new System.Drawing.Size(215, 20);
@@ -240,7 +272,7 @@
             this.tSize.GLBackgroundImage = null;
             this.tSize.GLVisible = false;
             this.tSize.GuiAnchor = null;
-            this.tSize.Location = new System.Drawing.Point(3, 196);
+            this.tSize.Location = new System.Drawing.Point(3, 201);
             this.tSize.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.tSize.Name = "tSize";
             this.tSize.Size = new System.Drawing.Size(215, 20);
@@ -256,9 +288,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.Controls.Add(this.layoutPanel);
             this.Name = "ctlObjectInfo";
-            this.Size = new System.Drawing.Size(232, 225);
+            this.Size = new System.Drawing.Size(232, 227);
             this.Resize += new System.EventHandler(this.ctlObjectInfo_Resize);
             this.layoutPanel.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -275,5 +308,7 @@
         private ctlInfoItem tMax;
         private ctlInfoItem tSize;
         private ctlTitle ctlTitle1;
+        private System.Windows.Forms.Panel panel1;
+        private ctlImageButton buttScene;
     }
 }

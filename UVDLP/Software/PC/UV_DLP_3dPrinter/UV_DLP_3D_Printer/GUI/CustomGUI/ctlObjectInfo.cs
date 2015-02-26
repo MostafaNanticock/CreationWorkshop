@@ -76,6 +76,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 totalMargin += ctl.Margin.Top + ctl.Margin.Bottom;
                 ctl.Width = Width - ctl.Margin.Left - ctl.Margin.Right;
             }
+            buttScene.Location = new Point(panel1.Width - buttScene.Width, 2);
+            tName.Width = panel1.Width - buttScene.Width - 6;
             totalMargin += ctlTitle1.Height;
             if (Height <= totalMargin)
                 return;
@@ -89,9 +91,20 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
         }
 
-        public void FillObjectInfo(Object3d obj)
+        public void FillObjectInfo(Object3d selobj)
         {
-            if (obj == null)
+            List<Object3d> objects;
+            if (buttScene.Checked)
+            {
+                objects = UVDLPApp.Instance().Engine3D.m_objects;
+            }
+            else
+            {
+                objects = new List<Object3d>();
+                if (selobj != null)
+                    objects.Add(selobj);
+            }
+            if (objects.Count == 0)
             {
                 foreach (Control ctl in layoutPanel.Controls)
                 {
@@ -101,18 +114,36 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 tName.Text = "";
                 return;
             }
-            obj.FindMinMax();
-            tName.Text = obj.Name;
-            tPoints.DataText = obj.NumPoints.ToString();
-            tPolys.DataText = obj.NumPolys.ToString();
-            tMin.DataText = String.Format("{0:0.00}, {1:0.00}, {2:0.00}", obj.m_min.x, obj.m_min.y, obj.m_min.z);
-            tMax.DataText = String.Format("{0:0.00}, {1:0.00}, {2:0.00}", obj.m_max.x, obj.m_max.y, obj.m_max.z);
+            tName.Text = buttScene.Checked ? "Scene" : selobj.Name;
+            Point3d min = new Point3d(99999999,99999999,99999999);
+            Point3d max = new Point3d(-99999999,-99999999,-99999999);
+            int points = 0;
+            int polys = 0;
+            double vol = 0;
+            foreach (Object3d obj in objects)
+            {
+                if (obj.tag != Object3d.OBJ_NORMAL && obj.tag != Object3d.OBJ_SUPPORT && obj.tag != Object3d.OBJ_SUPPORT_BASE)
+                    continue;
+                obj.FindMinMax();
+                points += obj.NumPoints;
+                polys += obj.NumPolys;
+                if (obj.m_min.x < min.x) min.x = obj.m_min.x;
+                if (obj.m_min.y < min.y) min.y = obj.m_min.y;
+                if (obj.m_min.z < min.z) min.z = obj.m_min.z;
+                if (obj.m_max.x > max.x) max.x = obj.m_max.x;
+                if (obj.m_max.y > max.y) max.y = obj.m_max.y;
+                if (obj.m_max.z > max.z) max.z = obj.m_max.z;
+                vol += obj.Volume;
+            }
+            tPoints.DataText = points.ToString();
+            tPolys.DataText = polys.ToString();
+            tMin.DataText = String.Format("{0:0.00}, {1:0.00}, {2:0.00}", min.x, min.y, min.z);
+            tMax.DataText = String.Format("{0:0.00}, {1:0.00}, {2:0.00}", max.x, max.y, max.z);
             double xs, ys, zs;
-            xs = obj.m_max.x - obj.m_min.x;
-            ys = obj.m_max.y - obj.m_min.y;
-            zs = obj.m_max.z - obj.m_min.z;
+            xs = max.x - min.x;
+            ys = max.y - min.y;
+            zs = max.z - min.z;
             tSize.DataText = String.Format("{0:0.00}, {1:0.00}, {2:0.00}", xs, ys, zs);
-            double vol = obj.Volume;           
             vol /= 1000.0; // convert to cm^3
             tVolume.DataText = string.Format("{0:0.000} cm^3", vol);
             double cost = vol * (UVDLPApp.Instance().m_buildparms.m_resinprice / 1000.0);
@@ -176,5 +207,11 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             tSize.Width = tSize.Parent.Width - 6;
             */
         }
+
+        private void buttScene_Click(object sender, EventArgs e)
+        {
+            FillObjectInfo(UVDLPApp.Instance().SelectedObject);
+        }
+
     }
 }

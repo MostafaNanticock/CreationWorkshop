@@ -910,6 +910,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                         }
                         UVDLPApp.Instance().SelectedObject = i.obj;
                         UVDLPApp.Instance().m_engine3d.UpdateLists();
+                        UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eUpdateSelectedObject, "");
                     }
                     UpdateView();
                     break;
