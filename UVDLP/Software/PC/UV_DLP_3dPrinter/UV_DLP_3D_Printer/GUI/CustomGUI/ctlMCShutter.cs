@@ -53,10 +53,11 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+            int padd = 5;
             Graphics gr = e.Graphics;
             if (mTitle != null)
                 DrawText(gr, mTitle, mTextX, mTextY, mInvBackColor, true);
-            int xpos = Width - mSOpen.Width;
+            int xpos = Width - mSOpen.Width - padd;
             if (mOverOpen)
             {
                 if (mPressOpen)
@@ -66,7 +67,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
             else
                 gr.DrawImage(mSOpenStd, xpos, 0);
-            xpos -= mSClose.Width;
+            xpos -= mSClose.Width + padd;
             if (mOverClose)
             {
                 if (mPressClose)

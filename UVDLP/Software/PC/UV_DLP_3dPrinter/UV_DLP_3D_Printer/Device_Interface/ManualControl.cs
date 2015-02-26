@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UV_DLP_3D_Printer.GUI.CustomGUI;
 
 namespace UV_DLP_3D_Printer.Device_Interface
 {
@@ -280,19 +281,52 @@ namespace UV_DLP_3D_Printer.Device_Interface
 
         private void cmdShutterOpen(object sender, object e)
         {
-            foreach (string gcode in UVDLPApp.Instance().m_buildparms.ShutterOpenCode.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            try
             {
-                if ((gcode[0] != ';') && (gcode[0] != '<'))
-                    UVDLPApp.Instance().m_deviceinterface.SendCommandToDevice(gcode);
+                //get the right parameter from the machine configuration
+                string openshutter = "cmdOpenShutter";
+                MachineConfig cfg = UVDLPApp.Instance().m_printerinfo;
+ 
+                CWParameter parm = cfg.userParams.paramDict[openshutter];
+                if (parm != null) 
+                {
+                    //get the value                    
+                    GuiParam<string> dat = (GuiParam<string>)parm;
+                    string cmds = dat.GetVal();
+                    foreach (string gcode in cmds.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        string tmp = gcode.Trim();
+                        UVDLPApp.Instance().m_deviceinterface.SendCommandToDevice(tmp + "\r\n");
+                    }
+                }
+            }catch(Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
             }
         }
 
         private void cmdShutterClose(object sender, object e)
         {
-            foreach (string gcode in UVDLPApp.Instance().m_buildparms.ShutterCloseCode.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            try
             {
-                if ((gcode[0] != ';') && (gcode[0] != '<'))
-                    UVDLPApp.Instance().m_deviceinterface.SendCommandToDevice(gcode);
+                //get the right parameter from the machine configuration
+                string openshutter = "cmdCloseShutter";
+                CWParameter parm = UVDLPApp.Instance().m_printerinfo.userParams.paramDict[openshutter];
+                if (parm != null)
+                {
+                    //get the value                    
+                    GuiParam<string> dat = (GuiParam<string>)parm;
+                    string cmds = dat.GetVal();
+                    foreach (string gcode in cmds.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        string tmp = gcode.Trim();
+                        UVDLPApp.Instance().m_deviceinterface.SendCommandToDevice(tmp + "\r\n");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
             }
         }
 

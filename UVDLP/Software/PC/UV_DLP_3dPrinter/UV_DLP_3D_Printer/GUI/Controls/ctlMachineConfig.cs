@@ -448,6 +448,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
 
             string filename = UVDLPApp.Instance().m_PathMachines + UVDLPApp.m_pathsep + cmbMachineProfiles.SelectedItem.ToString() + ".machine";
             ConfigUpdated(filename);
+            //set the user parameters
+            ctlUserParamEdit1.Setup(m_config.userParams);
         }
 
         private void ctlMachineConfig_Load(object sender, EventArgs e)

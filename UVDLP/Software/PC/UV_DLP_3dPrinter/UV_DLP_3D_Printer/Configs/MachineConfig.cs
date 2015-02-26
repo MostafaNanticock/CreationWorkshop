@@ -45,7 +45,7 @@ namespace UV_DLP_3D_Printer
         public DeviceDriverConfig m_driverconfig;
         //public MonitorConfig m_monitorconfig;
         public List<MonitorConfig> m_lstMonitorconfigs; // starting to add support for multiple monitors
-
+        public UserParameterList userParams;
         // this is held here in the mahcine profile to copy to the slicing profile
         // this rendering size can be different than the monitor size, it can be the size 
         //of multiple monitors stiched together
@@ -106,6 +106,7 @@ namespace UV_DLP_3D_Printer
 
         public bool Load(string filename)
         {
+
             m_filename = filename;
             m_lstMonitorconfigs.Clear(); // clear any previously loaded monitors
             m_name = Path.GetFileNameWithoutExtension(filename);
@@ -157,6 +158,8 @@ namespace UV_DLP_3D_Printer
                 xh.Save(FILE_VERSION);
             }
             CorrectMonitorConfig();
+            userParams = new UserParameterList();
+            xh.LoadUserParamList(userParams);
             return retval;
         }
 
@@ -206,6 +209,7 @@ namespace UV_DLP_3D_Printer
                 monc.Save(xh, mc);
             }
             //m_monitorconfig.Save(xh, mc);
+            xh.SaveUserParamList(userParams);
             xh.Save(FILE_VERSION);
             return retval;
         }
@@ -225,6 +229,7 @@ namespace UV_DLP_3D_Printer
             m_machinetype = eMachineType.UV_DLP;
             m_multimontype = eMultiMonType.eVertical;
             MachineControls = "";
+            userParams = new UserParameterList();
             CalcPixPerMM();
         }
         // create a null loop-back machine for test

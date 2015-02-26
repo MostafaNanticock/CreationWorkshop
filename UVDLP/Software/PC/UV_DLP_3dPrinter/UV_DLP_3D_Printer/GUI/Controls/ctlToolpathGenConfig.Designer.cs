@@ -876,7 +876,7 @@
             this.tbGCode.Location = new System.Drawing.Point(4, 27);
             this.tbGCode.Margin = new System.Windows.Forms.Padding(4);
             this.tbGCode.Name = "tbGCode";
-            this.tbGCode.Size = new System.Drawing.Size(1023, 580);
+            this.tbGCode.Size = new System.Drawing.Size(1023, 561);
             this.tbGCode.TabIndex = 7;
             this.tbGCode.Text = "GCode";
             this.tbGCode.UseVisualStyleBackColor = true;
@@ -899,13 +899,11 @@
             "Start",
             "Pre-Slice",
             "Lift",
-            "End",
-						"Open-Shutter",
-						"Close-Shutter"});
+            "End"});
             this.lbGCodeSection.Location = new System.Drawing.Point(5, 52);
             this.lbGCodeSection.Margin = new System.Windows.Forms.Padding(4);
             this.lbGCodeSection.Name = "lbGCodeSection";
-            this.lbGCodeSection.Size = new System.Drawing.Size(161, 256);
+            this.lbGCodeSection.Size = new System.Drawing.Size(161, 112);
             this.lbGCodeSection.TabIndex = 9;
             this.lbGCodeSection.SelectedIndexChanged += new System.EventHandler(this.lbGCodeSection_SelectedIndexChanged);
             // 

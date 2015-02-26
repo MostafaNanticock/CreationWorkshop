@@ -360,7 +360,7 @@
         0F,
         0F,
         0F};
-            this.cShutter.Size = new System.Drawing.Size(202, 50);
+            this.cShutter.Size = new System.Drawing.Size(202, 62);
             this.cShutter.StyleName = null;
             this.cShutter.TabIndex = 5;
             this.cShutter.Title = "Shutter:";
