@@ -182,7 +182,7 @@ namespace UV_DLP_3D_Printer
         /// </summary>
         /// <param name="curz"></param>
         /// <returns></returns>
-        public Slice GetSliceImmediate(float curz)
+        public Slice GetSliceImmediate(float curz, bool SliceSelectedOnly)
         {
             try
             {
@@ -191,6 +191,9 @@ namespace UV_DLP_3D_Printer
                 sl.m_segments = new List<PolyLine3d>();
                 foreach (Object3d obj in UVDLPApp.Instance().Engine3D.m_objects)
                 {
+                    if (SliceSelectedOnly && !obj.m_inSelectedList)
+                        continue;
+
                     if (curz >= obj.m_min.z && curz <= obj.m_max.z) // only slice from the bottom to the top of the objects
                     {
                         List<Polygon> lstply = GetZPolys(obj, curz);//get a list of polygons at this slice z height that potentially intersect
@@ -210,6 +213,12 @@ namespace UV_DLP_3D_Printer
         
         }
 
+        public Slice GetSliceImmediate(float curz)
+        {
+            return GetSliceImmediate(curz, false);
+        }
+
+        
         /// <summary>
         /// This function will immediately return a bitmap slice at the specified Z-Level
         /// If lstPoly is not null, a list of vector polylines representing the slice is returned

@@ -75,6 +75,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
 
             mainViewSplitContainer.Panel1Collapsed = true;
 
+            UVDLPApp.Instance().m_undoer.parentControl = this;
             UVDLPApp.Instance().m_undoer.AsociateUndoButton(buttUndo);
             UVDLPApp.Instance().m_undoer.AsociateRedoButton(buttRedo);
 

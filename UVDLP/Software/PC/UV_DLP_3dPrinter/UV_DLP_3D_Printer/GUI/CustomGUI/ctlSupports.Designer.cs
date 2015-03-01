@@ -33,6 +33,7 @@
             this.buttGenBase = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttAddSupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttAutoSupport = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.chkSupportAllScene = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.panelSuppotShape = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.numFB1 = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlNumber();
@@ -94,6 +95,7 @@
             this.flowLayoutPanel1.Controls.Add(this.buttGenBase);
             this.flowLayoutPanel1.Controls.Add(this.buttAddSupport);
             this.flowLayoutPanel1.Controls.Add(this.buttAutoSupport);
+            this.flowLayoutPanel1.Controls.Add(this.chkSupportAllScene);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(8, 73);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -113,8 +115,8 @@
             this.buttGenBase.GuiAnchor = null;
             this.buttGenBase.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttGenBase.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttSupBase;
-            this.buttGenBase.Location = new System.Drawing.Point(0, 5);
-            this.buttGenBase.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.buttGenBase.Location = new System.Drawing.Point(5, 5);
+            this.buttGenBase.Margin = new System.Windows.Forms.Padding(5);
             this.buttGenBase.Name = "buttGenBase";
             this.buttGenBase.Size = new System.Drawing.Size(40, 40);
             this.buttGenBase.StyleName = null;
@@ -137,7 +139,7 @@
             this.buttAddSupport.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttAddSupport.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttAddSupport;
             this.buttAddSupport.Location = new System.Drawing.Point(50, 5);
-            this.buttAddSupport.Margin = new System.Windows.Forms.Padding(5);
+            this.buttAddSupport.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.buttAddSupport.Name = "buttAddSupport";
             this.buttAddSupport.Size = new System.Drawing.Size(40, 40);
             this.buttAddSupport.StyleName = null;
@@ -168,6 +170,28 @@
             this.ctlToolTip1.SetToolTip(this.buttAutoSupport, "Generate Automatic Supports");
             this.buttAutoSupport.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttAutoSupport.Click += new System.EventHandler(this.buttAutoSupport_Click);
+            // 
+            // chkSupportAllScene
+            // 
+            this.chkSupportAllScene.BackColor = System.Drawing.Color.Navy;
+            this.chkSupportAllScene.Checked = true;
+            this.chkSupportAllScene.CheckImage = global::UV_DLP_3D_Printer.Properties.Resources.buttChecked;
+            this.chkSupportAllScene.Gapx = 5;
+            this.chkSupportAllScene.Gapy = 5;
+            this.chkSupportAllScene.GLBackgroundImage = null;
+            this.chkSupportAllScene.GLImage = null;
+            this.chkSupportAllScene.GLVisible = false;
+            this.chkSupportAllScene.GuiAnchor = null;
+            this.chkSupportAllScene.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.chkSupportAllScene.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttScene;
+            this.chkSupportAllScene.Location = new System.Drawing.Point(140, 5);
+            this.chkSupportAllScene.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.chkSupportAllScene.Name = "chkSupportAllScene";
+            this.chkSupportAllScene.Size = new System.Drawing.Size(40, 40);
+            this.chkSupportAllScene.StyleName = null;
+            this.chkSupportAllScene.TabIndex = 26;
+            this.ctlToolTip1.SetToolTip(this.chkSupportAllScene, "Checked: Support entire scene\r\nUnchecked: Support selected objects only");
+            this.chkSupportAllScene.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             // 
             // panelSuppotShape
             // 
@@ -524,7 +548,7 @@
             this.cmbSupType.Location = new System.Drawing.Point(7, 33);
             this.cmbSupType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmbSupType.Name = "cmbSupType";
-            this.cmbSupType.Size = new System.Drawing.Size(223, 24);
+            this.cmbSupType.Size = new System.Drawing.Size(223, 21);
             this.cmbSupType.TabIndex = 35;
             this.cmbSupType.SelectedIndexChanged += new System.EventHandler(this.cmbSupType_SelectedIndexChanged);
             // 
@@ -801,5 +825,6 @@
         public ctlImageButton buttGenBase;
         public ctlNumber numGap;
         public System.Windows.Forms.Label label4;
+        public ctlImageButton chkSupportAllScene;
     }
 }

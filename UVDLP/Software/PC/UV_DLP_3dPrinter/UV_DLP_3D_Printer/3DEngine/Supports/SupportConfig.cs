@@ -45,6 +45,7 @@ namespace UV_DLP_3D_Printer.Configs
         public int vdivs; // vertical divisions, not used
         public int cdivs; // circular divisions - used for cylinderical supports
         public bool m_onlydownward; // generate supports only on the downward facing polygons in the scene / object
+        public bool m_onlyselected;
         public eAUTOSUPPORTTYPE eSupType;
         public eCrossSectionShape eSectionShape;
 
@@ -61,6 +62,7 @@ namespace UV_DLP_3D_Printer.Configs
             fbrad2 = .2; // for intra-object support
             //vdivs = 1; // divisions vertically
             m_onlydownward = false;
+            m_onlyselected = false;
             downwardAngle = 45;
             cdivs = 11; // a prime number
             eSectionShape = eCrossSectionShape.eCircle;
@@ -76,6 +78,7 @@ namespace UV_DLP_3D_Printer.Configs
             sc.hbrad = hbrad;
             sc.htrad = htrad;
             sc.m_onlydownward = m_onlydownward;
+            sc.m_onlyselected = m_onlyselected;
             sc.downwardAngle = downwardAngle;
             sc.mingap = mingap;
             sc.vdivs = vdivs;

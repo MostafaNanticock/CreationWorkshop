@@ -666,7 +666,7 @@ namespace UV_DLP_3D_Printer
                 // case 1: island is not supported at all.
                 if (si.supportedCount == 0)
                 {
-                    //SupportLooseIsland(searchmap, si, lbm, lbmz, lbms, sl);
+                    SupportLooseIsland(searchmap, si, lbm, lbmz, lbms, sl);
                 }
                 // case 2: island is partially supported
                 else
@@ -722,7 +722,7 @@ namespace UV_DLP_3D_Printer
             }
         
 
-        // alternative method of support detection
+        // alternative method of support detection. not used at the moment
         void ProcessSlice2(List<SupportLocation> sl)
         {
             int npix = m_asp.xres * m_asp.yres;
@@ -892,7 +892,7 @@ namespace UV_DLP_3D_Printer
                     }
                     RaiseSupportEvent(UV_DLP_3D_Printer.SupportEvent.eProgress, "" + c + "/" + numslices, null);
 
-                    Slice sl = UVDLPApp.Instance().m_slicer.GetSliceImmediate(zlev);
+                    Slice sl = UVDLPApp.Instance().m_slicer.GetSliceImmediate(zlev, m_sc.m_onlyselected);
                     zlev += (float)config.ZThick;
 
                     if ((sl == null) || (sl.m_segments == null) || (sl.m_segments.Count == 0))
@@ -1029,6 +1029,9 @@ namespace UV_DLP_3D_Printer
 
                     foreach (ISectData htd in lstISects)
                     {
+                        if (m_sc.m_onlyselected && !htd.obj.m_inSelectedList)
+                            continue;
+
                         if (htd.obj.tag == Object3d.OBJ_NORMAL)  // if this is not another support or the ground
                         {
                             htd.poly.CalcNormal();
@@ -1084,6 +1087,8 @@ namespace UV_DLP_3D_Printer
             foreach (ISectData htd in lstISects)
             {
                 if (htd.obj.tag != Object3d.OBJ_NORMAL)
+                    continue;
+                if (m_sc.m_onlyselected && !htd.obj.m_inSelectedList)
                     continue;
                 float zdiff = Math.Abs(htd.intersect.z - z);
                 if ((zdiff < 1) && (zdiff < minzdiff))

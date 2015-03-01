@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using UV_DLP_3D_Printer;
 using UV_DLP_3D_Printer.GUI.CustomGUI;
 
@@ -30,6 +31,7 @@ namespace Engine3D
         ctlImageButton m_undoButt = null;
         ctlImageButton m_redoButt = null;
         int m_undopointer;
+        public Control parentControl;
 
         public Undoer()
         {
@@ -198,13 +200,20 @@ namespace Engine3D
 
         protected void UpdateButtons()
         {
-            if (m_undoButt != null)
+            if (parentControl.InvokeRequired)
             {
-                m_undoButt.Enabled = m_undopointer != 0;
+                parentControl.BeginInvoke(new MethodInvoker(delegate() { UpdateButtons(); }));
             }
-            if (m_redoButt != null)
+            else
             {
-                m_redoButt.Enabled = m_undopointer < m_undoItemList.Count;
+                if (m_undoButt != null)
+                {
+                    m_undoButt.Enabled = m_undopointer != 0;
+                }
+                if (m_redoButt != null)
+                {
+                    m_redoButt.Enabled = m_undopointer < m_undoItemList.Count;
+                }
             }
         }
 

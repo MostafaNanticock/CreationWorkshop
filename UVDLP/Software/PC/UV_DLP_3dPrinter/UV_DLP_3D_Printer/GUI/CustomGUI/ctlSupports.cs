@@ -92,6 +92,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 numX.FloatVal = (float)m_sc.xspace;
                 numGap.FloatVal = (float)m_sc.mingap;
                 chkOnlyDownward.Checked = m_sc.m_onlydownward;
+                chkSupportAllScene.Checked = !m_sc.m_onlyselected;
                 numDownAngle.FloatVal = (float)m_sc.downwardAngle;
                 switch (m_sc.eSupType)
                 {
@@ -126,6 +127,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 m_sc.xspace = (double)numX.FloatVal;
                 m_sc.mingap = (double)numGap.FloatVal;
                 m_sc.m_onlydownward = chkOnlyDownward.Checked;
+                m_sc.m_onlyselected = !chkSupportAllScene.Checked;
                 m_sc.downwardAngle = numDownAngle.FloatVal;
                 pictureSupport.Invalidate();
                 switch (cmbSupType.SelectedIndex) 
@@ -215,7 +217,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         private void buttGenBase_Click(object sender, EventArgs e)
         {
-            UVDLPApp.Instance().AddSupportBase();
+            UVDLPApp.Instance().AddSupportBase(!chkSupportAllScene.Checked);
         }
         
         private void buttAutoSupport_Click(object sender, EventArgs e)

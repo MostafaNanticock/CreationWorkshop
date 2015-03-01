@@ -241,9 +241,9 @@ namespace UV_DLP_3D_Printer
                         break;
                 }
             }
-            catch (Exception ) 
+            catch (Exception ex) 
             {
-                //DebugLogger.Instance().LogError(ex.Message);       // look more into the error being raised here on slicing completed
+                DebugLogger.Instance().LogError(ex.Message);       // look more into the error being raised here on slicing completed
             }
         }
         public void RaiseAppEvent(eAppEvent ev, String message) 
@@ -371,12 +371,15 @@ namespace UV_DLP_3D_Printer
         /// <summary>
         /// Adds a support base plate under objects 
         /// </summary>
-        public void AddSupportBase()
+        public void AddSupportBase(bool selectedObjectsOnly)
         {
             // add support base - SHS
             List<Object3d> stdObs = new List<Object3d>();
             foreach (Object3d obj in UVDLPApp.Instance().m_engine3d.m_objects)
             {
+                if (selectedObjectsOnly && !obj.m_inSelectedList)
+                    continue;
+
                 if ((obj != null) && (obj.tag == Object3d.OBJ_NORMAL))
                     stdObs.Add(obj);
             }
@@ -400,6 +403,8 @@ namespace UV_DLP_3D_Printer
             }
             RaiseAppEvent(eAppEvent.eModelAdded, "Support bases Created");
         }
+
+
         /// <summary>
         /// Removes the currently selected object
         /// </summary>
