@@ -870,7 +870,10 @@ namespace UV_DLP_3D_Printer.GUI
         {
             frmPrefs prefs = new frmPrefs();
             prefs.ShowDialog();
-
+        }
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UVDLPApp.Instance().m_exporter.ShowDialog();
         }
         public void cmdStop_Click(object sender, object e)
         {

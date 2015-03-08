@@ -401,6 +401,12 @@
     </Compile>
     <Compile Include="GUI\CustomGUI\GuiConfigDB.cs" />
     <Compile Include="GUI\CustomGUI\GuiConfigManager.cs" />
+    <Compile Include="GUI\ExportControls\ctlExportB9Creator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\ExportControls\ctlExportB9Creator.Designer.cs">
+      <DependentUpon>ctlExportB9Creator.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -430,6 +436,12 @@
     </Compile>
     <Compile Include="GUI\frmConnection.Designer.cs">
       <DependentUpon>frmConnection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\frmExport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\frmExport.Designer.cs">
+      <DependentUpon>frmExport.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\frmMain2.cs">
       <SubType>Form</SubType>
@@ -510,8 +522,10 @@
     <Compile Include="Slicing\PreProcessor.cs" />
     <Compile Include="Slicing\SliceFile.cs" />
     <Compile Include="3DEngine\Supports\SupportGenerator.cs" />
+    <Compile Include="Utility\B9JExporter.cs" />
     <Compile Include="Utility\BinPacker.cs" />
     <Compile Include="Utility\CallbackHandler.cs" />
+    <Compile Include="Utility\CWExporter.cs" />
     <Compile Include="Utility\DebugLogger.cs" />
     <Compile Include="GUI\frmDLP.cs">
       <SubType>Form</SubType>
@@ -544,6 +558,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Controls\ctlGcodeView.resx">
       <DependentUpon>ctlGcodeView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Controls\ctlMainConfig.resx">
       <DependentUpon>ctlMainConfig.cs</DependentUpon>
@@ -644,6 +659,9 @@
     <EmbeddedResource Include="GUI\CustomGUI\frmBmpSplash.resx">
       <DependentUpon>frmBmpSplash.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ExportControls\ctlExportB9Creator.resx">
+      <DependentUpon>ctlExportB9Creator.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>
@@ -661,6 +679,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmDLP.resx">
       <DependentUpon>frmDLP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmExport.resx">
+      <DependentUpon>frmExport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmMain2.resx">
       <DependentUpon>frmMain2.cs</DependentUpon>

@@ -119,6 +119,8 @@ namespace UV_DLP_3D_Printer
         public ServerContact m_sc;
         public AuxBuildCmds m_AuxBuildCmds;
 
+        public frmExport m_exporter;
+
         #region SupportModes
         public enum eSupportEditMode 
         {
@@ -172,6 +174,8 @@ namespace UV_DLP_3D_Printer
             m_gui_config = new GuiConfigManager();
             m_AuxBuildCmds = AuxBuildCmds.Instance(); // make sure the singleton doesn't go away...
             m_sequencemanager = SequenceManager.Instance();
+            m_exporter = new frmExport();
+            m_exporter.RegisterExporter(new B9JExporter());
         }
 
         public enum Platform
