@@ -684,7 +684,7 @@ namespace UV_DLP_3D_Printer
                                             }
                                             else // not null
                                             {
-                                                bmp.Tag = BuildManager.SLICE_NORMAL;
+                                                bmp.Tag = BuildManager.SLICE_NORMAL; // set the tag to normal so it is destroyed
                                             }
                                         }
                                         else

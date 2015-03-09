@@ -165,6 +165,7 @@ namespace UV_DLP_3D_Printer.Slicing
                         ze.Extract(stream);
                         Bitmap bmp = new Bitmap(stream);                        
                         m_zip.Dispose();
+                        bmp.Tag = BuildManager.SLICE_NORMAL; // mark it as normal so it will be disposed.
                         return bmp; // memory for the bitmap is created here, it's disposed of in the dlp forms...
                     }
                     catch (Exception ex )

@@ -40,6 +40,11 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             #endif
         }
 
+        public void ConsoleVisible(bool val) 
+        {
+            buttShowConsole.Visible = val;
+            Refresh();
+        }
         public SplitContainer MessagePanelHolder
         {
             get { return mMessagePanelHolder; }

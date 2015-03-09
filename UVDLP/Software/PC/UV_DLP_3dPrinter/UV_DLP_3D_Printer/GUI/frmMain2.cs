@@ -96,6 +96,7 @@ namespace UV_DLP_3D_Printer.GUI
             ctl3DView1.Enable3dView(true);
             // test new gui config system
             GuiConfigDB gconfdb = new GuiConfigDB();
+            //try to load the GUI
             gconfdb.LoadConfiguration(global::UV_DLP_3D_Printer.Properties.Resources.GuiConfig);
             UVDLPApp.Instance().m_gui_config.ApplyConfiguration(gconfdb);
             gconfdb.SaveConfiguration("GuiConfigTest");
@@ -111,6 +112,7 @@ namespace UV_DLP_3D_Printer.GUI
                 testToolStripMenuItem.Visible = false;
                 testMachineControlToolStripMenuItem.Visible = false;
                 loadGUIConfigToolStripMenuItem.Visible = false;
+                checkForUpdatesToolStripMenuItem.Visible = false;
             #endif
                 SetTitle();
             UVDLPApp.Instance().PerformPluginCommand("MainFormLoadedCommand", true);

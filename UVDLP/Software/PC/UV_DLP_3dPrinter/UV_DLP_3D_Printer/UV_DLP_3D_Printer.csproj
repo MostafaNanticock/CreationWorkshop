@@ -55,7 +55,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>cwlogo_dl.ico</ApplicationIcon>
+    <ApplicationIcon>ccw_slice_icon_final.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Releasex86|AnyCPU'">
     <OutputPath>bin\Releasex86\</OutputPath>
