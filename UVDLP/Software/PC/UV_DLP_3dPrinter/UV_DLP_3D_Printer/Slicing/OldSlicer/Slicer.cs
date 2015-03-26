@@ -141,6 +141,7 @@ namespace UV_DLP_3D_Printer
                 {
                     g.DrawImage(source, 0, 0, source.Width, source.Height);
                 }
+                b.Tag = BuildManager.SLICE_NORMAL; // added to dispose of old images
                 return b;
             }
             catch { return null; }
@@ -156,6 +157,7 @@ namespace UV_DLP_3D_Printer
                 {
                     g.DrawImage(source, 0, 0, source.Width, source.Height);
                 }
+                b.Tag = BuildManager.SLICE_NORMAL;
                 return b;
             }
             catch { return null; }
@@ -171,6 +173,7 @@ namespace UV_DLP_3D_Printer
                     g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                     g.DrawImage(imgToResize, 0, 0, size.Width, size.Height);
                 }
+                b.Tag = BuildManager.SLICE_NORMAL;
                 return b;
             }
             catch { return null; }

@@ -55,7 +55,14 @@ namespace UV_DLP_3D_Printer
 
         public void CheckForUpdate()
         {
-        
+            //post a query to a php page on my site
+            // get the response
+            //parse it, check version numbers
+            //if we can update,
+            // prompt the user
+            // if the user agrees,
+            //launch the upgrade helper program
+            // with params
         }
 
         public void UpdateRegInfo() 

@@ -775,6 +775,7 @@
             this.testNewSlicerToolStripMenuItem.Name = "testNewSlicerToolStripMenuItem";
             this.testNewSlicerToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.testNewSlicerToolStripMenuItem.Text = "Test new slicer";
+            this.testNewSlicerToolStripMenuItem.Visible = false;
             this.testNewSlicerToolStripMenuItem.Click += new System.EventHandler(this.testNewSlicerToolStripMenuItem_Click);
             // 
             // loadGUIConfigToolStripMenuItem
@@ -829,6 +830,7 @@
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
             this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
+            this.checkForUpdatesToolStripMenuItem.Visible = false;
             this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
             // frmMain2
