@@ -584,9 +584,13 @@ namespace UV_DLP_3D_Printer
                             //check time var
                             if (GetTimerValue() >= nextlayertime)
                             {
-                             //   DebugLogger.Instance().LogInfo("elapsed Layer time: " + GetTimerValue().ToString());
-                             //   DebugLogger.Instance().LogInfo("Diff = " + (GetTimerValue() - nextlayertime).ToString());
+                                //   DebugLogger.Instance().LogInfo("elapsed Layer time: " + GetTimerValue().ToString());
+                                //   DebugLogger.Instance().LogInfo("Diff = " + (GetTimerValue() - nextlayertime).ToString());
                                 m_state = BuildManager.STATE_DO_NEXT_COMMAND; // move onto next layer
+                            }
+                            else
+                            {
+                                Thread.Sleep(1); //  sleep for 1 ms to eliminate unnecessary cpu usage.
                             }
                             break;
                         case BuildManager.STATE_IDLE:
