@@ -113,6 +113,7 @@ namespace UV_DLP_3D_Printer.GUI
                 testMachineControlToolStripMenuItem.Visible = false;
                 loadGUIConfigToolStripMenuItem.Visible = false;
                 checkForUpdatesToolStripMenuItem.Visible = false;
+                //miiManualControlToolStripMenuItem.Visible = false;
             #endif
                 SetTitle();
             UVDLPApp.Instance().PerformPluginCommand("MainFormLoadedCommand", true);
@@ -1207,6 +1208,12 @@ namespace UV_DLP_3D_Printer.GUI
         {
             //check for an update, contact the server
             UVDLPApp.Instance().m_sc.CheckForUpdate();
+        }
+
+        private void miiManualControlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmMiiTest mii = new frmMiiTest();
+            mii.Show();
         }
     }
 }

@@ -401,6 +401,12 @@
     </Compile>
     <Compile Include="GUI\CustomGUI\GuiConfigDB.cs" />
     <Compile Include="GUI\CustomGUI\GuiConfigManager.cs" />
+    <Compile Include="GUI\CustomGUI\sMiiCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\CustomGUI\sMiiCtrl.Designer.cs">
+      <DependentUpon>sMiiCtrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ExportControls\ctlExportB9Creator.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -454,6 +460,12 @@
     </Compile>
     <Compile Include="GUI\frmMeshHoles.Designer.cs">
       <DependentUpon>frmMeshHoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\frmMiiTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\frmMiiTest.Designer.cs">
+      <DependentUpon>frmMiiTest.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\frmPluginManager.cs">
       <SubType>Form</SubType>
@@ -659,6 +671,9 @@
     <EmbeddedResource Include="GUI\CustomGUI\frmBmpSplash.resx">
       <DependentUpon>frmBmpSplash.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CustomGUI\sMiiCtrl.resx">
+      <DependentUpon>sMiiCtrl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\ExportControls\ctlExportB9Creator.resx">
       <DependentUpon>ctlExportB9Creator.cs</DependentUpon>
     </EmbeddedResource>
@@ -688,6 +703,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmMeshHoles.resx">
       <DependentUpon>frmMeshHoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmMiiTest.resx">
+      <DependentUpon>frmMiiTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmPluginManager.resx">
       <DependentUpon>frmPluginManager.cs</DependentUpon>

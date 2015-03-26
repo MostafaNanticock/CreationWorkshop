@@ -39,8 +39,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             {
                 grpLift.Hide();
                 groupBox3.Hide(); // image reflection
-                groupBox6.Hide();
-                groupBox4.Hide();
+                groupBox6.Hide();                
                 tabOptions.TabPages.Remove(m_gcodetab);
                 //TabControl
             }
@@ -57,7 +56,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 grpLift.Show();
                 groupBox3.Show(); // image reflection
                 groupBox6.Show();
-                groupBox4.Show();
                 //tabOptions.TabPages["tbGCode"].Show();
                 tabOptions.TabPages.Add(m_gcodetab);
             }
@@ -73,16 +71,16 @@ namespace UV_DLP_3D_Printer.GUI.Controls
            try
            {
                cmbSliceProfiles.Items.Clear();
-               lstSliceProfiles.Items.Clear();
+               
                foreach (string prof in UVDLPApp.Instance().SliceProfiles())
                {
                    cmbSliceProfiles.Items.Add(prof);
-                   lstSliceProfiles.Items.Add(prof);
+               
                }
                //get the current profile name
                string curprof = UVDLPApp.Instance().GetCurrentSliceProfileName();
                cmbSliceProfiles.SelectedItem = curprof;
-               lstSliceProfiles.SelectedItem = curprof;
+               
            }
            catch (Exception ex) 
            {
@@ -93,7 +91,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
        {
            try
            {
-               string shortname = lstSliceProfiles.SelectedItem.ToString();
+               string shortname = cmbSliceProfiles.SelectedItem.ToString();
                string fname = UVDLPApp.Instance().m_PathProfiles;
                fname += UVDLPApp.m_pathsep + shortname + UVDLPApp.m_pathsep;
                return fname;
@@ -111,18 +109,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
            fname += UVDLPApp.m_pathsep + shortname + ".slicing";
            return fname;
        }
-       /*public override void ApplyStyle(ControlStyle ct)
-       {
-           //base.ApplyStyle(ct);
-           //cmdCreate.ApplyStyle(ct);
-           //cmdRemove.ApplyStyle(ct);
-           this.BackColor = Control.DefaultBackColor;
-           this.ForeColor = Control.DefaultForeColor;
-           if (ct.ForeColor != ControlStyle.NullColor)
-           {
-
-           }
-       }*/
 
         private SliceBuildConfig LoadProfile(string shortname) 
         {
@@ -149,27 +135,12 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             return null;
         }
         private void SetValues() 
-        {
-            lblProfName.Text = lstSliceProfiles.SelectedItem.ToString();
+        {            
             chkExport.Checked = m_config.export;
             comboExportSvg.SelectedIndex = m_config.exportsvg;
             comboExportPreview.SelectedItem = m_config.exportpreview.ToString();
             chkExportPNG.Checked = m_config.exportpng;
             chkExport_CheckedChanged(null, null);
-           // groupBox2.Enabled = chkExport.Checked;
-           // chkgengcode.Checked = m_config.exportgcode;
-           // chkExportSlices.Checked = m_config.exportimages;
-            //chkexportsvg.Checked = m_config.exportsvg;
-            /*
-            if (m_config.m_exportopt.ToUpper().Contains("ZIP"))
-            {
-                rbzip.Checked = true;
-            }
-            else 
-            {
-                rbsub.Checked = true;
-            }
-             * */
             txtAAVal.Text = "" + m_config.aaval.ToString();
             txtBlankTime.Text = m_config.blanktime_ms.ToString();
             txtXOffset.Text = m_config.XOffset.ToString();
@@ -177,8 +148,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             txtLiftDistance.Text = m_config.liftdistance.ToString();
             txtSlideTilt.Text = m_config.slidetiltval.ToString();
             chkantialiasing.Checked = m_config.antialiasing;
-            //chkmainliftgcode.Checked = m_config.usemainliftgcode;
-            //grpLift.Enabled = !chkmainliftgcode.Checked;
             txtliftfeed.Text = m_config.liftfeedrate.ToString();
             txtbottomliftfeed.Text = m_config.bottomliftfeedrate.ToString();
 
@@ -195,7 +164,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             UpdateResinList();
             SetResinValues();
 
-           // txtRaiseTime.Text = m_config.raise_time_ms.ToString();
             cmbBuildDirection.Items.Clear();
             foreach(String name in Enum.GetNames(typeof(SliceBuildConfig.eBuildDirection)))
             {
@@ -231,26 +199,16 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             try
             {
                 
-               // if (rbzip.Checked == true)
-               // {
-                    m_config.m_exportopt = "ZIP";
-               // }
-               // else 
-               // {
-               //    m_config.m_exportopt = "SUBDIR";
-               // }
+                m_config.m_exportopt = "ZIP";
                 m_config.blanktime_ms = int.Parse(txtBlankTime.Text);
                 m_config.XOffset = int.Parse(txtXOffset.Text);
                 m_config.YOffset = int.Parse(txtYOffset.Text);
                 m_config.liftdistance = double.Parse(txtLiftDistance.Text);
                 m_config.slidetiltval = double.Parse(txtSlideTilt.Text);
                 m_config.antialiasing = chkantialiasing.Checked;
-                //m_config.usemainliftgcode = chkmainliftgcode.Checked;
                 m_config.liftfeedrate = double.Parse(txtliftfeed.Text);
                 m_config.bottomliftfeedrate = double.Parse(txtbottomliftfeed.Text);
                 m_config.liftretractrate = double.Parse(txtretractfeed.Text);
-                //  m_config.raise_time_ms = int.Parse(txtRaiseTime.Text);
-                //grpLift.Enabled = !chkmainliftgcode.Checked;
                 m_config.m_flipX = chkReflectX.Checked;
                 m_config.m_flipY = chkReflectY.Checked;
                 m_config.m_notes = txtNotes.Text;
@@ -316,12 +274,12 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         private void cmdApply_Click(object sender, EventArgs e)
         {
             if(m_config == null) return;
-            if (lstSliceProfiles.SelectedIndex == -1) return;
+            if(cmbSliceProfiles.SelectedIndex == -1) return;
             try
             {
                 if (GetValues())
                 {
-                    string shortname = lstSliceProfiles.SelectedItem.ToString();
+                    string shortname = cmbSliceProfiles.SelectedItem.ToString();
                     string fname = GetSlicingFilename(shortname);
                     m_config.Save(fname);
                     // make sure main build params are updated if needed
@@ -350,48 +308,23 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 //set this profile to be the active one for the program                
                 string shortname = cmbSliceProfiles.SelectedItem.ToString();
                 string fname = GetSlicingFilename(shortname);
-                UVDLPApp.Instance().LoadBuildSliceProfile(fname);
+                UVDLPApp.Instance().LoadBuildSliceProfile(fname); // load it globally
                 try
                 {
-                    if (groupBox4.Visible == false)
+                    m_config = LoadProfile(shortname); // and again here for this control
+                    if (m_config != null)
                     {
-                        //if the list of all profiles is hidden, then make sure we make the 
-                        // selected all profile item the same as the selected in-use profile
-                        lstSliceProfiles.SelectedIndex = cmbSliceProfiles.SelectedIndex;
+                        SetValues();
+                        lbGCodeSection_SelectedIndexChanged(this, null);
                     }
                 }
                 catch (Exception ex) 
                 {
                     DebugLogger.Instance().LogError(ex);
                 }
+
             }
         }
-
-        private void lstSliceProfiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // get the item
-            if (lstSliceProfiles.SelectedIndex == -1)
-            {
-                //blank items
-                return;
-            }
-            else
-            {
-                string shortname = lstSliceProfiles.SelectedItem.ToString();
-                m_config = LoadProfile(shortname);
-                if (m_config != null)
-                {
-                    SetValues();
-                    lbGCodeSection_SelectedIndexChanged(this, null);
-                }
-                else 
-                {
-                    //blank items
-                }
-                 
-            }
-        }
-
         private void cmdNew_Click(object sender, EventArgs e)
         {
             // prompt for a new name
@@ -416,7 +349,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         {
             try
             {
-                string shortname = lstSliceProfiles.SelectedItem.ToString();
+                string shortname = cmbSliceProfiles.SelectedItem.ToString();
                 if (shortname.ToLower().Contains("default"))
                 {
                     MessageBox.Show("Cannot delete default profile");
@@ -426,9 +359,12 @@ namespace UV_DLP_3D_Printer.GUI.Controls
 
                     string fname = GetSlicingFilename(shortname);
                     File.Delete(fname); // delete the file
-                    string pname = UVDLPApp.Instance().m_PathProfiles + UVDLPApp.m_pathsep + shortname;
+                    //string pname = UVDLPApp.Instance().m_PathProfiles + UVDLPApp.m_pathsep + shortname;
                    // Directory.Delete(pname, true); // no longer creating specific directories for profiles - gcode is now embedded
+                    //choose another profile to select as main profile
+                    cmbSliceProfiles.SelectedIndex = 0; //set to the first profile...
                     PopulateProfiles();
+                    //cmbSliceProfiles
                 }
             }
             catch (Exception ex) 
@@ -455,11 +391,12 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 case "Start":           return m_config.HeaderCode;
                 case "Pre-Slice":       return m_config.PreSliceCode;
                 case "Lift":            return m_config.LiftCode;
-                case "End":             return m_config.FooterCode;
+                case "End": return m_config.FooterCode;
+                case "Layer": return m_config.LayerCode;
             }
             return "";
         }
-
+        /*
         private string GCodeSection2FName() 
         {
             if (lbGCodeSection.SelectedIndex == -1) return "";
@@ -474,7 +411,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             }
             return "";
         }
-
+        */
         private void cmdSaveGCode_Click(object sender, EventArgs e)
         {
             try
@@ -492,11 +429,11 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                // m_config.SaveFile(CurPrefGcodePath() + GCodeSection2FName(), gcode);
                 //really just need to save the profile name here.
                 // make sure main build params are updated if needed
-                string shortname = lstSliceProfiles.SelectedItem.ToString();
+                string shortname = cmbSliceProfiles.SelectedItem.ToString();
                 string fname = GetSlicingFilename(shortname);
                 m_config.Save(fname);
 
-                shortname = lstSliceProfiles.SelectedItem.ToString();
+                shortname = cmbSliceProfiles.SelectedItem.ToString();
                 if (cmbSliceProfiles.SelectedItem.ToString() == shortname)
                 {
                     UVDLPApp.Instance().LoadBuildSliceProfile(GetSlicingFilename(shortname));

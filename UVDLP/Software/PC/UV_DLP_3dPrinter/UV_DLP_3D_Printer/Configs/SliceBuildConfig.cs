@@ -49,6 +49,7 @@ namespace UV_DLP_3D_Printer
         private String m_footercode; // inserted at end of file
         private String m_preslicecode; // inserted before each slice
         private String m_liftcode; // inserted before each slice
+        private String m_layercode; // inserted before each slice
         public int XOffset, YOffset; // the X/Y pixel offset used 
         public String m_exportopt; // export sliced images in ZIP or SUBDIR
         public bool m_flipX; // mirror the x axis
@@ -66,6 +67,16 @@ namespace UV_DLP_3D_Printer
         //need some parms here for auto support
 
         public UserParameterList userParams;
+
+        private String[] m_deflayer = 
+        {
+            ";********** Layer Start ********\r\n", //
+            ";Here you can set any G or M-Code which should be executed per-layer during the build process\r\n",
+            "<slice> $CURSLICE\r\n", 
+            "G91 ;Relative Positioning\r\n",
+            "M17 ;Enable motors\r\n",
+            ";********** Layer End **********\r\n", // 
+        };
 
         private String[] m_defheader = 
         {
@@ -142,6 +153,13 @@ namespace UV_DLP_3D_Printer
                 sb.Append(s);
             return sb.ToString();
         }
+        private string DefGCodeLayer()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (String s in m_deflayer)
+                sb.Append(s);
+            return sb.ToString();
+        }
 
         
         public String HeaderCode
@@ -154,7 +172,12 @@ namespace UV_DLP_3D_Printer
             get { return m_footercode; }
             set { m_footercode = value; }
         }
-
+        public string LayerCode 
+        {
+            get { return m_layercode; }
+            set { m_layercode = value; }
+        
+        }
         public String LiftCode
         {
             get { return m_liftcode; }
@@ -194,7 +217,8 @@ namespace UV_DLP_3D_Printer
             m_footercode = source.m_footercode; // inserted at end of file
             m_preslicecode = source.m_preslicecode; // inserted before each slice
             m_liftcode = source.m_liftcode; // its the main lift code
-
+            m_layercode = source.m_layercode; // its the main lift code
+            
             liftdistance = source.liftdistance;
             direction = source.direction;
             numfirstlayers = source.numfirstlayers;
@@ -297,6 +321,7 @@ namespace UV_DLP_3D_Printer
             m_headercode = DefGCodeHeader();
             m_footercode = DefGCodeFooter();
             m_liftcode = DefGCodeLift();
+            m_layercode = DefGCodeLayer();
             m_preslicecode = DefGCodePreslice();
             inks = new Dictionary<string, InkConfig>();
             selectedInk = "Default";
@@ -388,6 +413,7 @@ namespace UV_DLP_3D_Printer
             m_footercode = xh.GetString(sbc, "GCodeFooter", DefGCodeFooter());
             m_preslicecode = xh.GetString(sbc, "GCodePreslice", DefGCodePreslice());
             m_liftcode = xh.GetString(sbc, "GCodeLift", DefGCodeLift());
+            m_layercode = xh.GetString(sbc, "GCodeLayer", DefGCodeLayer());
             selectedInk = xh.GetString(sbc, "SelectedInk", "Default");
             inks = new Dictionary<string, InkConfig>();
             List<XmlNode> inkNodes = xh.FindAllChildElement(sbc, "InkConfig");
@@ -523,6 +549,7 @@ namespace UV_DLP_3D_Printer
             xh.SetParameter(sbc, "GCodeFooter", m_footercode);
             xh.SetParameter(sbc, "GCodePreslice", m_preslicecode);
             xh.SetParameter(sbc, "GCodeLift", m_liftcode);
+            xh.SetParameter(sbc, "GCodeLayer", m_layercode);
 
             xh.SetParameter(sbc, "SelectedInk", selectedInk);
             foreach (KeyValuePair<string, InkConfig> entry in inks)
