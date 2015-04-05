@@ -77,6 +77,7 @@
             this.testMachineControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testNewSlicerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadGUIConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miiManualControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.plugInsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,7 +85,6 @@
             this.hardwareGuideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.miiManualControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlTopIcons.SuspendLayout();
             this.pnl3dview.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -310,6 +310,7 @@
             this.ctl3DView1.Name = "ctl3DView1";
             this.ctl3DView1.Size = new System.Drawing.Size(405, 412);
             this.ctl3DView1.TabIndex = 0;
+            this.ctl3DView1.Load += new System.EventHandler(this.ctl3DView1_Load);
             // 
             // flowLayoutPanel2
             // 
@@ -787,6 +788,13 @@
             this.loadGUIConfigToolStripMenuItem.Text = "Load GUIConfig";
             this.loadGUIConfigToolStripMenuItem.Click += new System.EventHandler(this.loadGUIConfigToolStripMenuItem_Click);
             // 
+            // miiManualControlToolStripMenuItem
+            // 
+            this.miiManualControlToolStripMenuItem.Name = "miiManualControlToolStripMenuItem";
+            this.miiManualControlToolStripMenuItem.Size = new System.Drawing.Size(218, 24);
+            this.miiManualControlToolStripMenuItem.Text = "Mii Manual Control";
+            this.miiManualControlToolStripMenuItem.Click += new System.EventHandler(this.miiManualControlToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -834,13 +842,6 @@
             this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
             this.checkForUpdatesToolStripMenuItem.Visible = false;
             this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
-            // 
-            // miiManualControlToolStripMenuItem
-            // 
-            this.miiManualControlToolStripMenuItem.Name = "miiManualControlToolStripMenuItem";
-            this.miiManualControlToolStripMenuItem.Size = new System.Drawing.Size(218, 24);
-            this.miiManualControlToolStripMenuItem.Text = "Mii Manual Control";
-            this.miiManualControlToolStripMenuItem.Click += new System.EventHandler(this.miiManualControlToolStripMenuItem_Click);
             // 
             // frmMain2
             // 

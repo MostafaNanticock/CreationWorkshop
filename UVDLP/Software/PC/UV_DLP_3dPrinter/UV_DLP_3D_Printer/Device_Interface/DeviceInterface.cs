@@ -221,7 +221,7 @@ namespace UV_DLP_3D_Printer
                     // raise the data event
                     if (DataEvent != null)
                     {
-                        DataEvent(device, data, length);
+                        DataEvent(device, data, length); // raise an event whenever data is received
                     }
 
                     if (m_alwaysready) 
@@ -407,7 +407,11 @@ namespace UV_DLP_3D_Printer
                 return false;
             }
         }
-
+        //for drivers that need to be kicked every once in a while to set their states.
+        public void SetReady(bool readyforcommand) 
+        {
+            m_ready = readyforcommand;
+        }
         /// <summary>
         /// This will be true if the device is ready for another command
         /// </summary>

@@ -113,6 +113,7 @@ namespace UV_DLP_3D_Printer.GUI
                 testMachineControlToolStripMenuItem.Visible = false;
                 loadGUIConfigToolStripMenuItem.Visible = false;
                 checkForUpdatesToolStripMenuItem.Visible = false;
+                miiManualControlToolStripMenuItem.Visible = false;
                 //miiManualControlToolStripMenuItem.Visible = false;
             #endif
                 SetTitle();
@@ -1214,6 +1215,11 @@ namespace UV_DLP_3D_Printer.GUI
         {
             frmMiiTest mii = new frmMiiTest();
             mii.Show();
+        }
+
+        private void ctl3DView1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

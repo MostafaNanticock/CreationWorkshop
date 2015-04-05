@@ -62,15 +62,20 @@ namespace UV_DLP_3D_Printer
                 return ms.ToArray();
             }
         }
+
         public static Stream ReadFromZip(string zipname, string zipentryname) 
         {
             try
             {
-                ZipFile zip = ZipFile.Read(zipname);
-                ZipEntry ze = zip[zipentryname];
-                Stream stream = new MemoryStream();
-                ze.Extract(stream);
-                return stream;
+                using (ZipFile zip = ZipFile.Read(zipname))
+                {
+                    ZipEntry ze = zip[zipentryname];
+                    Stream stream = new MemoryStream();
+                    ze.Extract(stream);
+                    stream.Seek(0, SeekOrigin.Begin); // rewind
+                    return stream;
+                }
+                
             }
             catch (Exception ex)
             {

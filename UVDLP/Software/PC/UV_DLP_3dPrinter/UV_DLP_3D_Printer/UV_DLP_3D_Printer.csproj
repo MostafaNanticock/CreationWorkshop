@@ -526,6 +526,7 @@
     <Compile Include="Plugin\IPluginHost.cs" />
     <Compile Include="Plugin\PluginEntry.cs" />
     <Compile Include="Plugin\PluginItem.cs" />
+    <Compile Include="Plugin\PluginLite.cs" />
     <Compile Include="Plugin\PluginOptions.cs" />
     <Compile Include="Plugin\PluginStates.cs" />
     <Compile Include="Projector_LCD\prjcmdlst.cs" />

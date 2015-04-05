@@ -211,17 +211,20 @@ namespace UV_DLP_3D_Printer.Drivers
         {
             if (Logging == true)
             {
-                m_commlog.LogRecord(Logger.TimeStamp() +" Writing > "+ message);
+                m_commlog.LogRecord(Logger.TimeStamp() +" Writing : "+ message);
+                byte []b2 = System.Text.Encoding.ASCII.GetBytes(message);
+                m_commlog.LogHexRecord(b2, 0, b2.Length);
             }
         }
         protected void Log(byte[] data, int len) 
         {
             if (Logging == true)
             {
-                m_commlog.LogRecord(Logger.TimeStamp() + "Received: ");
+                m_commlog.LogRecord(Logger.TimeStamp() + " Received: ");
+                string rec = "";
+                rec = System.Text.Encoding.Default.GetString(data);
+                m_commlog.LogRecord(rec);
                 m_commlog.LogHexRecord(data, 0, len);
-                //m_commlog.LogRecord(Logger.TimeStamp() + "\r\n");
-
             }            
         }
         /// <summary>

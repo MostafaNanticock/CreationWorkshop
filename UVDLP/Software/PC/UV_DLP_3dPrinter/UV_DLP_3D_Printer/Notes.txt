@@ -9,15 +9,12 @@ Integrate VCG library
 http://vcg.isti.cnr.it/~cignoni/newvcglib/html/
 builds for 32bit x86 on Linux and Windows
 
-Supports:
-	Generate for entire scene
-	Generate for selected model(s)
+
 
 2.  Is it possible to select a model and have the software show you the unsupported areas that are hanging down. (Ron B.)
 -Find and show lowest point/area in region of model
 -manual & automatic intra-object supports
 	-match angle of supports better to the surface of the polygon normal
-
 
 Automatic layout and support generation of scene?
 
@@ -27,17 +24,16 @@ Automatic layout and support generation of scene?
 	render into zbuffer
 	test each pixel of zbuffer to associate what polygon it came from
 
-
--Fix Pause / Resume feature
-
 Scene/Object info areas should be merged
 
 Pro Version:
-home hobbiest licience 
-	flat fee
+home hobbiest licensce 
+	flat fee - 75$
 
 vendor licience 
 	per-site cost(unlimited) or per-machine license
+	2500$ per year Site license fee
+	Pro-fee? Plugin Creation Fee
 	
 Pro Features:
 -Background/theming color control
@@ -211,6 +207,11 @@ This would give people the possibility to use Other slicers like "VISCam RP" an 
 
 Completed**********************************
 
+03/2015 Supports:
+	Generate for entire scene
+	Generate for selected model(s)
+
+02/01/2015 -Fix Pause / Resume feature
 - Flip the direction of the Debug window text from bottom-up to top-down
 - CW fails to cleanly close - memory/resource issues
 09/14 - serial port auto-detect

@@ -855,6 +855,8 @@ namespace UV_DLP_3D_Printer
             LoadLicenseKeys();
             //look for plug-ins and validate licensing
             ScanForPlugins();
+            //look for 'lite' plugins
+            ScanForPluginsLite();
             // validate those loaded plugins against license keys
             CheckLicensing();
             // initialize the plugins, the main form will send a secondary init after the main app gui is created
@@ -1072,12 +1074,6 @@ namespace UV_DLP_3D_Printer
                                         DebugLogger.Instance().LogInfo("Loaded licensed plugin " + args);
                                     }
                                 }
-                                /*
-                                if (pe.m_enabled && pe.m_licensed) 
-                                {
-                                    DebugLogger.Instance().LogInfo("Loaded licensed plugin " + args);                                
-                                }else if (pe.m_enabled && )                                
-                                 * */
                                 DebugLogger.Instance().LogInfo("Loaded plugin " + args);
                             }
                         }
@@ -1086,6 +1082,64 @@ namespace UV_DLP_3D_Printer
                     {
                         DebugLogger.Instance().LogError(ex.Message);
                     }
+                }
+            }
+        }
+        /// <summary>
+        /// Loading 'lite' plugins from zip file .plg files
+        /// </summary>
+        public void ScanForPluginsLite()
+        {
+
+            // load the list of plugin states
+            string picn = m_apppath + m_pathsep + "pluginconfig.cfg"; // plugin configuration name
+            m_pluginstates.Load(picn);
+
+            // get a list of dll's in this current directory
+            // try to register them as a plug-in
+            string[] filePaths = Directory.GetFiles(m_apppath, "*.plg");
+            foreach (String pluginname in filePaths)
+            {
+                try
+                {
+                    
+                        // create an instance of the plugin
+                    PluginLite pll = new PluginLite();
+                    pll.m_filename = pluginname;
+                    IPlugin plug = (IPlugin)pll;
+                    string args = Path.GetFileNameWithoutExtension(pluginname);
+                    
+                    // create an entry for the plugin
+                    PluginEntry pe = new PluginEntry(plug, args);
+                    //add the entry to the list of plugins
+                    m_plugins.Add(pe);
+                    //mark the plugin as enabled by default
+                    pe.m_enabled = true;
+                    if (m_pluginstates.InList(args))
+                    {
+                        // this plugin is listed in the disabled list.
+                        DebugLogger.Instance().LogInfo("Plugin " + args + " marked disabled");
+                        pe.m_enabled = false;
+                    }
+                    //get the vendor id of the newly loaded plugin
+                    int vid = plug.GetInt("VendorID");
+                    //look for the license key for this plugin
+                    LicenseKey lk = KeyRing.Instance().Find(vid);
+                    // if we found it, mark it as licensed
+                    if (lk != null)
+                    {
+                        //initialize the plugin by setting the host.
+                        if (pe.m_enabled)
+                        {
+                            plug.Host = this; // this will initialize the plugin - the plugin's init function will be called
+                            DebugLogger.Instance().LogInfo("Loaded licensed plugin " + args);
+                        }
+                    }
+                    DebugLogger.Instance().LogInfo("Loaded plugin " + args);                                       
+                }
+                catch (Exception ex)
+                {
+                    DebugLogger.Instance().LogError(ex.Message);
                 }
             }
         }

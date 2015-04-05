@@ -13,6 +13,7 @@ using UV_DLP_3D_Printer._3DEngine;
 using UV_DLP_3D_Printer.Plugin;
 using UV_DLP_3D_Printer.Util.Sequence;
 using System.Diagnostics;
+using Ionic.Zip;
 
 namespace UV_DLP_3D_Printer.GUI.CustomGUI
 {
@@ -657,6 +658,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             Controls = new Dictionary<string, Control>();
             Buttons = new Dictionary<string, ctlImageButton>();
             */
+            
             GuiControlStylesDict = new Dictionary<string, GuiControlStyle>();
             GuiDecorItemsDict = new Dictionary<string,GuiDecorItem>();
 
@@ -683,6 +685,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
             PreviewMode = false;
         }
+
 
         public Control TopLevelControl
         {
@@ -1479,7 +1482,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 return defVal;
             return img;
         }
-
+        public 
         string FixDockingVal(string origdock)
         {
             if (origdock == null)

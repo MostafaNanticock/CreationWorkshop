@@ -576,6 +576,7 @@ namespace UV_DLP_3D_Printer
                             //start things off, reset some variables
                             RaiseStatusEvent(eBuildStatus.eBuildStarted, "Build Started");
                             m_state = BuildManager.STATE_DO_NEXT_COMMAND; // go to the first layer
+                            UVDLPApp.Instance().m_deviceinterface.SetReady(true);// say we're ready
                             m_gcodeline = 0; // set the start line
                             m_curlayer = 0;
                             m_printstarttime = new DateTime();
@@ -616,6 +617,9 @@ namespace UV_DLP_3D_Printer
                             {
                                 // go through the gcode, line by line
                                 line = m_gcode.Lines[m_gcodeline++];
+#if (DEBUG)
+                                DebugLogger.Instance().LogInfo("Building : "+line);
+#endif
                             }
                             else
                             {
