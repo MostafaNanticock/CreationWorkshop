@@ -27,7 +27,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         List<GuiDecorItem> BgndDecorList;
         List<GuiDecorItem> FgndDecorList;
         ResourceManager Res; // the resource manager for the main CW application
-        IPlugin Plugin;
+        IPlugin Plugin; // not used quite yet...
         Control mTopLevelControl = null;
         public GuiControlStyle DefaultControlStyle;
         public GuiControlStyle DefaultButtonStyle;

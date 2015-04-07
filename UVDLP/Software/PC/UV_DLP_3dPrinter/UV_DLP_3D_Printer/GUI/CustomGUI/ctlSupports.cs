@@ -372,7 +372,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 case SupportConfig.eAUTOSUPPORTTYPE.eBON:
                     chkOnlyDownward.Visible = true;
                     //labelAutoSup.Visible = true;
-                    labelAutoSup.Text = "Automatic Sipport";
+                    labelAutoSup.Text = "Automatic Support";
                     label6.Visible = true;
                     label7.Visible = true;
                     numX.Visible = true;

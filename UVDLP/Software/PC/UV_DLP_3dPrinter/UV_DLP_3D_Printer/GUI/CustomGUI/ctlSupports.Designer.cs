@@ -521,7 +521,7 @@
             this.numGap.Increment = 0.1F;
             this.numGap.IntVal = 1;
             this.numGap.IsFloat = true;
-            this.numGap.Location = new System.Drawing.Point(24, 116);
+            this.numGap.Location = new System.Drawing.Point(49, 116);
             this.numGap.Margin = new System.Windows.Forms.Padding(4);
             this.numGap.MaxFloat = 20F;
             this.numGap.MaxInt = 1000;
@@ -548,7 +548,7 @@
             this.cmbSupType.Location = new System.Drawing.Point(7, 33);
             this.cmbSupType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmbSupType.Name = "cmbSupType";
-            this.cmbSupType.Size = new System.Drawing.Size(223, 21);
+            this.cmbSupType.Size = new System.Drawing.Size(223, 24);
             this.cmbSupType.TabIndex = 35;
             this.cmbSupType.SelectedIndexChanged += new System.EventHandler(this.cmbSupType_SelectedIndexChanged);
             // 
@@ -663,7 +663,7 @@
             // 
             this.labelAutoSup.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.labelAutoSup.ForeColor = System.Drawing.Color.White;
-            this.labelAutoSup.Location = new System.Drawing.Point(4, 91);
+            this.labelAutoSup.Location = new System.Drawing.Point(0, 91);
             this.labelAutoSup.Name = "labelAutoSup";
             this.labelAutoSup.Size = new System.Drawing.Size(136, 15);
             this.labelAutoSup.TabIndex = 32;

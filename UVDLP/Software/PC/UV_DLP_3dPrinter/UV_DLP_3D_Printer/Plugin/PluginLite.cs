@@ -10,14 +10,19 @@ using System.Windows.Forms;
 namespace UV_DLP_3D_Printer.Plugin
 {
     /// <summary>
-    /// This class loads and saves to zip file that are the .pcw file format - Plugin Creatin Workshop
+    /// This class loads and saves to zip file that are the .pcw file format - Plugin Creation Workshop
     /// this file can contain the following:
     /// 1 guiconfig.xml file
     /// 0 or more machine config files
     /// 0 or moe slicing profile files
     /// 
+    /// The slicing profiles will copy into the main /Profiles directory ONLY if they don't exist there already
+    /// The machine profiles will copy into the main /Machine directory ONLY if they don't exist there already
+    /// 
+    /// 
     /// This is a 'lite' plugin desing for the following:
-    /// change remove the splash screen
+    /// 
+    /// change/remove the splash screen
     /// change the about screen
     /// change the toolbar icon pictures
     /// remove toolbar icons
@@ -36,17 +41,20 @@ namespace UV_DLP_3D_Printer.Plugin
             new  PluginItem ("Description",ePlItemType.eString,0),
             new  PluginItem("Icon",ePlItemType.eImage,0),
             new  PluginItem("Splash",ePlItemType.eImage,0),
+            new  PluginItem("About",ePlItemType.eImage,0),            
             new  PluginItem("VendorID",ePlItemType.eInt,0),
             new  PluginItem("GuiConfig",ePlItemType.eGuiConfig,0),
         };
-        private IPluginHost m_host;
+        private IPluginHost m_host; // the host of this program is UVDLPapp
         public string m_filename; // the name of this zip file
         private static string m_Vendorname = "Envision Labs";        
-        private static int m_VendorID = 0x1000; // changing this to CWKeygenVIDs class static member crashed this. - need to keep this synced with Licensing dll VIDs
+        private static int m_VendorID = 0x1000; //
         private static string m_PluginName = "Envision Labs";
         private static string m_description = "Envision Labs Plugin";
         private static string version = "1.0.0.1";
         private static int m_licensed = 0; // locked to a vendor key (1 or 0)
+        private GuiConfigDB m_guiconfig;
+        private bool inited = false;
 
         public Bitmap GetImage(string name)
         {
@@ -67,7 +75,7 @@ namespace UV_DLP_3D_Printer.Plugin
             }
             catch (Exception)
             {
-                DebugLogger.Instance().LogError("Image resource " + name + ".png not found in plugin " + m_filename);
+                DebugLogger.Instance().LogError("Image resource " + name + ".png error loading from plugin " + m_filename);
             }
             return bmp;
         }
@@ -76,7 +84,10 @@ namespace UV_DLP_3D_Printer.Plugin
         public IPluginHost Host 
         {
             get { return m_host; }
-            set { m_host = value; }
+            set { 
+                m_host = value;
+                Initialize();
+            }
         } 
         // this function will return a manifest of plugin items
         public List<PluginItem> GetPluginItems 
@@ -154,6 +165,13 @@ namespace UV_DLP_3D_Printer.Plugin
                 case PluginFuctionality.CustomGUI: return true;
             }
             return false;
+        }
+        private void Initialize()
+        {
+            if (inited) // no re-initialization
+                return;
+            //load the guiconfigdb locally here to search / parse items
+            inited = true;
         }
         public String Name 
         {
