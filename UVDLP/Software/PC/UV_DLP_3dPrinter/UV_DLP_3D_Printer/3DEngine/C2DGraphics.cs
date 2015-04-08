@@ -291,6 +291,16 @@ namespace UV_DLP_3D_Printer._3DEngine
             return ImgDbase[name];
         }
 
+        public List<string> GetImageNames()
+        {
+            List<string> imnames = new List<string>();
+            foreach (KeyValuePair<string, C2DImage> pair in ImgDbase)
+            {
+                imnames.Add(pair.Key);
+            }
+            return imnames;
+        }
+
         public Bitmap GetBitmap(String name)
         {
             C2DImage img = GetImage(name);
