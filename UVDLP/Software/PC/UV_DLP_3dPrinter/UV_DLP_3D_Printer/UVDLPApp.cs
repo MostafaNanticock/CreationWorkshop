@@ -60,6 +60,7 @@ namespace UV_DLP_3D_Printer
         eSceneSaved, // scene was saved to disk. message contains the file type (cws or stl)
         eMachineConfigLoaded,  // Machine config was just loaded
         eLicenseUpdate, // server sent a response after we contacted them with license info
+        eCustom, // plugins can use this for very general purpose low-bandwidth signaling 
     }
     public delegate void AppEventDelegate(eAppEvent ev, String Message);
     /*

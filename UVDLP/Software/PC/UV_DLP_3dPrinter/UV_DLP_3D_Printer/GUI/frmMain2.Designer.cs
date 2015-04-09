@@ -113,7 +113,7 @@
             this.pnlTopIcons.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlTopIcons.Location = new System.Drawing.Point(0, 0);
             this.pnlTopIcons.Name = "pnlTopIcons";
-            this.pnlTopIcons.Size = new System.Drawing.Size(865, 65);
+            this.pnlTopIcons.Size = new System.Drawing.Size(865, 58);
             this.pnlTopIcons.TabIndex = 0;
             // 
             // buttOpenFile
@@ -492,9 +492,9 @@
             this.pnlTopTabs.Controls.Add(this.ctlTitleViewControls);
             this.pnlTopTabs.Controls.Add(this.ctlTitleConfigure);
             this.pnlTopTabs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTopTabs.Location = new System.Drawing.Point(0, 93);
+            this.pnlTopTabs.Location = new System.Drawing.Point(0, 86);
             this.pnlTopTabs.Name = "pnlTopTabs";
-            this.pnlTopTabs.Size = new System.Drawing.Size(1380, 50);
+            this.pnlTopTabs.Size = new System.Drawing.Size(1380, 45);
             this.pnlTopTabs.TabIndex = 2;
             // 
             // ctlTitle3dView
@@ -599,7 +599,7 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 143);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 131);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -613,8 +613,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.txtLog);
-            this.splitContainer1.Size = new System.Drawing.Size(1380, 551);
-            this.splitContainer1.SplitterDistance = 447;
+            this.splitContainer1.Size = new System.Drawing.Size(1380, 563);
+            this.splitContainer1.SplitterDistance = 456;
             this.splitContainer1.TabIndex = 4;
             // 
             // ctlMainConfig1
@@ -650,7 +650,7 @@
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(1380, 100);
+            this.txtLog.Size = new System.Drawing.Size(1380, 103);
             this.txtLog.TabIndex = 1;
             // 
             // pnlTopIconsMain
@@ -661,7 +661,7 @@
             this.pnlTopIconsMain.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTopIconsMain.Location = new System.Drawing.Point(0, 28);
             this.pnlTopIconsMain.Name = "pnlTopIconsMain";
-            this.pnlTopIconsMain.Size = new System.Drawing.Size(1380, 65);
+            this.pnlTopIconsMain.Size = new System.Drawing.Size(1380, 58);
             this.pnlTopIconsMain.TabIndex = 45;
             // 
             // flowLayoutPanel3
@@ -672,7 +672,7 @@
             this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel3.Location = new System.Drawing.Point(871, 0);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(509, 65);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(509, 58);
             this.flowLayoutPanel3.TabIndex = 44;
             // 
             // lblMainMessage

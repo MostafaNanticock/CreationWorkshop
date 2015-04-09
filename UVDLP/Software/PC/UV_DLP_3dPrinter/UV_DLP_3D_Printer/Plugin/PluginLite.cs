@@ -79,7 +79,11 @@ namespace UV_DLP_3D_Printer.Plugin
             }
             return bmp;
         }
-
+        public GuiConfigDB GUIDB 
+        {
+            get { return m_guiconfig; }
+            set { m_guiconfig = value; }
+        }
         // this will set the plugin host
         public IPluginHost Host 
         {
@@ -145,6 +149,7 @@ namespace UV_DLP_3D_Printer.Plugin
         {
             return null; // no actual gui controls in here for now
         }
+        //don't think we actually used this before.
         public byte[] GetBinary(string name) 
         {
             return null;
@@ -175,7 +180,7 @@ namespace UV_DLP_3D_Printer.Plugin
         }
         public String Name 
         {
-            get { return "Plugin"; }
+            get { return "Pro Plugin created"; }
         } // required NOT to be part of the string plugin items        
     }
 }

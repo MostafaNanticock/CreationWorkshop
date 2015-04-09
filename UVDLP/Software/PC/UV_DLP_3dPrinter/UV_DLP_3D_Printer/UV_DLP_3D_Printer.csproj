@@ -892,6 +892,7 @@
     <None Include="resources\Splash1.png" />
     <None Include="resources\MachineControl\mc_shuttclose.png" />
     <None Include="resources\MachineControl\mc_shuttopen.png" />
+    <Content Include="sharebot.ico" />
     <Content Include="Slicing\OldSlicer\OldSliceNotes.txt" />
     <Content Include="Slicing\SlicerNotes1.txt" />
     <None Include="resources\Load.jpg" />

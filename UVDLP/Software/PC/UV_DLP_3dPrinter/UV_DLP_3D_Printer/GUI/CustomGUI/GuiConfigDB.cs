@@ -14,6 +14,7 @@ using UV_DLP_3D_Printer.Plugin;
 using UV_DLP_3D_Printer.Util.Sequence;
 using System.Diagnostics;
 using Ionic.Zip;
+using UV_DLP_3D_Printer.Configs;
 
 namespace UV_DLP_3D_Printer.GUI.CustomGUI
 {
@@ -647,7 +648,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public GuiParam<bool> HideAllControls;
         public GuiParam<bool> HideAllDecals;
         Dictionary<string, int> NameGenerator;
-
+        public UserParameterList m_userparms;
         public bool PreviewMode;
 
 
@@ -672,7 +673,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             BgndDecorList = new List<GuiDecorItem>();
             FgndDecorList = new List<GuiDecorItem>();
             CmdSequenceList = new List<CommandSequence>();
-
+            
             GuiLayouts = new List<GuiLayout>();
 
             NameGenerator = new Dictionary<string, int>();
@@ -684,6 +685,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             HideAllDecals = new GuiParam<bool>();
 
             PreviewMode = false;
+            m_userparms = new UserParameterList();
         }
 
 
@@ -761,6 +763,12 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             string text = streamReader.ReadToEnd();
             streamReader.Close();
             LoadConfiguration(text);
+        }
+
+        void LoadUserParms(XmlNode usrprmnode) 
+        {
+            //
+
         }
         #region Sequences
         // sequences are command sequences that can be used

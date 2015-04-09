@@ -113,12 +113,17 @@ namespace UV_DLP_3D_Printer.GUI
                 testMachineControlToolStripMenuItem.Visible = false;
                 loadGUIConfigToolStripMenuItem.Visible = false;
                 checkForUpdatesToolStripMenuItem.Visible = false;
-                miiManualControlToolStripMenuItem.Visible = false;
+                //miiManualControlToolStripMenuItem.Visible = false;
                 //miiManualControlToolStripMenuItem.Visible = false;
             #endif
                 SetTitle();
             UVDLPApp.Instance().PerformPluginCommand("MainFormLoadedCommand", true);
         }
+        public void SetAboutVisible(bool val) 
+        {
+            aboutToolStripMenuItem.Visible = val;
+        }
+
         public void SetFileExt(string ext) 
         {
             SceneFileExt = ext;
