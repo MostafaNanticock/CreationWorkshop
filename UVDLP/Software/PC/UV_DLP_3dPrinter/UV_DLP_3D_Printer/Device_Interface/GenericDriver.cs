@@ -131,7 +131,7 @@ namespace UV_DLP_3D_Printer.Drivers
                         hexstr = hexstr.Trim();
                         byte[] data = System.Text.Encoding.ASCII.GetBytes(hexstr);
                         Write(data, data.Length);
-                         
+                        return true;                         
                     }
                     else if (hexstr.StartsWith("T1"))
                     {
@@ -139,6 +139,7 @@ namespace UV_DLP_3D_Printer.Drivers
                         hexstr = hexstr.Trim();
                         byte[] data = Utility.HexStringToByteArray(hexstr); // convert to a byte array
                         Write(data, data.Length); // send the raw bytes of data
+                        return true;
                     }
                     else 
                     {
