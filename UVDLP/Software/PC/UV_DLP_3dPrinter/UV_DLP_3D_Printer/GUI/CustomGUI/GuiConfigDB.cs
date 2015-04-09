@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Resources;
+using System.Globalization;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -1475,10 +1477,21 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             return res;
         }
 
-        public Image GetImage(GuiParam<string> imageName, Image defVal)
+        public List<string> GetAllImageNames()
         {
-            if (!imageName.IsExplicit())
-                return defVal;
+            List<string> imnames = UVDLPApp.Instance().m_2d_graphics.GetImageNames();
+            ResourceSet resourceSet = Res.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
+            foreach (DictionaryEntry entry in resourceSet)
+            {
+                string resourceKey = entry.Key.ToString();
+                if (entry.Value.GetType() == typeof(Bitmap))
+                    imnames.Add(resourceKey);
+            }            
+            return imnames;
+        }
+
+        public Image GetImage(string imageName)
+        {
             Image img = null;
             if (Plugin != null)
                 img = Plugin.GetImage(imageName);
@@ -1486,12 +1499,20 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 img = UVDLPApp.Instance().m_2d_graphics.GetBitmap(imageName);
             if (img == null)
                 img = (Image)Res.GetObject(imageName);
+            return img;
+        }
+
+        public Image GetImage(GuiParam<string> imageName, Image defVal)
+        {
+            if (!imageName.IsExplicit())
+                return defVal;
+            Image img = GetImage(imageName);
             if (img == null)
                 return defVal;
             return img;
         }
-        public 
-        string FixDockingVal(string origdock)
+
+        public string FixDockingVal(string origdock)
         {
             if (origdock == null)
                 return "cc";
