@@ -21,8 +21,14 @@ namespace UV_DLP_3D_Printer.GUI.Controls.ManualControls
             InitializeComponent();
             // the data received should be dis-abled during prints and re-enabled when not printing
             UVDLPApp.Instance().m_deviceinterface.LineDataEvent += new DeviceInterface.DeviceLineReceived(LineDataReceived);
+            UVDLPApp.Instance().m_deviceinterface.DataEvent += new DeviceInterface.DeviceDataReceived(datareceivedev);
             UVDLPApp.Instance().m_buildmgr.BuildStatus += new delBuildStatus(BuildStatus);
             UVDLPApp.Instance().m_callbackhandler.RegisterCallback("cmdLogGcode", LogGcode, typeof(string), "Log all commands sent to machine");
+        }
+        void datareceivedev(DeviceDriver device, byte[] dat, int len) 
+        {
+            string str = Utility.ByteArrayToString(dat);
+            DebugLogger.Instance().LogInfo(str);
         }
 
         private void cmdSendGCode_Click(object sender, EventArgs e)

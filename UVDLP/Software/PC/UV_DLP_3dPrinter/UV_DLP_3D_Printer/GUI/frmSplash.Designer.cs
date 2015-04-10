@@ -31,13 +31,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSplash));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
             this.lblbuilddate = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.version = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -69,6 +69,17 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(708, 470);
             this.panel1.TabIndex = 5;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(2, 65);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(260, 25);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Free for non-commercial use";
             // 
             // lblbuilddate
             // 
@@ -129,17 +140,6 @@
             this.label1.Size = new System.Drawing.Size(436, 55);
             this.label1.TabIndex = 1;
             this.label1.Text = "Creation Workshop";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(2, 65);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(260, 25);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Free for non-commercial use";
             // 
             // frmSplash
             // 

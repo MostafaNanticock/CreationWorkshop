@@ -79,7 +79,7 @@
             this.progressTitle.BorderThickness = 2;
             this.progressTitle.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.progressTitle.ForeColor = System.Drawing.Color.White;
-            this.progressTitle.Location = new System.Drawing.Point(7, 47);
+            this.progressTitle.Location = new System.Drawing.Point(7, 45);
             this.progressTitle.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.progressTitle.Maximum = 100;
             this.progressTitle.Minimum = 0;
@@ -96,10 +96,10 @@
             this.flowLayoutPanel1.Controls.Add(this.buttAddSupport);
             this.flowLayoutPanel1.Controls.Add(this.buttAutoSupport);
             this.flowLayoutPanel1.Controls.Add(this.chkSupportAllScene);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(8, 73);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(8, 71);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(297, 46);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(297, 44);
             this.flowLayoutPanel1.TabIndex = 5;
             // 
             // buttGenBase
@@ -204,7 +204,7 @@
             this.panelSuppotShape.Controls.Add(this.numHT);
             this.panelSuppotShape.Controls.Add(this.pictureSupport);
             this.panelSuppotShape.ForeColor = System.Drawing.Color.White;
-            this.panelSuppotShape.Location = new System.Drawing.Point(9, 120);
+            this.panelSuppotShape.Location = new System.Drawing.Point(9, 115);
             this.panelSuppotShape.Margin = new System.Windows.Forms.Padding(0);
             this.panelSuppotShape.Name = "panelSuppotShape";
             this.panelSuppotShape.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -404,7 +404,7 @@
             this.panel1.Controls.Add(this.chkDownPolys);
             this.panel1.Controls.Add(this.numDownAngle);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(210, 120);
+            this.panel1.Location = new System.Drawing.Point(210, 115);
             this.panel1.Margin = new System.Windows.Forms.Padding(0, 0, 3, 2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(95, 188);
@@ -489,7 +489,7 @@
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.labelAutoSup);
             this.panel2.Controls.Add(this.label3);
-            this.panel2.Location = new System.Drawing.Point(8, 309);
+            this.panel2.Location = new System.Drawing.Point(8, 303);
             this.panel2.Margin = new System.Windows.Forms.Padding(0, 0, 3, 2);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(297, 154);
@@ -685,18 +685,18 @@
             this.panel3.Controls.Add(this.cmdRemoveSupports);
             this.panel3.Controls.Add(this.lbSupports);
             this.panel3.Controls.Add(this.label9);
-            this.panel3.Location = new System.Drawing.Point(9, 464);
+            this.panel3.Location = new System.Drawing.Point(9, 456);
             this.panel3.Margin = new System.Windows.Forms.Padding(0, 0, 3, 2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(296, 156);
+            this.panel3.Size = new System.Drawing.Size(296, 140);
             this.panel3.TabIndex = 27;
             // 
             // cmdRemoveSupports
             // 
-            this.cmdRemoveSupports.Location = new System.Drawing.Point(44, 116);
+            this.cmdRemoveSupports.Location = new System.Drawing.Point(115, 4);
             this.cmdRemoveSupports.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmdRemoveSupports.Name = "cmdRemoveSupports";
-            this.cmdRemoveSupports.Size = new System.Drawing.Size(188, 32);
+            this.cmdRemoveSupports.Size = new System.Drawing.Size(171, 32);
             this.cmdRemoveSupports.TabIndex = 32;
             this.cmdRemoveSupports.Text = "Remove all Supports";
             this.cmdRemoveSupports.UseVisualStyleBackColor = true;
@@ -710,11 +710,11 @@
             this.lbSupports.FullRowSelect = true;
             this.lbSupports.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.lbSupports.HideSelection = false;
-            this.lbSupports.Location = new System.Drawing.Point(3, 32);
+            this.lbSupports.Location = new System.Drawing.Point(3, 39);
             this.lbSupports.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lbSupports.MultiSelect = false;
             this.lbSupports.Name = "lbSupports";
-            this.lbSupports.Size = new System.Drawing.Size(283, 80);
+            this.lbSupports.Size = new System.Drawing.Size(283, 95);
             this.lbSupports.TabIndex = 31;
             this.lbSupports.UseCompatibleStateImageBehavior = false;
             this.lbSupports.View = System.Windows.Forms.View.Details;
@@ -729,9 +729,9 @@
             // 
             this.label9.Font = new System.Drawing.Font("Arial", 17.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(5, 4);
+            this.label9.Location = new System.Drawing.Point(5, 10);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(285, 22);
+            this.label9.Size = new System.Drawing.Size(104, 22);
             this.label9.TabIndex = 29;
             this.label9.Text = "Supports";
             // 
@@ -758,7 +758,7 @@
             this.ctlTitle1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ctlTitle1.Name = "ctlTitle1";
             this.ctlTitle1.OnClickCallback = "";
-            this.ctlTitle1.Size = new System.Drawing.Size(302, 45);
+            this.ctlTitle1.Size = new System.Drawing.Size(302, 43);
             this.ctlTitle1.StyleName = null;
             this.ctlTitle1.TabIndex = 28;
             this.ctlTitle1.Text = "Support Generation";
@@ -776,7 +776,7 @@
             this.Controls.Add(this.panel3);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "ctlSupports";
-            this.Size = new System.Drawing.Size(310, 622);
+            this.Size = new System.Drawing.Size(310, 602);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.panelSuppotShape.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureSupport)).EndInit();

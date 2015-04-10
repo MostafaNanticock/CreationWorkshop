@@ -37,12 +37,20 @@ namespace UV_DLP_3D_Printer.GUI
             lblbuilddate.Text = "Build Date: " + Utility.RetrieveLinkerTimestamp().ToString();
 
             LoadPluginSplash();
+            RemoveMessages();
             m_timer = new Timer();
             m_timer.Interval = 20;
             m_timer.Tick += new EventHandler(m_timer_Tick);
             m_timer.Start();
             
             Opacity = 0.0;
+        }
+        private void RemoveMessages() 
+        {
+            label5.Visible = false;
+            label2.Visible = false;
+            Refresh();
+        
         }
         private void LoadPluginSplash() 
         {
