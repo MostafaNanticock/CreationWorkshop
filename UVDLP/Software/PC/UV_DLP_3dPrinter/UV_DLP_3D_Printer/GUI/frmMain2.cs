@@ -99,7 +99,6 @@ namespace UV_DLP_3D_Printer.GUI
             //try to load the GUI
             gconfdb.LoadConfiguration(global::UV_DLP_3D_Printer.Properties.Resources.GuiConfig);
             UVDLPApp.Instance().m_gui_config.ApplyConfiguration(gconfdb);
-            gconfdb.SaveConfiguration("GuiConfigTest");
 
             //ctlSliceGCodePanel1.ctlSliceViewctl.DlpForm = m_frmdlp; // set the dlp form for direct control
             SetMainMessage("");
@@ -1195,7 +1194,6 @@ namespace UV_DLP_3D_Printer.GUI
                         frm.Controls.Add(winLayout);
                         frm.ShowDialog();
                     }
-                    gconfdb.SaveConfiguration("GuiConfigMenuTest");
                     UVDLPApp.Instance().m_gui_config.DumpDatabase("GuiManagerDatabase.txt");
                     //UVDLPApp.Instance().m_gui_config.LayoutGui(
                 }

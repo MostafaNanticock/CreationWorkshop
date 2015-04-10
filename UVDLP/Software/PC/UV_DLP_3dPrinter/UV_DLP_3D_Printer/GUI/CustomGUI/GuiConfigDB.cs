@@ -1306,7 +1306,17 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             GuiLayout gl = HandleLayoutRecurse(lnode);
             if (gl != null)
+            {
+                for (int i=0; i<GuiLayouts.Count; i++)
+                {
+                    if (GuiLayouts[i].name == gl.name)
+                    {
+                        GuiLayouts[i] = gl;
+                        return;
+                    }
+                }
                 GuiLayouts.Add(gl);
+            }
         }
 
         GuiLayout HandleLayoutRecurse(XmlNode lnode)
@@ -1676,10 +1686,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             SaveDecals(xd, toplevel);
             SaveLayouts(xd, toplevel);
             SaveSequences(xd, toplevel);
-            if (Plugin != null)
+            /*if (Plugin != null)
                 fileName += "_" + Plugin.Name + ".xml";
             else
-                fileName += ".xml";
+                fileName += ".xml";*/
             try
             {
                 xd.Save(fileName);

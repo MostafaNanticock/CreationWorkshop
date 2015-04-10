@@ -123,6 +123,14 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             return ctl;
         }
 
+        public bool RemoveButton(string name)
+        {
+            if ((name == null) || !Buttons.ContainsKey(name))
+                return false;
+            Buttons.Remove(name);
+            return true;
+        }
+
         public Control GetControlOrButton(string name)
         {
             return GetControlOrButton(name, guiConf.PreviewMode);
@@ -141,7 +149,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
             prevCtl.Text = name;
             prevCtl.Name = name;
-            Controls["!" +  name] = ctl;
+            Controls["!" + name] = prevCtl;
             if (guiConf.PreviewMode)
                 ctl.MouseEnter += new EventHandler(ctl_MouseEnter);
             return prevCtl;
@@ -151,7 +159,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             if ((ctl.Name == null) || (ctl.Name == ""))
                 ctl.Name = name;
-            Controls[ctl.Name] = ctl;
+            if (!(ctl is ctlPreview))
+                Controls[ctl.Name] = ctl;
             if (guiConf.PreviewMode)
                 ctl.MouseEnter += new EventHandler(ctl_MouseEnter);
         }
@@ -784,7 +793,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 tabctl = GetControlOrButton(gl.control);
             if (tabctl == null)
             {
-                string cmd = String.Format("GMActivateTab {0} {1}", gl.name, shownControl.Name); 
+                string cmd = String.Format("GMActivateTab {0} {1}", gl.name, shownControl.Name);
                 if (!gl.text.IsExplicit())
                 {
                     // if no text, create image button
@@ -802,6 +811,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 else
                 {
                     // text valid, create title control
+                    RemoveButton(gl.name); // in case such a button exists with the same name
                     ctlTitle ttl = new ctlTitle();
                     ttl.Image = guiConf.GetImage(gl.image, null);
                     ttl.Text = gl.text;
