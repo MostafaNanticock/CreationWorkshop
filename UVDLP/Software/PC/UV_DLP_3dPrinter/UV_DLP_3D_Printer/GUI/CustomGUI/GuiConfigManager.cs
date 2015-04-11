@@ -138,7 +138,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         private Control CreatePreviewControl(string name, Control ctl)
         {
-            Control prevCtl = new ctlPreview();
+            ctlPreview prevCtl = new ctlPreview();
             if (ctl != null)
             {
                 if (ctl.Width >  20)
@@ -146,6 +146,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 if (ctl.Height > 10)
                     prevCtl.Height = ctl.Height;
                 prevCtl.Dock = ctl.Dock;
+                if (ctl is ctlImageButton)
+                    prevCtl.Image = ((ctlImageButton)ctl).Image;
             }
             prevCtl.Text = name;
             prevCtl.Name = name;
@@ -650,6 +652,12 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (ctl is ctlCollapse)
                 ((ctlCollapse)ctl).InnerControl.ResumeLayout();
             ctl.ResumeLayout();
+            if ((gl.type != GuiLayout.LayoutType.Control) && gl.style.IsValid())
+            {
+                GuiControlStyle stl = GetControlStyle(gl.style);
+                if (stl != null)
+                    ApplyStyleRecurse(ctl, stl);
+            }
             return ctl;
         }
 
@@ -819,6 +827,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                     ttl.OnClickCallback = cmd;
                     ttl.CheckImage = guiConf.GetImage("buttChecked", null);
                     ttl.Size = new Size(180, 40);
+                    ttl.FitWidth();
                     Controls[gl.name] = ttl;
                     tabctl = ttl;
 

@@ -596,6 +596,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public GuiParam<string> orientation;
         public GuiParam<string> direction;
         public GuiParam<int> splitPos;
+        public GuiParam<string> style;
 
         public GuiLayout(LayoutType type, string name)
         {
@@ -1360,6 +1361,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             gl.isCollapsed = GetBoolParam(lnode, "iscollapsed", false);
             gl.collapsible = GetBoolParam(lnode, "collapsible", false);
             gl.isSelected = GetBoolParam(lnode, "isselected", false);
+            gl.style = GetStrParam(lnode, "style", null);
             foreach (XmlNode subnode in lnode.ChildNodes)
             {
                 GuiLayout subgl = HandleLayoutRecurse(subnode);
@@ -1933,6 +1935,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             gl.isCollapsed.Save(xd, glNode, "iscollapsed");
             gl.collapsible.Save(xd, glNode, "collapsible");
             gl.isSelected.Save(xd, glNode, "isselected");
+            gl.style.Save(xd, glNode, "style");
             foreach (GuiLayout subgl in gl.subLayouts)
             {
                 SaveLayoutRecurse(xd, glNode, subgl);

@@ -11,6 +11,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 {
     public partial class ctlTitle : ctlUserPanel
     {
+        bool mFitTextWidth = false;
         public ctlTitle()
         {
             InitializeComponent();
@@ -96,6 +97,17 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             set { lblTitle.TextAlign = value; Invalidate(); }
         }
 
+        public void FitWidth()
+        {
+            Graphics g = lblTitle.CreateGraphics();
+            SizeF txtsize = g.MeasureString(lblTitle.Text, lblTitle.Font);
+            if (lblTitle.Location.X + txtsize.Width > Width)
+            {
+                Width = lblTitle.Location.X + (int)txtsize.Width + 8;
+            }
+            Invalidate();
+        }
+
         private void lblTitle_Click(object sender, EventArgs e)
         {
             //ctlImageButton1.Click(sender, e);
@@ -126,6 +138,11 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         private void lblTitle_MouseUp(object sender, MouseEventArgs e)
         {
             lblTitle.ForeColor = Style.HoverColor;
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
         }
     }
 }

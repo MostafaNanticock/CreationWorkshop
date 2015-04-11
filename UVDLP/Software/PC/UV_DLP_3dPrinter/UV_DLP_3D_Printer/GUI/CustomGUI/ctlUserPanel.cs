@@ -191,6 +191,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         // new gui system -SHS
         public virtual void ApplyStyle(GuiControlStyle ct)
         {
+            //if (mStyle == null || ((ct.Name != "DefaultControl") && (ct.Name != "DefaultButton")))
             mStyle = ct;
             mStyleName = ct.Name;
             ApplyStyleRecurse(this, ct);
