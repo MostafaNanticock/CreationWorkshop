@@ -73,7 +73,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (ct.FrameColor.IsValid())
             {
                 treeScene.BackColor = ct.FrameColor;
-                flowLayoutPanel1.BackColor = ct.FrameColor;
+                //flowLayoutPanel1.BackColor = ct.FrameColor;
+                panel1.BackColor = ct.FrameColor;
             }
 
         }
@@ -217,7 +218,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             manipObject.Width = manipObject.Parent.Width -6;
             ctlTitle1.Width = ctlTitle1.Parent.Width - 6;
-            flowLayoutPanel1.Width = flowLayoutPanel1.Parent.Width - 6;
+            //flowLayoutPanel1.Width = flowLayoutPanel1.Parent.Width - 6;
+            panel1.Width = panel1.Parent.Width - 6;
             treeScene.Width = treeScene.Parent.Width - 6;
         }
 
@@ -262,6 +264,13 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             //refresh the 3d view
             UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eModelRemoved, "");
         }
+
+        private void panel1_Resize(object sender, EventArgs e)
+        {
+            cmdNewScene.SetPositioning(AnchorTypes.Right, AnchorTypes.Center, 4, 0);
+        }
+
+        
 
     }
 }

@@ -32,7 +32,7 @@ namespace UV_DLP_3D_Printer
         public bool m_viewslice3dheight; // view the height of the slice in 3d
         public bool m_previewslicesbuilddisplay; // show the 2d slice on the DLP display while previewing with the scrollbar
         public bool m_driverdebuglog;  // enable driver level debug logging of communication
-        public bool m_ignoreGCrsp; // ignore the gcode responses, and go by timing
+        public bool m_ignore_response; // ignore the gcode responses, and go by timing
         public bool m_showBoundingBox; // selected objects will be marked with a bounding box
         public bool m_showShaded;      // selected objects will be marked with a different shade
         public bool m_showOutline;     // selected objects will be marked with an outline
@@ -55,7 +55,7 @@ namespace UV_DLP_3D_Printer
             m_viewslice3d = false;
             m_viewslice3dheight = false;
             m_driverdebuglog = false;
-            m_ignoreGCrsp = false;
+            m_ignore_response = false;
             m_showBoundingBox = true;
             m_showOutline = false;
             m_showShaded = false;
@@ -83,7 +83,7 @@ namespace UV_DLP_3D_Printer
                 m_viewslice3d = xh.GetBool(ac, "Preview3dSlice", false);
                 m_viewslice3dheight = xh.GetBool(ac, "Preview3dSliceHeight", false);
                 m_driverdebuglog = xh.GetBool(ac, "DriverLogging", false);
-                m_ignoreGCrsp = xh.GetBool(ac, "IgnoreGCRsp", false);
+                m_ignore_response = xh.GetBool(ac, "IgnoreGCRsp", false);
                 m_showBoundingBox = xh.GetBool(ac, "ShowBoundingBox", true);
                 m_showShaded = xh.GetBool(ac, "ShowShaded", false);
                 m_showOutline = xh.GetBool(ac, "ShowOutline", false);
@@ -122,7 +122,7 @@ namespace UV_DLP_3D_Printer
                 xh.SetParameter(ac, "Preview3dSlice", m_viewslice3d);
                 xh.SetParameter(ac, "Preview3dSliceHeight", m_viewslice3dheight);
                 xh.SetParameter(ac, "DriverLogging", m_driverdebuglog);
-                xh.SetParameter(ac, "IgnoreGCRsp", m_ignoreGCrsp);
+                xh.SetParameter(ac, "IgnoreGCRsp", m_ignore_response);
                 xh.SetParameter(ac, "ShowBoundingBox", m_showBoundingBox);
                 xh.SetParameter(ac, "ShowOutline", m_showOutline);
                 xh.SetParameter(ac, "ShowShaded", m_showShaded);

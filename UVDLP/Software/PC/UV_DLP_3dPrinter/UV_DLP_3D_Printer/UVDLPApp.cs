@@ -348,6 +348,10 @@ namespace UV_DLP_3D_Printer
                 {
                     lst.Add(obj);
                 }
+                if (obj.m_supports.Count > 0) 
+                {
+                    obj.m_supports.Clear();
+                }
             }
             foreach (Object3d obj in lst) 
             {

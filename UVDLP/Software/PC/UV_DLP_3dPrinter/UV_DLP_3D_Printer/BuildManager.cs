@@ -613,7 +613,7 @@ namespace UV_DLP_3D_Printer
                             string line = "";
                             // if the driver reports we're ready for the next command, or
                             // if we choose to ignore the driver ready status
-                            if (UVDLPApp.Instance().m_deviceinterface.ReadyForCommand() || (UVDLPApp.Instance().m_appconfig.m_ignoreGCrsp == true))
+                            if (UVDLPApp.Instance().m_deviceinterface.ReadyForCommand() || (UVDLPApp.Instance().m_appconfig.m_ignore_response == true))
                             {
                                 // go through the gcode, line by line
                                 line = m_gcode.Lines[m_gcodeline++];
