@@ -173,5 +173,10 @@ namespace UV_DLP_3D_Printer
                 return false;
             }
         }
+
+        public static bool IsAlphaNum(string str)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(str, @"^[_a-zA-Z0-9]+$");
+        }
     }
 }

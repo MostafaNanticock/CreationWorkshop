@@ -45,20 +45,27 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 try { defVal = xnode.Attributes["default"].Value; }
                 catch { }
                 string value = xnode.InnerText;
-                switch (xnode.Attributes["type"].Value)
-                {
-                    case "Int32": newPar = CreateIntParam(defVal, value); break;
-                    case "Color": newPar = CreateColorParam(defVal, value); break;
-                    case "Boolean": newPar = CreateBoolParam(defVal, value); break;
-                    case "String": newPar = CreateStringParam(defVal, value); break;
-                }
-                newPar.paramName = xnode.Name;
+                newPar = CreateParameter(xnode.Name, xnode.Attributes["type"].Value, defVal, value);
             }
             catch
             {
                 return null;
             }
 
+            return newPar;
+        }
+
+        public static CWParameter CreateParameter(string name, string type, string defVal, string value)
+        {
+            CWParameter newPar = null;
+            switch (type)
+            {
+                case "Int32": newPar = CreateIntParam(defVal, value); break;
+                case "Color": newPar = CreateColorParam(defVal, value); break;
+                case "Boolean": newPar = CreateBoolParam(defVal, value); break;
+                case "String": newPar = CreateStringParam(defVal, value); break;
+            }
+            newPar.paramName = name;
             return newPar;
         }
 
@@ -134,6 +141,17 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             parrent = t;
             state = GuiParamState.Inherited;
+        }
+
+        public GuiParam<T> GetCopy()
+        {
+            GuiParam<T> newPar = new GuiParam<T>();
+            newPar.state = state;
+            newPar.defVal = defVal;
+            newPar.defaultSet = defaultSet;
+            newPar.parrent = parrent;
+            newPar.paramName = paramName;
+            return newPar;
         }
 
         public GuiParam(T defval)
@@ -423,29 +441,29 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (sctl == null)
                 return;
 
-            ForeColor = sctl.ForeColor;
-            BackColor = sctl.BackColor;
-            FrameColor = sctl.FrameColor;
-            BackImage = sctl.BackImage;
-            glMode = sctl.glMode;
+            ForeColor = sctl.ForeColor.GetCopy();
+            BackColor = sctl.BackColor.GetCopy();
+            FrameColor = sctl.FrameColor.GetCopy();
+            BackImage = sctl.BackImage.GetCopy();
+            glMode = sctl.glMode.GetCopy();
 
-            SubImgCount = sctl.SubImgCount;
-            PressedColor = sctl.PressedColor;
-            CheckedColor = sctl.CheckedColor;
-            DisabledColor = sctl.DisabledColor;
-            HoverColor = sctl.HoverColor;
-            PressedSize = sctl.PressedSize;
-            HoverSize = sctl.HoverSize;
+            SubImgCount = sctl.SubImgCount.GetCopy();
+            PressedColor = sctl.PressedColor.GetCopy();
+            CheckedColor = sctl.CheckedColor.GetCopy();
+            DisabledColor = sctl.DisabledColor.GetCopy();
+            HoverColor = sctl.HoverColor.GetCopy();
+            PressedSize = sctl.PressedSize.GetCopy();
+            HoverSize = sctl.HoverSize.GetCopy();
             PanelPad = new GuiControlPad();
-            PanelPad.Left = sctl.PanelPad.Left;
-            PanelPad.Right = sctl.PanelPad.Right;
-            PanelPad.Top = sctl.PanelPad.Top;
-            PanelPad.Bottom = sctl.PanelPad.Bottom;
-            applySubControls = sctl.applySubControls;
-            applyWindowsControls = sctl.applyWindowsControls;
-            CheckedImage = sctl.CheckedImage;
-            BorderShape = sctl.BorderShape;
-            inheritFrom = sctl.inheritFrom;
+            PanelPad.Left = sctl.PanelPad.Left.GetCopy();
+            PanelPad.Right = sctl.PanelPad.Right.GetCopy();
+            PanelPad.Top = sctl.PanelPad.Top.GetCopy();
+            PanelPad.Bottom = sctl.PanelPad.Bottom.GetCopy();
+            applySubControls = sctl.applySubControls.GetCopy();
+            applyWindowsControls = sctl.applyWindowsControls.GetCopy();
+            CheckedImage = sctl.CheckedImage.GetCopy();
+            BorderShape = sctl.BorderShape.GetCopy();
+            inheritFrom = sctl.inheritFrom.GetCopy();
         }
  
         public void InheritFrom(GuiControlStyle sctl)
@@ -454,6 +472,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 return;
 
             parent = sctl;
+            inheritFrom = sctl.Name;
             ForeColor.InheritFrom(sctl.ForeColor);
             BackColor.InheritFrom(sctl.BackColor);
             FrameColor.InheritFrom(sctl.FrameColor);
