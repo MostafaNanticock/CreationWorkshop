@@ -80,8 +80,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (UVDLPApp.Instance().SelectedObject == null) return;
             Point3d center = UVDLPApp.Instance().SelectedObject.CalcCenter();
             UVDLPApp.Instance().SelectedObject.Translate((float)-center.x, (float)-center.y, (float)-center.z, true);
-            //UVDLPApp.Instance().m_undoer.SaveTranslation(UVDLPApp.Instance().SelectedObject, (float)-center.x, (float)-center.y, (float)-center.z);
-            //UVDLPApp.Instance().SelectedObject.Update(); // make sure we update
             UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eUpdateSelectedObject, "updateobject");
         }
 
@@ -92,14 +90,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             Point3d center = UVDLPApp.Instance().SelectedObject.CalcCenter();
             UVDLPApp.Instance().SelectedObject.FindMinMax();
             float zlev = (float)UVDLPApp.Instance().SelectedObject.m_min.z;
-            //float epsilon = .05f; // add in a the level of 1 slice
-            //float zmove = -zlev - epsilon; // SHS - place object flat on platform, no epsilon
             float zmove = -zlev; 
-            //UVDLPApp.Instance().SelectedObject.Translate((float)0, (float)0, (float)-zlev);
-            //UVDLPApp.Instance().SelectedObject.Translate((float)0, (float)0, (float)-epsilon);
             UVDLPApp.Instance().SelectedObject.Translate(0, 0, zmove, true);
-            //UVDLPApp.Instance().m_undoer.SaveTranslation(UVDLPApp.Instance().SelectedObject, 0, 0, zmove);
-            //UVDLPApp.Instance().SelectedObject.Update(); // make sure we update
             UVDLPApp.Instance().RaiseAppEvent(eAppEvent.eUpdateSelectedObject, "updateobject");
         }
 

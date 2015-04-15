@@ -69,7 +69,7 @@
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(170, 219);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(214, 238);
             this.flowLayoutPanel2.TabIndex = 22;
             // 
             // label8
@@ -80,7 +80,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(161, 31);
             this.label8.TabIndex = 0;
-            this.label8.Text = "Move (mm)";
+            this.label8.Text = "Move";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // flowLayoutPanel1
@@ -459,7 +459,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.Controls.Add(this.flowLayoutPanel2);
             this.Name = "ctlMove";
-            this.Size = new System.Drawing.Size(170, 219);
+            this.Size = new System.Drawing.Size(214, 238);
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel7.ResumeLayout(false);

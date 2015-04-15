@@ -31,7 +31,7 @@ namespace UV_DLP_3D_Printer.GUI
             panelback.BackColor = UVDLPApp.Instance().m_appconfig.m_backgroundcolor;
             panelfore.BackColor = UVDLPApp.Instance().m_appconfig.m_foregroundcolor;
             chkDriverLog.Checked = UVDLPApp.Instance().m_appconfig.m_driverdebuglog;
-            chkIgnoreGCRsp.Checked = UVDLPApp.Instance().m_appconfig.m_ignoreGCrsp;
+            chkIgnoreGCRsp.Checked = UVDLPApp.Instance().m_appconfig.m_ignore_response;
            // txtSlic3rParams.Text = UVDLPApp.Instance().m_appconfig.m_slic3rparameters;
         }
         private void GetData() 
@@ -40,7 +40,7 @@ namespace UV_DLP_3D_Printer.GUI
             UVDLPApp.Instance().m_appconfig.m_backgroundcolor = panelback.BackColor;
             UVDLPApp.Instance().m_appconfig.m_foregroundcolor = panelfore.BackColor;
             UVDLPApp.Instance().m_appconfig.m_driverdebuglog = chkDriverLog.Checked;
-            UVDLPApp.Instance().m_appconfig.m_ignoreGCrsp = chkIgnoreGCRsp.Checked;
+            UVDLPApp.Instance().m_appconfig.m_ignore_response = chkIgnoreGCRsp.Checked;
             //UVDLPApp.Instance().m_appconfig.m_slic3rparameters = txtSlic3rParams.Text;
             UVDLPApp.Instance().SaveAppConfig();
         }

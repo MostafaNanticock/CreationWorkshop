@@ -31,7 +31,9 @@
             this.manipObject = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.label12 = new System.Windows.Forms.Label();
+            this.buttAllMinus = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.textScaleAll = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlTextBox();
+            this.buttAllPlus = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttScaleAll = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
@@ -49,6 +51,12 @@
             this.buttmm2inch = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.buttinch2mm = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.ctlTitle1 = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlTitle();
+            this.buttXMinus = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.buttYMinus = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.buttZMinus = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.buttXPlus = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.buttYPlus = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.buttZPlus = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.manipObject.SuspendLayout();
             this.flowLayoutPanel4.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -76,12 +84,14 @@
             // 
             this.flowLayoutPanel4.BackColor = System.Drawing.Color.RoyalBlue;
             this.flowLayoutPanel4.Controls.Add(this.label12);
+            this.flowLayoutPanel4.Controls.Add(this.buttAllMinus);
             this.flowLayoutPanel4.Controls.Add(this.textScaleAll);
+            this.flowLayoutPanel4.Controls.Add(this.buttAllPlus);
             this.flowLayoutPanel4.Controls.Add(this.buttScaleAll);
             this.flowLayoutPanel4.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(164, 38);
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(229, 38);
             this.flowLayoutPanel4.TabIndex = 5;
             // 
             // label12
@@ -91,10 +101,32 @@
             this.label12.Location = new System.Drawing.Point(3, 3);
             this.label12.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(50, 32);
+            this.label12.Size = new System.Drawing.Size(46, 32);
             this.label12.TabIndex = 1;
             this.label12.Text = "All";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // buttAllMinus
+            // 
+            this.buttAllMinus.BackColor = System.Drawing.Color.Navy;
+            this.buttAllMinus.Checked = false;
+            this.buttAllMinus.CheckImage = null;
+            this.buttAllMinus.Gapx = 5;
+            this.buttAllMinus.Gapy = 5;
+            this.buttAllMinus.GLBackgroundImage = null;
+            this.buttAllMinus.GLImage = null;
+            this.buttAllMinus.GLVisible = false;
+            this.buttAllMinus.GuiAnchor = null;
+            this.buttAllMinus.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttAllMinus.Image = global::UV_DLP_3D_Printer.Properties.Resources.butMinus;
+            this.buttAllMinus.Location = new System.Drawing.Point(52, 5);
+            this.buttAllMinus.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.buttAllMinus.Name = "buttAllMinus";
+            this.buttAllMinus.Size = new System.Drawing.Size(28, 28);
+            this.buttAllMinus.StyleName = null;
+            this.buttAllMinus.TabIndex = 5;
+            this.buttAllMinus.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttAllMinus.Click += new System.EventHandler(this.buttAllMinus_Click);
             // 
             // textScaleAll
             // 
@@ -105,7 +137,7 @@
             this.textScaleAll.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textScaleAll.ForeColor = System.Drawing.Color.White;
             this.textScaleAll.IntVal = 100;
-            this.textScaleAll.Location = new System.Drawing.Point(56, 5);
+            this.textScaleAll.Location = new System.Drawing.Point(86, 5);
             this.textScaleAll.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.textScaleAll.MaxFloat = 1000F;
             this.textScaleAll.MaxInt = 1000;
@@ -118,6 +150,28 @@
             this.textScaleAll.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textScaleAll.ValidColor = System.Drawing.Color.White;
             this.textScaleAll.ValueType = UV_DLP_3D_Printer.GUI.CustomGUI.ctlTextBox.EValueType.Float;
+            // 
+            // buttAllPlus
+            // 
+            this.buttAllPlus.BackColor = System.Drawing.Color.Navy;
+            this.buttAllPlus.Checked = false;
+            this.buttAllPlus.CheckImage = null;
+            this.buttAllPlus.Gapx = 5;
+            this.buttAllPlus.Gapy = 5;
+            this.buttAllPlus.GLBackgroundImage = null;
+            this.buttAllPlus.GLImage = null;
+            this.buttAllPlus.GLVisible = false;
+            this.buttAllPlus.GuiAnchor = null;
+            this.buttAllPlus.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttAllPlus.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
+            this.buttAllPlus.Location = new System.Drawing.Point(160, 5);
+            this.buttAllPlus.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.buttAllPlus.Name = "buttAllPlus";
+            this.buttAllPlus.Size = new System.Drawing.Size(28, 28);
+            this.buttAllPlus.StyleName = null;
+            this.buttAllPlus.TabIndex = 6;
+            this.buttAllPlus.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttAllPlus.Click += new System.EventHandler(this.buttAllPlus_Click);
             // 
             // buttScaleAll
             // 
@@ -132,7 +186,7 @@
             this.buttScaleAll.GuiAnchor = null;
             this.buttScaleAll.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttScaleAll.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttV;
-            this.buttScaleAll.Location = new System.Drawing.Point(130, 5);
+            this.buttScaleAll.Location = new System.Drawing.Point(194, 5);
             this.buttScaleAll.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.buttScaleAll.Name = "buttScaleAll";
             this.buttScaleAll.Size = new System.Drawing.Size(28, 28);
@@ -146,12 +200,14 @@
             // 
             this.flowLayoutPanel1.BackColor = System.Drawing.Color.RoyalBlue;
             this.flowLayoutPanel1.Controls.Add(this.label5);
+            this.flowLayoutPanel1.Controls.Add(this.buttXMinus);
             this.flowLayoutPanel1.Controls.Add(this.textScaleX);
+            this.flowLayoutPanel1.Controls.Add(this.buttXPlus);
             this.flowLayoutPanel1.Controls.Add(this.buttScaleX);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 44);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(164, 38);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(229, 38);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // label5
@@ -161,7 +217,7 @@
             this.label5.Location = new System.Drawing.Point(3, 3);
             this.label5.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(50, 32);
+            this.label5.Size = new System.Drawing.Size(46, 32);
             this.label5.TabIndex = 1;
             this.label5.Text = "X";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -175,7 +231,7 @@
             this.textScaleX.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textScaleX.ForeColor = System.Drawing.Color.White;
             this.textScaleX.IntVal = 100;
-            this.textScaleX.Location = new System.Drawing.Point(56, 5);
+            this.textScaleX.Location = new System.Drawing.Point(86, 5);
             this.textScaleX.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.textScaleX.MaxFloat = 1000F;
             this.textScaleX.MaxInt = 1000;
@@ -202,7 +258,7 @@
             this.buttScaleX.GuiAnchor = null;
             this.buttScaleX.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttScaleX.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttV;
-            this.buttScaleX.Location = new System.Drawing.Point(130, 5);
+            this.buttScaleX.Location = new System.Drawing.Point(194, 5);
             this.buttScaleX.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.buttScaleX.Name = "buttScaleX";
             this.buttScaleX.Size = new System.Drawing.Size(28, 28);
@@ -216,12 +272,14 @@
             // 
             this.flowLayoutPanel3.BackColor = System.Drawing.Color.RoyalBlue;
             this.flowLayoutPanel3.Controls.Add(this.label6);
+            this.flowLayoutPanel3.Controls.Add(this.buttYMinus);
             this.flowLayoutPanel3.Controls.Add(this.textScaleY);
+            this.flowLayoutPanel3.Controls.Add(this.buttYPlus);
             this.flowLayoutPanel3.Controls.Add(this.buttScaleY);
             this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 85);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(164, 38);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(229, 38);
             this.flowLayoutPanel3.TabIndex = 4;
             // 
             // label6
@@ -231,7 +289,7 @@
             this.label6.Location = new System.Drawing.Point(3, 3);
             this.label6.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(50, 32);
+            this.label6.Size = new System.Drawing.Size(46, 32);
             this.label6.TabIndex = 1;
             this.label6.Text = "Y";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -245,7 +303,7 @@
             this.textScaleY.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textScaleY.ForeColor = System.Drawing.Color.White;
             this.textScaleY.IntVal = 100;
-            this.textScaleY.Location = new System.Drawing.Point(56, 5);
+            this.textScaleY.Location = new System.Drawing.Point(86, 5);
             this.textScaleY.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.textScaleY.MaxFloat = 1000F;
             this.textScaleY.MaxInt = 1000;
@@ -272,7 +330,7 @@
             this.buttScaleY.GuiAnchor = null;
             this.buttScaleY.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttScaleY.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttV;
-            this.buttScaleY.Location = new System.Drawing.Point(130, 5);
+            this.buttScaleY.Location = new System.Drawing.Point(194, 5);
             this.buttScaleY.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.buttScaleY.Name = "buttScaleY";
             this.buttScaleY.Size = new System.Drawing.Size(28, 28);
@@ -286,12 +344,14 @@
             // 
             this.flowLayoutPanel5.BackColor = System.Drawing.Color.RoyalBlue;
             this.flowLayoutPanel5.Controls.Add(this.label7);
+            this.flowLayoutPanel5.Controls.Add(this.buttZMinus);
             this.flowLayoutPanel5.Controls.Add(this.textScaleZ);
+            this.flowLayoutPanel5.Controls.Add(this.buttZPlus);
             this.flowLayoutPanel5.Controls.Add(this.buttScaleZ);
             this.flowLayoutPanel5.Location = new System.Drawing.Point(3, 126);
             this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-            this.flowLayoutPanel5.Size = new System.Drawing.Size(164, 38);
+            this.flowLayoutPanel5.Size = new System.Drawing.Size(229, 38);
             this.flowLayoutPanel5.TabIndex = 5;
             // 
             // label7
@@ -301,7 +361,7 @@
             this.label7.Location = new System.Drawing.Point(3, 3);
             this.label7.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(50, 32);
+            this.label7.Size = new System.Drawing.Size(46, 32);
             this.label7.TabIndex = 1;
             this.label7.Text = "Z";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -315,7 +375,7 @@
             this.textScaleZ.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textScaleZ.ForeColor = System.Drawing.Color.White;
             this.textScaleZ.IntVal = 100;
-            this.textScaleZ.Location = new System.Drawing.Point(56, 5);
+            this.textScaleZ.Location = new System.Drawing.Point(86, 5);
             this.textScaleZ.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.textScaleZ.MaxFloat = 1000F;
             this.textScaleZ.MaxInt = 1000;
@@ -342,7 +402,7 @@
             this.buttScaleZ.GuiAnchor = null;
             this.buttScaleZ.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttScaleZ.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttV;
-            this.buttScaleZ.Location = new System.Drawing.Point(130, 5);
+            this.buttScaleZ.Location = new System.Drawing.Point(194, 5);
             this.buttScaleZ.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.buttScaleZ.Name = "buttScaleZ";
             this.buttScaleZ.Size = new System.Drawing.Size(28, 28);
@@ -423,6 +483,138 @@
             this.ctlTitle1.Text = "Scale %";
             this.ctlTitle1.Click += new System.EventHandler(this.ctlTitle1_Click);
             // 
+            // buttXMinus
+            // 
+            this.buttXMinus.BackColor = System.Drawing.Color.Navy;
+            this.buttXMinus.Checked = false;
+            this.buttXMinus.CheckImage = null;
+            this.buttXMinus.Gapx = 5;
+            this.buttXMinus.Gapy = 5;
+            this.buttXMinus.GLBackgroundImage = null;
+            this.buttXMinus.GLImage = null;
+            this.buttXMinus.GLVisible = false;
+            this.buttXMinus.GuiAnchor = null;
+            this.buttXMinus.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttXMinus.Image = global::UV_DLP_3D_Printer.Properties.Resources.butMinus;
+            this.buttXMinus.Location = new System.Drawing.Point(52, 5);
+            this.buttXMinus.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.buttXMinus.Name = "buttXMinus";
+            this.buttXMinus.Size = new System.Drawing.Size(28, 28);
+            this.buttXMinus.StyleName = null;
+            this.buttXMinus.TabIndex = 6;
+            this.buttXMinus.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttXMinus.Click += new System.EventHandler(this.buttXMinus_Click);
+            // 
+            // buttYMinus
+            // 
+            this.buttYMinus.BackColor = System.Drawing.Color.Navy;
+            this.buttYMinus.Checked = false;
+            this.buttYMinus.CheckImage = null;
+            this.buttYMinus.Gapx = 5;
+            this.buttYMinus.Gapy = 5;
+            this.buttYMinus.GLBackgroundImage = null;
+            this.buttYMinus.GLImage = null;
+            this.buttYMinus.GLVisible = false;
+            this.buttYMinus.GuiAnchor = null;
+            this.buttYMinus.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttYMinus.Image = global::UV_DLP_3D_Printer.Properties.Resources.butMinus;
+            this.buttYMinus.Location = new System.Drawing.Point(52, 5);
+            this.buttYMinus.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.buttYMinus.Name = "buttYMinus";
+            this.buttYMinus.Size = new System.Drawing.Size(28, 28);
+            this.buttYMinus.StyleName = null;
+            this.buttYMinus.TabIndex = 6;
+            this.buttYMinus.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttYMinus.Click += new System.EventHandler(this.buttYMinus_Click);
+            // 
+            // buttZMinus
+            // 
+            this.buttZMinus.BackColor = System.Drawing.Color.Navy;
+            this.buttZMinus.Checked = false;
+            this.buttZMinus.CheckImage = null;
+            this.buttZMinus.Gapx = 5;
+            this.buttZMinus.Gapy = 5;
+            this.buttZMinus.GLBackgroundImage = null;
+            this.buttZMinus.GLImage = null;
+            this.buttZMinus.GLVisible = false;
+            this.buttZMinus.GuiAnchor = null;
+            this.buttZMinus.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttZMinus.Image = global::UV_DLP_3D_Printer.Properties.Resources.butMinus;
+            this.buttZMinus.Location = new System.Drawing.Point(52, 5);
+            this.buttZMinus.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.buttZMinus.Name = "buttZMinus";
+            this.buttZMinus.Size = new System.Drawing.Size(28, 28);
+            this.buttZMinus.StyleName = null;
+            this.buttZMinus.TabIndex = 6;
+            this.buttZMinus.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttZMinus.Click += new System.EventHandler(this.buttZMinus_Click);
+            // 
+            // buttXPlus
+            // 
+            this.buttXPlus.BackColor = System.Drawing.Color.Navy;
+            this.buttXPlus.Checked = false;
+            this.buttXPlus.CheckImage = null;
+            this.buttXPlus.Gapx = 5;
+            this.buttXPlus.Gapy = 5;
+            this.buttXPlus.GLBackgroundImage = null;
+            this.buttXPlus.GLImage = null;
+            this.buttXPlus.GLVisible = false;
+            this.buttXPlus.GuiAnchor = null;
+            this.buttXPlus.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttXPlus.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
+            this.buttXPlus.Location = new System.Drawing.Point(160, 5);
+            this.buttXPlus.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.buttXPlus.Name = "buttXPlus";
+            this.buttXPlus.Size = new System.Drawing.Size(28, 28);
+            this.buttXPlus.StyleName = null;
+            this.buttXPlus.TabIndex = 7;
+            this.buttXPlus.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttXPlus.Click += new System.EventHandler(this.buttXPlus_Click);
+            // 
+            // buttYPlus
+            // 
+            this.buttYPlus.BackColor = System.Drawing.Color.Navy;
+            this.buttYPlus.Checked = false;
+            this.buttYPlus.CheckImage = null;
+            this.buttYPlus.Gapx = 5;
+            this.buttYPlus.Gapy = 5;
+            this.buttYPlus.GLBackgroundImage = null;
+            this.buttYPlus.GLImage = null;
+            this.buttYPlus.GLVisible = false;
+            this.buttYPlus.GuiAnchor = null;
+            this.buttYPlus.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttYPlus.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
+            this.buttYPlus.Location = new System.Drawing.Point(160, 5);
+            this.buttYPlus.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.buttYPlus.Name = "buttYPlus";
+            this.buttYPlus.Size = new System.Drawing.Size(28, 28);
+            this.buttYPlus.StyleName = null;
+            this.buttYPlus.TabIndex = 7;
+            this.buttYPlus.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttYPlus.Click += new System.EventHandler(this.buttYPlus_Click);
+            // 
+            // buttZPlus
+            // 
+            this.buttZPlus.BackColor = System.Drawing.Color.Navy;
+            this.buttZPlus.Checked = false;
+            this.buttZPlus.CheckImage = null;
+            this.buttZPlus.Gapx = 5;
+            this.buttZPlus.Gapy = 5;
+            this.buttZPlus.GLBackgroundImage = null;
+            this.buttZPlus.GLImage = null;
+            this.buttZPlus.GLVisible = false;
+            this.buttZPlus.GuiAnchor = null;
+            this.buttZPlus.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttZPlus.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
+            this.buttZPlus.Location = new System.Drawing.Point(160, 5);
+            this.buttZPlus.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.buttZPlus.Name = "buttZPlus";
+            this.buttZPlus.Size = new System.Drawing.Size(28, 28);
+            this.buttZPlus.StyleName = null;
+            this.buttZPlus.TabIndex = 7;
+            this.buttZPlus.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.buttZPlus.Click += new System.EventHandler(this.buttZPlus_Click);
+            // 
             // ctlScale
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -444,10 +636,6 @@
         #endregion
 
         private System.Windows.Forms.FlowLayoutPanel manipObject;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
-        private System.Windows.Forms.Label label12;
-        private ctlTextBox textScaleAll;
-        private ctlImageButton buttScaleAll;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label label5;
         private ctlImageButton buttScaleX;
@@ -464,6 +652,18 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private ctlImageButton buttmm2inch;
         private ctlImageButton buttinch2mm;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
+        private System.Windows.Forms.Label label12;
+        private ctlImageButton buttAllMinus;
+        private ctlTextBox textScaleAll;
+        private ctlImageButton buttAllPlus;
+        private ctlImageButton buttScaleAll;
+        private ctlImageButton buttXMinus;
+        private ctlImageButton buttXPlus;
+        private ctlImageButton buttYMinus;
+        private ctlImageButton buttYPlus;
+        private ctlImageButton buttZMinus;
+        private ctlImageButton buttZPlus;
 
     }
 }

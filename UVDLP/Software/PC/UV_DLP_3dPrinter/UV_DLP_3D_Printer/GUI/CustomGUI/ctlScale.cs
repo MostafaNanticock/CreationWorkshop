@@ -165,5 +165,120 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         }
 
+        private void buttAllMinus_Click(object sender, EventArgs e)
+        {
+            //get value from txtScaleAll
+            try
+            {
+                float fval = float.Parse(textScaleAll.Text);
+                fval -= 10.0f;
+                textScaleAll.Text = fval.ToString();
+            }catch(Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);            
+            }
+        }
+
+        private void buttAllPlus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float fval = float.Parse(textScaleAll.Text);
+                fval += 10.0f;
+                textScaleAll.Text = fval.ToString();
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
+
+        }
+
+        private void buttXMinus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float fval = float.Parse(textScaleX.Text);
+                fval -= 10.0f;
+                textScaleX.Text = fval.ToString();
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
+
+
+        }
+
+        private void buttXPlus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float fval = float.Parse(textScaleX.Text);
+                fval += 10.0f;
+                textScaleX.Text = fval.ToString();
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
+        }
+
+        private void buttYMinus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float fval = float.Parse(textScaleY.Text);
+                fval -= 10.0f;
+                textScaleY.Text = fval.ToString();
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
+        }
+
+        private void buttYPlus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float fval = float.Parse(textScaleY.Text);
+                fval += 10.0f;
+                textScaleY.Text = fval.ToString();
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
+        }
+
+        private void buttZMinus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float fval = float.Parse(textScaleZ.Text);
+                fval -= 10.0f;
+                textScaleZ.Text = fval.ToString();
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
+        }
+
+        private void buttZPlus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float fval = float.Parse(textScaleZ.Text);
+                fval += 10.0f;
+                textScaleZ.Text = fval.ToString();
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError(ex);
+            }
+        }
+
     }
 }
