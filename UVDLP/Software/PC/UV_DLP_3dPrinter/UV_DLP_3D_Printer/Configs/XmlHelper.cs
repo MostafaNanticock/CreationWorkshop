@@ -437,7 +437,7 @@ namespace UV_DLP_3D_Printer.Configs
         {
             foreach (XmlNode xnode in parentNode.ChildNodes)
             {
-                CWParameter par = CWParameter.LoadUser(m_xdoc, xnode);
+                CWParameter par = CWParameter.LoadUser(xnode);
                 if (par != null)
                     parList.paramDict[par.paramName] = par;
             }

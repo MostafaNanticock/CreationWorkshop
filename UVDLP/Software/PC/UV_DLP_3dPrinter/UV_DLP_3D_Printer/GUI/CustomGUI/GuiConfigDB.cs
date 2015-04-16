@@ -36,7 +36,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public bool defaultSet;
         public abstract Type ParamType { get; }
         public abstract void SaveUser(XmlDocument xd, XmlNode xnode);
-        public static CWParameter LoadUser(XmlDocument xd, XmlNode xnode)
+        public static CWParameter LoadUser(XmlNode xnode)
         {
             CWParameter newPar = null;
             try
@@ -764,6 +764,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                         case "controls": HandleControls(xnode); break;
                         case "sequences": LoadSequences(xnode); break;
                         case "layouts": HandleLayouts(xnode); break;
+                        case "userparams": HandleUserParams(xnode); break;
                     }
                 }
 
@@ -1394,6 +1395,18 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         #endregion
 
 
+#region UserParameters
+        void HandleUserParams(XmlNode upnode)
+        {
+            foreach (XmlNode xnode in upnode.ChildNodes)
+            {
+                CWParameter param = CWParameter.LoadUser(xnode);
+                m_userparms.paramDict[param.paramName] = param;
+            }
+        }
+
+        #endregion
+
         #region Attribute parsing
         GuiParam<string> GetStrParam(XmlNode xnode, string paramName, object defVal)
         {
@@ -1715,6 +1728,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             SaveDecals(xd, toplevel);
             SaveLayouts(xd, toplevel);
             SaveSequences(xd, toplevel);
+            SaveUserParams(xd, toplevel);
             /*if (Plugin != null)
                 fileName += "_" + Plugin.Name + ".xml";
             else
@@ -1961,6 +1975,17 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
         }
 
+        void SaveUserParams(XmlDocument xd, XmlNode parent)
+        {
+            XmlNode upNode = xd.CreateElement("userparams");
+            parent.AppendChild(upNode);
+            foreach (KeyValuePair<string, CWParameter> pair in m_userparms.paramDict)
+            {
+                XmlNode parnode = xd.CreateElement(pair.Value.paramName);
+                upNode.AppendChild(parnode);
+                pair.Value.SaveUser(xd, parnode);
+            }
+        }
 
         public static void AddParameter(XmlDocument xd, XmlNode parent, string name, object data)
         {

@@ -113,4 +113,8 @@
     </layout>
   </layouts>
   <sequences />
+  <userparams>
+    <MyText type="String">676</MyText>
+    <MyColor type="Color">ControlDark</MyColor>
+  </userparams>
 </GuiConfig>
