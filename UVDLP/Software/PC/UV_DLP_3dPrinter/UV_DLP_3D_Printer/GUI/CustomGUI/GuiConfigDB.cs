@@ -1408,7 +1408,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         #endregion
 
         #region Attribute parsing
-        GuiParam<string> GetStrParam(XmlNode xnode, string paramName, object defVal)
+        public static GuiParam<string> GetStrParam(XmlNode xnode, string paramName, object defVal)
         {
             GuiParam<string> res;
             if (defVal is GuiParam<string>)
@@ -1423,7 +1423,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             return res;
         }
 
-        GuiParam<int> GetIntParam(XmlNode xnode, string paramName, object defVal)
+        public static GuiParam<int> GetIntParam(XmlNode xnode, string paramName, object defVal)
         {
             GuiParam<int> res;
             if (defVal is GuiParam<int>)
@@ -1438,7 +1438,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             return res;
         }
 
-        int [] GetIntArrayParam(XmlNode xnode, string paramName)
+        public static int[] GetIntArrayParam(XmlNode xnode, string paramName)
         {
             List<int> num = new List<int>();
             string val = GetStrParam(xnode, paramName, null);
@@ -1459,7 +1459,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             return res;
         }
 
-        GuiParam<bool> GetBoolParam(XmlNode xnode, string paramName, object defVal)
+        public static GuiParam<bool> GetBoolParam(XmlNode xnode, string paramName, object defVal)
         {
             GuiParam<bool> res;
             if (defVal is GuiParam<bool>)
@@ -1474,7 +1474,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             return res;
         }
 
-        GuiParam<Color> GetColorParam(XmlNode xnode, string paramName, object defVal)
+        public static GuiParam<Color> GetColorParam(XmlNode xnode, string paramName, object defVal)
         {
             GuiParam<Color> res;
             if (defVal is GuiParam<Color>)
