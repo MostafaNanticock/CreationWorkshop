@@ -908,7 +908,7 @@ namespace UV_DLP_3D_Printer
                     // get the vendor id
                     int vid = pe.m_plugin.GetInt("VendorID");
                     LicenseKey lk = KeyRing.Instance().Find(vid);
-                    if (lk != null || vid == 0x1000) 
+                    if (lk != null /*|| vid == 0x1000*/) 
                     {
                         pe.m_licensed = true;
                         

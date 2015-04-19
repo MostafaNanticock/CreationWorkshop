@@ -67,17 +67,28 @@ namespace UV_DLP_3D_Printer.Plugin
 
     public class PluginResources
     {
+        const int FILE_VERSION = 1;
+
         List<string> SliceConfigFiles;
         List<string> MachineConfigFiles;
         List<string> ImageFiles;
-        PluginInfo PluginInfo;
+        List<string> PluginGeneral;
+        public PluginInfo PluginInfo;
 
         public PluginResources()
         {
             SliceConfigFiles = new List<string>();
             MachineConfigFiles = new List<string>();
             ImageFiles = new List<string>();
+            PluginGeneral = new List<string>();
+            PluginGeneral.Add("PluginInfo");
             PluginInfo = new PluginInfo();
+            
+        }
+
+        public List<string> GetPluginInfoItems()
+        {
+            return PluginGeneral;
         }
 
         #region manifest parsing
@@ -97,6 +108,29 @@ namespace UV_DLP_3D_Printer.Plugin
                 }
             }
         }
+        #endregion
+
+        #region manifest generation
+        public void SaveManifest(MemoryStream stream)
+        {
+            XmlDocument xd = new XmlDocument();
+            xd.AppendChild(xd.CreateXmlDeclaration("1.0", "utf-8", ""));
+            XmlNode toplevel = xd.CreateElement("CWPluginManifest");
+            XmlAttribute verattr = xd.CreateAttribute("FileVersion");
+            verattr.Value = FILE_VERSION.ToString();
+            toplevel.Attributes.Append(verattr);
+            xd.AppendChild(toplevel);
+            SaveInfo(xd, toplevel);
+            xd.Save(stream);
+        }
+
+        void SaveInfo(XmlDocument xd, XmlNode parentnode)
+        {
+            XmlNode xnode = xd.CreateElement("PluginInfo");
+            PluginInfo.Save(xd, xnode);
+            parentnode.AppendChild(xnode);
+        }
+
         #endregion
     }
 }

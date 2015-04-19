@@ -1716,6 +1716,40 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         #region Save configuration
         public void SaveConfiguration(string fileName)
         {
+            XmlDocument xd = CreateConfigXml();
+            /*if (Plugin != null)
+                fileName += "_" + Plugin.Name + ".xml";
+            else
+                fileName += ".xml";*/
+            try
+            {
+                xd.Save(fileName);
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError("Unable to save GUI configuration: " + ex.Message);
+            }
+        }
+
+        public void SaveConfiguration(MemoryStream ms)
+        {
+            XmlDocument xd = CreateConfigXml();
+            /*if (Plugin != null)
+                fileName += "_" + Plugin.Name + ".xml";
+            else
+                fileName += ".xml";*/
+            try
+            {
+                xd.Save(ms);
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogError("Unable to save GUI configuration: " + ex.Message);
+            }
+        }
+
+        XmlDocument CreateConfigXml()
+        {
             XmlDocument xd = new XmlDocument();
             xd.AppendChild(xd.CreateXmlDeclaration("1.0", "utf-8", ""));
             XmlNode toplevel = xd.CreateElement("GuiConfig");
@@ -1729,19 +1763,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             SaveLayouts(xd, toplevel);
             SaveSequences(xd, toplevel);
             SaveUserParams(xd, toplevel);
-            /*if (Plugin != null)
-                fileName += "_" + Plugin.Name + ".xml";
-            else
-                fileName += ".xml";*/
-            try
-            {
-                xd.Save(fileName);
-            }
-            catch (Exception ex)
-            {
-                DebugLogger.Instance().LogError("Unable to save GUI configuration: " + ex.Message);
-            }
-
+            return xd;
         }
 
         void SaveStyle(XmlDocument xd, XmlNode xnode, GuiControlStyle stl)
