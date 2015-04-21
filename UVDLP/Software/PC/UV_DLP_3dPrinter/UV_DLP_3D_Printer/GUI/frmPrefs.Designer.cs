@@ -48,7 +48,7 @@
             // 
             // cmdOK
             // 
-            this.cmdOK.Location = new System.Drawing.Point(164, 181);
+            this.cmdOK.Location = new System.Drawing.Point(232, 184);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(82, 36);
             this.cmdOK.TabIndex = 4;
@@ -58,7 +58,7 @@
             // 
             // cmdCancel
             // 
-            this.cmdCancel.Location = new System.Drawing.Point(252, 181);
+            this.cmdCancel.Location = new System.Drawing.Point(320, 184);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(75, 36);
             this.cmdCancel.TabIndex = 5;
@@ -143,7 +143,7 @@
             this.grpDebug.Controls.Add(this.chkDriverLog);
             this.grpDebug.Location = new System.Drawing.Point(333, 12);
             this.grpDebug.Name = "grpDebug";
-            this.grpDebug.Size = new System.Drawing.Size(482, 153);
+            this.grpDebug.Size = new System.Drawing.Size(295, 153);
             this.grpDebug.TabIndex = 13;
             this.grpDebug.TabStop = false;
             this.grpDebug.Text = "Debugging";
@@ -172,11 +172,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(827, 232);
+            this.ClientSize = new System.Drawing.Size(637, 232);
             this.Controls.Add(this.grpDebug);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmPrefs";
             this.Text = "Program Preferences";
             this.groupBox2.ResumeLayout(false);

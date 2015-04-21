@@ -130,7 +130,7 @@ namespace UV_DLP_3D_Printer.Drivers
                         hexstr = hexstr.Replace("T0", string.Empty);
                         hexstr = hexstr.Trim();
                         byte[] data = System.Text.Encoding.ASCII.GetBytes(hexstr);
-                        Write(data, data.Length);
+                        m_serialport.Write(data,0, data.Length);
                         return true;                         
                     }
                     else if (hexstr.StartsWith("T1"))
@@ -138,7 +138,8 @@ namespace UV_DLP_3D_Printer.Drivers
                         hexstr = hexstr.Replace("T1", string.Empty);
                         hexstr = hexstr.Trim();
                         byte[] data = Utility.HexStringToByteArray(hexstr); // convert to a byte array
-                        Write(data, data.Length); // send the raw bytes of data
+                       // Write(data, data.Length); // send the raw bytes of data
+                        m_serialport.Write(data, 0, data.Length);
                         return true;
                     }
                     else 
