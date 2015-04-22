@@ -173,6 +173,7 @@
             this.cmdNewScene.StyleName = null;
             this.cmdNewScene.TabIndex = 67;
             this.cmdNewScene.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
+            this.cmdNewScene.Click += new System.EventHandler(this.cmdNewScene_Click);
             // 
             // ctlScene
             // 
