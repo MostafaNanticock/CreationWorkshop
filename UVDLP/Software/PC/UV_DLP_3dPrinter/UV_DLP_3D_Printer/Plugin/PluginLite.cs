@@ -55,17 +55,28 @@ namespace UV_DLP_3D_Printer.Plugin
         private static int m_licensed = 0; // locked to a vendor key (1 or 0)
         private GuiConfigDB m_guiconfig;
         private bool inited = false;
+        private PluginResources pluginRes;
 
         public Bitmap GetImage(string name)
         {
             Bitmap bmp = null;
+            string fname = null;
+            if (pluginRes != null)
+            {
+                foreach (string str in pluginRes.ImageFiles)
+                {
+                    if (Path.GetFileNameWithoutExtension(str) == name)
+                        fname = @"Images/" + str;
+                }
+            }
+            if (fname == null)
+                fname = name + ".png"; // backward compatibility needed ??
             //try to load a bitmap from the zip file
             try
             {
                 using (ZipFile m_zip = ZipFile.Read(m_filename))
                 {
-                    string fname = name + ".png";
-                    ZipEntry ze = m_zip[fname];
+                     ZipEntry ze = m_zip[fname];
                     Stream stream = new MemoryStream();
                     ze.Extract(stream);
                     bmp = new Bitmap(stream);
@@ -79,6 +90,50 @@ namespace UV_DLP_3D_Printer.Plugin
             }
             return bmp;
         }
+
+        public void LoadManifest()
+        {
+            pluginRes = new PluginResources();
+            try
+            {
+                using (ZipFile m_zip = ZipFile.Read(m_filename))
+                {
+                    ZipEntry ze = m_zip["PluginManifest.xml"];
+                    MemoryStream stream = new MemoryStream();
+                    ze.Extract(stream);
+                    pluginRes.ParseManifest(stream);
+                }
+            }
+            catch (Exception)
+            {
+                DebugLogger.Instance().LogError("Error loading PluginManifest.xml from plugin " + m_filename);
+            }
+        }
+
+        private void CopyConfigFile(ZipFile zipFile, string fileName)
+        {
+            ZipEntry ze = zipFile[fileName];
+            ze.Extract(ExtractExistingFileAction.DoNotOverwrite);
+        }
+
+        public void CopyConfigFiles()
+        {
+            try
+            {
+                using (ZipFile m_zip = ZipFile.Read(m_filename))
+                {
+                    foreach (string name in pluginRes.MachineConfigFiles)
+                        CopyConfigFile(m_zip, @"Machines/" + name);
+                    foreach (string name in pluginRes.SliceConfigFiles)
+                        CopyConfigFile(m_zip, @"Profiles/" + name);
+                }
+            }
+            catch (Exception)
+            {
+                DebugLogger.Instance().LogError("Error copying config file");
+            }
+        }
+
         public GuiConfigDB GUIDB 
         {
             get { return m_guiconfig; }
@@ -116,16 +171,16 @@ namespace UV_DLP_3D_Printer.Plugin
         public String GetString(string name)
         {
             if (name.Equals("VendorName"))
-                return m_Vendorname;
+                return pluginRes == null ? m_Vendorname : (string)pluginRes.PluginInfo.vendorName;
 
             if (name.Equals("PluginName"))
-                return m_PluginName;
+                return pluginRes == null ? m_PluginName : (string)pluginRes.PluginInfo.productName;
 
             if (name.Equals("Description"))
-                return m_description;
+                return pluginRes == null ? m_description : (string)pluginRes.PluginInfo.description;
 
             if (name.Equals("Version"))
-                return version;// Assembly.GetCallingAssembly().GetName().Version.ToString();
+                return pluginRes == null ? version : (string)pluginRes.PluginInfo.version;// Assembly.GetCallingAssembly().GetName().Version.ToString();
 
             if (name.Equals("GuiConfig")) 
             {
@@ -175,6 +230,7 @@ namespace UV_DLP_3D_Printer.Plugin
         {
             if (inited) // no re-initialization
                 return;
+            CopyConfigFiles();
             //load the guiconfigdb locally here to search / parse items
             inited = true;
         }

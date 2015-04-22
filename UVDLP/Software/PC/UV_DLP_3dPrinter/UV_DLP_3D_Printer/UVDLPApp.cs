@@ -1111,6 +1111,7 @@ namespace UV_DLP_3D_Printer
                         // create an instance of the plugin
                     PluginLite pll = new PluginLite();
                     pll.m_filename = pluginname;
+                    pll.LoadManifest();
                     IPlugin plug = (IPlugin)pll;
                     string args = Path.GetFileNameWithoutExtension(pluginname);
                     

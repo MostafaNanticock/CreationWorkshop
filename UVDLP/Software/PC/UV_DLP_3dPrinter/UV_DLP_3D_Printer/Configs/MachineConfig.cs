@@ -106,13 +106,36 @@ namespace UV_DLP_3D_Printer
 
         public bool Load(string filename)
         {
-
             m_filename = filename;
             m_lstMonitorconfigs.Clear(); // clear any previously loaded monitors
             m_name = Path.GetFileNameWithoutExtension(filename);
             bool retval = false;
             XmlHelper xh = new XmlHelper();
             bool fileExist = xh.Start(m_filename, "MachineConfig");
+            retval = Load(xh);
+            if (!fileExist)
+            {
+                xh.Save(FILE_VERSION);
+            }
+            return retval;
+        }
+
+        public bool Load(MemoryStream ms, string name)
+        {
+            m_filename = null;
+            m_lstMonitorconfigs.Clear(); // clear any previously loaded monitors
+            m_name = name;
+            bool retval = false;
+            XmlHelper xh = new XmlHelper();
+            xh.LoadFromStream(ms, "MachineConfig");
+            retval = Load(xh);
+            return retval;
+        }
+
+        bool Load(XmlHelper xh)
+        {
+            bool retval = false;
+
             XmlNode mc = xh.m_toplevel;
 
             m_PlatXSize = xh.GetDouble(mc, "PlatformXSize", 102.0);
@@ -153,10 +176,6 @@ namespace UV_DLP_3D_Printer
 
             CalcPixPerMM();
 
-            if (!fileExist)
-            {
-                xh.Save(FILE_VERSION);
-            }
             CorrectMonitorConfig();
             userParams = new UserParameterList();
             xh.LoadUserParamList(userParams);

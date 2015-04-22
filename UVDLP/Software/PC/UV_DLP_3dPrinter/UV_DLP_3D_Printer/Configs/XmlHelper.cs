@@ -108,6 +108,32 @@ namespace UV_DLP_3D_Printer.Configs
             }
             return fileExist;
         }
+
+        /*public bool Start(MemoryStream ms, String docName)
+        {
+            m_filename = null;
+            m_name = docName;
+            m_xdoc = new XmlDocument();
+            m_toplevel = null;
+            try
+            {
+                m_xdoc.Load(ms);
+                m_toplevel = m_xdoc.ChildNodes[1];
+                //m_version = GetInt(m_xdoc, "FileVersion", 0);
+                if (m_toplevel.Name != docName)
+                    m_toplevel = null;
+                else
+                {
+                    m_verattr = m_toplevel.Attributes["FileVersion"];
+                    m_version = int.Parse(m_verattr.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                m_toplevel = null;
+            }
+            return true;
+        }*/
         
         public XmlNode FindChildElement(XmlNode parentNode, String elemName)
         {

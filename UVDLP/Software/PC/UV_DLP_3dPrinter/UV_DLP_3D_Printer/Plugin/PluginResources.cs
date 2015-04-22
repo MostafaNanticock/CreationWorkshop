@@ -69,32 +69,51 @@ namespace UV_DLP_3D_Printer.Plugin
     {
         const int FILE_VERSION = 1;
 
-        List<string> SliceConfigFiles;
-        List<string> MachineConfigFiles;
-        List<string> ImageFiles;
-        List<string> PluginGeneral;
+        List<string> mSliceConfigFiles;
+        List<string> mMachineConfigFiles;
+        List<string> mImageFiles;
+        List<string> mPluginGeneral;
         public PluginInfo PluginInfo;
 
         public PluginResources()
         {
-            SliceConfigFiles = new List<string>();
-            MachineConfigFiles = new List<string>();
-            ImageFiles = new List<string>();
-            PluginGeneral = new List<string>();
-            PluginGeneral.Add("PluginInfo");
+            mSliceConfigFiles = new List<string>();
+            mMachineConfigFiles = new List<string>();
+            mImageFiles = new List<string>();
+            mPluginGeneral = new List<string>();
+            mPluginGeneral.Add("PluginInfo");
             PluginInfo = new PluginInfo();
             
         }
 
-        public List<string> GetPluginInfoItems()
+        public List<string> PluginInfoItems
         {
-            return PluginGeneral;
+            get { return mPluginGeneral; }
+        }
+
+        public List<string> SliceConfigFiles
+        {
+            get { return mSliceConfigFiles; }
+            set { mSliceConfigFiles = value; }
+        }
+
+        public List<string> MachineConfigFiles
+        {
+            get { return mMachineConfigFiles; }
+            set { mMachineConfigFiles = value; }
+        }
+
+        public List<string> ImageFiles
+        {
+            get { return mImageFiles; }
+            set { mImageFiles = value; }
         }
 
         #region manifest parsing
-        void ParseManifest(MemoryStream stream)
+        public void ParseManifest(MemoryStream stream)
         {
             XmlDocument xd = new XmlDocument();
+            stream.Seek(0, SeekOrigin.Begin);
             xd.Load(stream);
             XmlNode rootnode = xd.ChildNodes[1];
             if (rootnode.Name != "CWPluginManifest")
@@ -105,10 +124,40 @@ namespace UV_DLP_3D_Printer.Plugin
                 switch (xnode.Name)
                 {
                     case "PluginInfo": PluginInfo.Load(xnode); break;
+                    case "UserImages":
+                        LoadFileList(xnode, "Image", mImageFiles);
+                        break;
+
+                    case "MachineConfigs":
+                        LoadFileList(xnode, "MachineConfig", mMachineConfigFiles);
+                        break;
+
+                    case "SliceProfile":
+                        LoadFileList(xnode, "SliceProfile", mSliceConfigFiles);
+                        break;
+
                 }
             }
         }
+
+        void LoadFileList(XmlNode parentnode, string name, List<string> fileList)
+        {
+            foreach (XmlNode xnode in parentnode.ChildNodes)
+            {
+                if (xnode.Name == name)
+                {
+                    try
+                    {
+                        fileList.Add(xnode.Attributes["filename"].Value);
+                    }
+                    catch {}
+                }
+            }
+        }
+
         #endregion
+
+
 
         #region manifest generation
         public void SaveManifest(MemoryStream stream)
@@ -121,6 +170,9 @@ namespace UV_DLP_3D_Printer.Plugin
             toplevel.Attributes.Append(verattr);
             xd.AppendChild(toplevel);
             SaveInfo(xd, toplevel);
+            SaveFileList(xd, toplevel, "UserImages", "Image", mImageFiles);
+            SaveFileList(xd, toplevel, "MachineConfigs", "MachineConfig", mMachineConfigFiles);
+            SaveFileList(xd, toplevel, "SliceProfile", "SliceProfile", mSliceConfigFiles);
             xd.Save(stream);
         }
 
@@ -128,6 +180,20 @@ namespace UV_DLP_3D_Printer.Plugin
         {
             XmlNode xnode = xd.CreateElement("PluginInfo");
             PluginInfo.Save(xd, xnode);
+            parentnode.AppendChild(xnode);
+        }
+
+        void SaveFileList(XmlDocument xd, XmlNode parentnode, string title, string item, List<string> fileList)
+        {
+            XmlNode xnode = xd.CreateElement(title);
+            foreach (string imgfile in fileList)
+            {
+                XmlNode imgnode = xd.CreateElement(item);
+                XmlAttribute fileattr = xd.CreateAttribute("filename");
+                fileattr.Value = imgfile;
+                imgnode.Attributes.Append(fileattr);
+                xnode.AppendChild(imgnode);
+            }
             parentnode.AppendChild(xnode);
         }
 
