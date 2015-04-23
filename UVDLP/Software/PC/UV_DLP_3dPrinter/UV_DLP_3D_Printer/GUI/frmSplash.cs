@@ -13,7 +13,7 @@ namespace UV_DLP_3D_Printer.GUI
     {
         Timer m_timer;
         private int m_total = 0;
-        int max = 100;
+        int max = 200;
         public frmSplash()
         {
             InitializeComponent();
@@ -76,8 +76,17 @@ namespace UV_DLP_3D_Printer.GUI
         void m_timer_Tick(object sender, EventArgs e)
         {
             try
-            {                
-                if (m_total >= max) // check for closing
+            {
+                if (UVDLPApp.Instance().m_splashStop && (m_total < (max - 50)))
+                {
+                    m_total = max - 50;
+                    Visible = false;
+                    Update();
+                    Visible = true;
+                    //this.Opacity = 1;
+                    //Update();
+                }
+                if (m_total >= max)// check for closing
                 {
                     m_timer.Stop();
                     Close();

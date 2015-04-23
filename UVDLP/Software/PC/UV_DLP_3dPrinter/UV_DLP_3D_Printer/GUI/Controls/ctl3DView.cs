@@ -344,6 +344,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
 
                 Set3DView();
                 UVDLPApp.Instance().PerformPluginCommand("AfterThemingDone", true);
+                if (firstTime)
+                    UVDLPApp.Instance().m_splashStop = true;
                 firstTime = false;
             }
             catch (Exception ex)

@@ -9,6 +9,7 @@ using System.Reflection;
 using UV_DLP_3D_Printer.GUI;
 using SoftwareLocker;
 using UV_DLP_3D_Printer.Plugin;
+using System.Threading;
 
 namespace UV_DLP_3D_Printer
 {
@@ -73,6 +74,11 @@ namespace UV_DLP_3D_Printer
                 {
                     frmSplash splash = new frmSplash(); // should pull from a licensed plug-in if need-be
                     splash.Show();
+                    for (int i = 0; i < 100; i++)
+                    {
+                        Thread.Sleep(5);
+                        Application.DoEvents();
+                    }
                 }
 #endif
                 Application.Run(new frmMain2());

@@ -122,6 +122,8 @@ namespace UV_DLP_3D_Printer
 
         public frmExport m_exporter;
 
+        public bool m_splashStop = false;
+
         #region SupportModes
         public enum eSupportEditMode 
         {
