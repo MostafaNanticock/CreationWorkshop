@@ -283,8 +283,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             if (conf.HideAllDecals)
             {
-                BgndDecorList = conf.BgndDecorList;
-                FgndDecorList = conf.FgndDecorList;
+                BgndDecorList.Clear();
+                FgndDecorList.Clear();
             }
             BgndDecorList.AddRange(conf.BgndDecorList);
             FgndDecorList.AddRange(conf.FgndDecorList);

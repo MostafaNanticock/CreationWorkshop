@@ -59,15 +59,20 @@ namespace UV_DLP_3D_Printer._3DEngine
     {
         Dictionary<String, C2DImage> ImgDbase;
         Dictionary<String, C2DFont> FontDbase;
+        List<C2DImage> mNewImages;
         int mWidth, mHeight;
+        int mUserTexture;
         OpenTK.Matrix4 m_ortho;
         OpenTK.Matrix4 m_2dView;
+        bool needPacking = false;
 
         public C2DGraphics()
         {
             ImgDbase = new Dictionary<String, C2DImage>();
             FontDbase = new Dictionary<string,C2DFont>();
+            mNewImages = new List<C2DImage>();
             m_2dView = OpenTK.Matrix4.LookAt(new OpenTK.Vector3(0, 0, 10), new OpenTK.Vector3(0, 0, 0), new OpenTK.Vector3(0, 1, 0));
+            mUserTexture = -1;
          }
 
         public void SetupViewport(int w, int h)
@@ -195,13 +200,16 @@ namespace UV_DLP_3D_Printer._3DEngine
                 }
                 if (line[0] != ' ')
                 {
+                    // update last image bmp
+                    if (img != null && img.w != 0 && img.h != 0)
+                        img.bmp = image.Clone(new RectangleF(img.x, img.y, img.w, img.h), image.PixelFormat);
                     // a new image
                     img = new C2DImage();
                     img.name = line.Trim();
                     img.tex = tex;
                     img.scalex = tw;
                     img.scaley = th;
-                    img.bmp = image;
+                    //img.bmp = image;
                     ImgDbase[img.name] = img;
                     continue;
                 }
@@ -224,6 +232,9 @@ namespace UV_DLP_3D_Printer._3DEngine
                         break;
                 }
             }
+            // update last image
+            if (img != null && img.w != 0 && img.h != 0)
+                img.bmp = image.Clone(new RectangleF(img.x, img.y, img.w, img.h), image.PixelFormat);
         }
 
         public void LoadTexture(string index)
@@ -258,6 +269,8 @@ namespace UV_DLP_3D_Printer._3DEngine
 
         public void Image(String name, float x, float y)
         {
+            if (needPacking)
+                GenereteUserTexture();
             if (ImgDbase.ContainsKey(name))
             {
                 C2DImage img = ImgDbase[name];
@@ -267,6 +280,8 @@ namespace UV_DLP_3D_Printer._3DEngine
 
         public void Image(String name, float sx, float sy, float sw, float sh, float dx, float dy, float dw, float dh)
         {
+            if (needPacking)
+                GenereteUserTexture();
             if (ImgDbase.ContainsKey(name))
             {
                 C2DImage img = ImgDbase[name];
@@ -306,8 +321,9 @@ namespace UV_DLP_3D_Printer._3DEngine
             C2DImage img = GetImage(name);
             if (img == null)
                 return null;
-            Bitmap bmp = img.bmp.Clone(new RectangleF(img.x, img.y, img.w, img.h), img.bmp.PixelFormat);
-            return bmp;
+            //Bitmap bmp = img.bmp.Clone(new RectangleF(img.x, img.y, img.w, img.h), img.bmp.PixelFormat);
+            //return bmp;
+            return img.bmp;
         }
 
         // this function will tint a bitmap with a given color */
@@ -449,6 +465,83 @@ namespace UV_DLP_3D_Printer._3DEngine
         {
             GL.Color4(col);
         }
+
+        #region User Images
+
+        public void AddImage(string name, Bitmap image)
+        {
+            C2DImage img = new C2DImage();
+            img.name = name;
+            img.w = image.Width;
+            img.h = image.Height;
+            img.bmp = image;
+            mNewImages.Add(img);
+            needPacking = true;
+        }
+
+        public void GenereteUserTexture()
+        {
+            if (mUserTexture >= 0)
+                DeleteTexture(mUserTexture);
+
+            // step 1, arrange all textures in a one big bitmap;
+            Bitmap bmp = new Bitmap(2048, 2048, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            Graphics gr = Graphics.FromImage(bmp);
+            gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+            //gr.ResetTransform();
+            //gr.PageUnit = GraphicsUnit.Pixel;
+            using (Brush br = new SolidBrush(Color.FromArgb(0, 0, 0, 0)))
+            {
+                gr.FillRectangle(br, new Rectangle(0,0,bmp.Width,bmp.Height));
+            }
+            float tw = bmp.Width;
+            float th = bmp.Height;
+
+            BinPacker bp = new BinPacker();
+            List<BinPacker.BinRect> rects = new List<BinPacker.BinRect>();
+            foreach (C2DImage img in mNewImages)
+            {
+                BinPacker.BinRect rc = new BinPacker.BinRect(img.w, img.h, img);
+                rects.Add(rc);
+            }
+
+            bp.Pack(rects, bmp.Width, bmp.Height, false);
+
+            List<C2DImage> packedImages = new List<C2DImage>();
+            foreach (BinPacker.BinRect rc in rects)
+            {
+                C2DImage img = (C2DImage)rc.obj;
+                if (rc.packed)
+                {
+                    img.x = rc.x;
+                    img.y = rc.y;
+                    img.x1 = (img.x + 0.5f) / tw;
+                    img.y1 = (img.y + 0.5f) / th;
+                    img.x2 = img.x1 + (float)(img.w - 1) / tw;
+                    img.y2 = img.y1 + (float)(img.h - 1) / th;
+                    img.scalex = tw;
+                    img.scaley = th;
+                    gr.DrawImage(img.bmp, img.x, img.y, img.bmp.Width, img.bmp.Height);
+                    //img.bmp.Save("origbmp.png", System.Drawing.Imaging.ImageFormat.Png);
+                    packedImages.Add(img);
+                    mNewImages.Remove(img);
+                }
+            }
+            if (mNewImages.Count != 0)
+            {
+                DebugLogger.Instance().LogError("Not all user images could be loaded");
+            }
+            //bmp.Save("packedbmp.png", System.Drawing.Imaging.ImageFormat.Png);
+            mUserTexture = LoadTextureImage(bmp);
+            foreach (C2DImage img in packedImages)
+            {
+                img.tex = mUserTexture;
+                ImgDbase[img.name] = img;
+            }
+            needPacking = false;
+         }
+
+        #endregion
 
         #region Fonts
 

@@ -56,8 +56,16 @@ namespace UV_DLP_3D_Printer.Plugin
         private GuiConfigDB m_guiconfig;
         private bool inited = false;
         private PluginResources pluginRes;
+        private Dictionary<string, Bitmap> m_images;
 
         public Bitmap GetImage(string name)
+        {
+            if ((m_images != null) && (m_images.ContainsKey(name)))
+                return m_images[name];
+            return null;
+        }
+
+        /*public Bitmap GetImage(string name)
         {
             Bitmap bmp = null;
             string fname = null;
@@ -89,7 +97,7 @@ namespace UV_DLP_3D_Printer.Plugin
                 DebugLogger.Instance().LogError("Image resource " + name + ".png error loading from plugin " + m_filename);
             }
             return bmp;
-        }
+        }*/
 
         public void LoadManifest()
         {
@@ -134,6 +142,39 @@ namespace UV_DLP_3D_Printer.Plugin
             }
         }
 
+        public void LoadImages()
+        {
+            if (pluginRes == null)
+                return;
+            m_images = new Dictionary<string, Bitmap>();
+            try
+            {
+                using (ZipFile m_zip = ZipFile.Read(m_filename))
+                {
+                    foreach (string name in pluginRes.ImageFiles)
+                    {
+                        string fname = @"Images/" + name;
+                        ZipEntry ze = m_zip[fname];
+                        Stream stream = new MemoryStream();
+                        ze.Extract(stream);
+                        Bitmap bmp = new Bitmap(stream);
+                        if (bmp != null)
+                        {
+                            string imname = Path.GetFileNameWithoutExtension(name);
+                            m_images[imname] = bmp;
+                            if (name.StartsWith("gl"))
+                                UVDLPApp.Instance().m_2d_graphics.AddImage(imname, bmp);
+                       }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                DebugLogger.Instance().LogError("Error copying config file");
+            }
+
+        }
+
         public GuiConfigDB GUIDB 
         {
             get { return m_guiconfig; }
@@ -162,7 +203,7 @@ namespace UV_DLP_3D_Printer.Plugin
         public int GetInt(string name)
         {
             if (name.Equals("VendorID"))
-                return m_VendorID;
+                return pluginRes == null ? m_VendorID : (int)pluginRes.PluginInfo.vendorID;
             if (name.Equals("HasLicense"))
                 return m_licensed;
             return -1;
@@ -231,12 +272,14 @@ namespace UV_DLP_3D_Printer.Plugin
             if (inited) // no re-initialization
                 return;
             CopyConfigFiles();
+            LoadImages();
             //load the guiconfigdb locally here to search / parse items
             inited = true;
         }
         public String Name 
         {
-            get { return "Pro Plugin created"; }
+            //get { return "Pro Plugin created"; }
+            get { return Path.GetFileNameWithoutExtension(m_filename); }
         } // required NOT to be part of the string plugin items        
     }
 }

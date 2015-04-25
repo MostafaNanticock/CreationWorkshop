@@ -872,7 +872,8 @@ namespace UV_DLP_3D_Printer
             m_sc.ServerContactEvenet += new ServerContact.Servercontacted(m_sc_ServerContactEvent);
             m_sc.UpdateRegInfo();
             m_undoer.RegisterCallback();
-
+            // pack all 2d gl images
+            //m_2d_graphics.GenereteUserTexture();
         }
 
         void m_sc_ServerContactEvent(string id)
