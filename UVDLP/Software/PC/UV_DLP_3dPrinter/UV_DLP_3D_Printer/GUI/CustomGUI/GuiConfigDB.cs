@@ -549,7 +549,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
     public class GuiButton : GuiControl
     {
-        public string name;
+        //public string name;
         public GuiParam<string> image;
         public GuiParam<string> checkImage;
         public GuiParam<string> onClickCmd;
@@ -657,6 +657,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public List<GuiLayout> GuiLayouts;
         public Dictionary<String, GuiControl> GuiControlsDict;
         public Dictionary<String, GuiButton> GuiButtonsDict;
+        public Dictionary<String, Image> GuiUserImages;
         //List<GuiControl> GuiControls;
         //List<GuiButton> GuiButtons;
         public List<GuiDecorItem> BgndDecorList;
@@ -690,6 +691,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
             GuiControlsDict = new Dictionary<string, GuiControl>();
             GuiButtonsDict = new Dictionary<string, GuiButton>();
+            GuiUserImages = null;
             //GuiControls = new List<GuiControl>();
             //GuiButtons = new List<GuiButton>();
             BgndDecorList = new List<GuiDecorItem>();
@@ -1014,7 +1016,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (!GuiButtonsDict.ContainsKey(name))
             {
                 butt = new GuiButton(name);
-                butt.name = name;
+                //butt.name = name;
                 GuiButtonsDict[name] = butt;
             }
             else
@@ -1534,11 +1536,20 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             return imnames;
         }
 
+        public void AddUserImage(string name, Image img)
+        {
+            if (GuiUserImages == null)
+                GuiUserImages = new Dictionary<string, Image>();
+            GuiUserImages[name] = img;
+        }
+
         public Image GetImage(string imageName)
         {
             Image img = null;
             if (Plugin != null)
                 img = Plugin.GetImage(imageName);
+            if ((GuiUserImages != null) && (GuiUserImages.ContainsKey(imageName)))
+                img = GuiUserImages[imageName];
             if (img == null) // try to get from the 2d graphics first
                 img = UVDLPApp.Instance().m_2d_graphics.GetBitmap(imageName);
             if (img == null)
