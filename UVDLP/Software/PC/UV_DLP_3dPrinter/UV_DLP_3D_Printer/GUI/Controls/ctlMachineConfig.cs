@@ -19,12 +19,26 @@ namespace UV_DLP_3D_Printer.GUI.Controls
         private eDriverType m_saved;
         private MachineConfig m_config = new MachineConfig(); // just so it's not blank
         Configs.MonitorConfig curmc = null;
+        System.Windows.Forms.TabPage m_userparmtab;
         bool settingup;
 
         public ctlMachineConfig()
         {
             InitializeComponent();
             settingup = false;
+            m_userparmtab = tabControl1.TabPages["tabPage2"];
+        }
+        public void ShowMachineControls(bool val)
+        {
+            groupMCControls.Visible = val;
+            if (val == false)
+            {
+                tabControl1.TabPages.Remove(m_userparmtab);
+            }
+            else 
+            {
+                tabControl1.TabPages.Add(m_userparmtab);
+            }
         }
         private void FillMultiMon() 
         {
@@ -37,24 +51,13 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             settingup = true;
             try
             {
-                //lblMachineName.Text = m_config.m_name;
                 grpMachineConfig.Text = m_config.m_name;
                 Monitors.Enabled = true;
                 grpPrjSerial.Enabled = true;
-                
-                //cmbMachineType.Items.Clear();
-                /*
-                foreach(String s in Enum.GetNames(typeof(MachineConfig.eMachineType)))
-                {
-                    cmbMachineType.Items.Add(s);
-                }
-                cmbMachineType.SelectedItem = m_config.m_machinetype.ToString();
-                 * */
                 m_saved = m_config.m_driverconfig.m_drivertype;
-
                 FillMultiMon();
                 cmbMultiSel.SelectedItem = m_config.m_multimontype.ToString();
-
+                chkOverride.Checked = m_config.m_OverrideRenderSize;
                 //list the drivers
                 txtPlatWidth.Text = "" + m_config.m_PlatXSize.ToString("0.00");
                 txtPlatHeight.Text = "" + m_config.m_PlatYSize.ToString("0.00"); 
@@ -123,7 +126,7 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 {
                     UVDLPApp.Instance().SetupDriver();
                 }
-
+                m_config.m_OverrideRenderSize = chkOverride.Checked;
                 m_config.m_PlatXSize = double.Parse(txtPlatWidth.Text);
                 m_config.m_PlatYSize = double.Parse(txtPlatHeight.Text);
                 m_config.m_PlatZSize = double.Parse(txtPlatTall.Text);
@@ -242,10 +245,14 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                     // if there is only 1 configured monitor, then we will set the res to that
                     lblMulti.Visible = false;
                     cmbMultiSel.Visible = false;
-                    int xr = (int)m_config.m_lstMonitorconfigs[0].m_XDLPRes;
-                    int yr = (int)m_config.m_lstMonitorconfigs[0].m_YDLPRes;
-                    txtXRes.Text = xr.ToString();
-                    txtYRes.Text = yr.ToString();
+                    // if we're over-riding the monitor size, leave this alone...
+                    if (m_config.m_OverrideRenderSize == false)
+                    {
+                        int xr = (int)m_config.m_lstMonitorconfigs[0].m_XDLPRes;
+                        int yr = (int)m_config.m_lstMonitorconfigs[0].m_YDLPRes;
+                        txtXRes.Text = xr.ToString();
+                        txtYRes.Text = yr.ToString();
+                    }
                 }
                 else
                 {
@@ -611,11 +618,19 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                 m_config.m_lstMonitorconfigs[0].m_monitorrect.left = 0;
                 m_config.m_lstMonitorconfigs[0].m_monitorrect.right = 1;
                 m_config.m_lstMonitorconfigs[0].m_monitorrect.bottom = 1;
+                if (m_config.m_OverrideRenderSize == false)
+                {
+                    xr = (int)m_config.m_lstMonitorconfigs[0].m_XDLPRes;
+                    yr = (int)m_config.m_lstMonitorconfigs[0].m_YDLPRes;
+                    txtXRes.Text = xr.ToString();
+                    txtYRes.Text = yr.ToString();
+                }
+                else 
+                {
+                    txtXRes.Text = m_config.XRenderSize.ToString();
+                    txtYRes.Text = m_config.YRenderSize.ToString();
                 
-                xr = (int)m_config.m_lstMonitorconfigs[0].m_XDLPRes;
-                yr = (int)m_config.m_lstMonitorconfigs[0].m_YDLPRes;
-                txtXRes.Text = xr.ToString();
-                txtYRes.Text = yr.ToString();
+                }
             }else if( m_config.m_lstMonitorconfigs.Count == 2) 
             {
                 if (cmbMultiSel.SelectedIndex != -1)

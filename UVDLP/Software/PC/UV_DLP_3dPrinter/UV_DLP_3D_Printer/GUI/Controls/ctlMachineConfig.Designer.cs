@@ -87,6 +87,7 @@
             this.ctlUserParamEdit1 = new UV_DLP_3D_Printer.GUI.Controls.ctlUserParamEdit();
             this.cmdRemove = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
             this.cmdCreate = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlImageButton();
+            this.chkOverride = new System.Windows.Forms.CheckBox();
             this.Monitors.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -256,7 +257,7 @@
             this.cmdOK.Location = new System.Drawing.Point(434, 8);
             this.cmdOK.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmdOK.Name = "cmdOK";
-            this.cmdOK.Size = new System.Drawing.Size(175, 48);
+            this.cmdOK.Size = new System.Drawing.Size(175, 40);
             this.cmdOK.TabIndex = 45;
             this.cmdOK.Text = "Apply Changes";
             this.cmdOK.UseVisualStyleBackColor = true;
@@ -277,11 +278,11 @@
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.cmdCfgConMch);
             this.groupBox4.Controls.Add(this.lblConMachine);
-            this.groupBox4.Location = new System.Drawing.Point(215, 22);
+            this.groupBox4.Location = new System.Drawing.Point(215, 13);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox4.Size = new System.Drawing.Size(213, 141);
+            this.groupBox4.Size = new System.Drawing.Size(213, 150);
             this.groupBox4.TabIndex = 59;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Machine Connection";
@@ -425,11 +426,11 @@
             this.groupMCControls.Controls.Add(this.checkMCTilt);
             this.groupMCControls.Controls.Add(this.checkMCZ);
             this.groupMCControls.Controls.Add(this.checkMCXY);
-            this.groupMCControls.Location = new System.Drawing.Point(621, 22);
+            this.groupMCControls.Location = new System.Drawing.Point(621, 13);
             this.groupMCControls.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupMCControls.Name = "groupMCControls";
             this.groupMCControls.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupMCControls.Size = new System.Drawing.Size(158, 338);
+            this.groupMCControls.Size = new System.Drawing.Size(158, 347);
             this.groupMCControls.TabIndex = 63;
             this.groupMCControls.TabStop = false;
             this.groupMCControls.Text = "Machine Controls";
@@ -640,17 +641,18 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.chkOverride);
             this.groupBox2.Controls.Add(this.lblMicronY);
             this.groupBox2.Controls.Add(this.lblMicronX);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.txtYRes);
             this.groupBox2.Controls.Add(this.txtXRes);
-            this.groupBox2.Location = new System.Drawing.Point(434, 22);
+            this.groupBox2.Location = new System.Drawing.Point(434, 13);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(181, 141);
+            this.groupBox2.Size = new System.Drawing.Size(181, 150);
             this.groupBox2.TabIndex = 61;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Output Resolution (px)";
@@ -658,7 +660,7 @@
             // lblMicronY
             // 
             this.lblMicronY.AutoSize = true;
-            this.lblMicronY.Location = new System.Drawing.Point(12, 112);
+            this.lblMicronY.Location = new System.Drawing.Point(12, 101);
             this.lblMicronY.Name = "lblMicronY";
             this.lblMicronY.Size = new System.Drawing.Size(46, 18);
             this.lblMicronY.TabIndex = 5;
@@ -667,7 +669,7 @@
             // lblMicronX
             // 
             this.lblMicronX.AutoSize = true;
-            this.lblMicronX.Location = new System.Drawing.Point(12, 84);
+            this.lblMicronX.Location = new System.Drawing.Point(12, 73);
             this.lblMicronX.Name = "lblMicronX";
             this.lblMicronX.Size = new System.Drawing.Size(46, 18);
             this.lblMicronX.TabIndex = 4;
@@ -676,7 +678,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 57);
+            this.label4.Location = new System.Drawing.Point(9, 48);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 18);
             this.label4.TabIndex = 3;
@@ -685,7 +687,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(9, 30);
+            this.label7.Location = new System.Drawing.Point(9, 22);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(46, 18);
             this.label7.TabIndex = 2;
@@ -693,7 +695,7 @@
             // 
             // txtYRes
             // 
-            this.txtYRes.Location = new System.Drawing.Point(71, 55);
+            this.txtYRes.Location = new System.Drawing.Point(71, 46);
             this.txtYRes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtYRes.Name = "txtYRes";
             this.txtYRes.Size = new System.Drawing.Size(67, 24);
@@ -702,7 +704,7 @@
             // 
             // txtXRes
             // 
-            this.txtXRes.Location = new System.Drawing.Point(71, 27);
+            this.txtXRes.Location = new System.Drawing.Point(71, 19);
             this.txtXRes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtXRes.Name = "txtXRes";
             this.txtXRes.Size = new System.Drawing.Size(67, 24);
@@ -794,6 +796,17 @@
             this.cmdCreate.TabIndex = 63;
             this.cmdCreate.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.cmdCreate.Click += new System.EventHandler(this.cmdNew_Click);
+            // 
+            // chkOverride
+            // 
+            this.chkOverride.AutoSize = true;
+            this.chkOverride.Location = new System.Drawing.Point(15, 122);
+            this.chkOverride.Margin = new System.Windows.Forms.Padding(4);
+            this.chkOverride.Name = "chkOverride";
+            this.chkOverride.Size = new System.Drawing.Size(119, 22);
+            this.chkOverride.TabIndex = 9;
+            this.chkOverride.Text = "Override Size";
+            this.chkOverride.UseVisualStyleBackColor = true;
             // 
             // ctlMachineConfig
             // 
@@ -892,5 +905,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private ctlUserParamEdit ctlUserParamEdit1;
+        private System.Windows.Forms.CheckBox chkOverride;
     }
 }

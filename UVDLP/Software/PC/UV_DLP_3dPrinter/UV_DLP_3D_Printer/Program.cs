@@ -30,6 +30,14 @@ namespace UV_DLP_3D_Printer
             //iterate through the plugins
             bool showlicensedialog = false;
             bool nosplash = false;
+
+#if (REQUIREPLUGIN)
+            if (UVDLPApp.Instance().m_plugins.Count == 0) 
+            {
+                Application.Exit();
+                return;
+            }
+#endif
             //iterate through all plugins,
             // if they are un-licensed and enabled - show licensing dialog.
             foreach (PluginEntry pe in UVDLPApp.Instance().m_plugins) 
