@@ -51,6 +51,8 @@ namespace UV_DLP_3D_Printer
         //of multiple monitors stiched together
         public int XRenderSize;
         public int YRenderSize;
+        public bool m_OverrideRenderSize;
+
         public string MachineControls;
 
         /// <summary>
@@ -146,6 +148,8 @@ namespace UV_DLP_3D_Printer
             m_ZMaxFeedrate = xh.GetDouble(mc, "MaxZFeedRate", 100.0);
             XRenderSize = xh.GetInt(mc, "XRenderSize", 1024);
             YRenderSize = xh.GetInt(mc, "YRenderSize", 768);
+            m_OverrideRenderSize = xh.GetBool(mc, "OverrideRenderSize", false);
+
             MachineControls = xh.GetString(mc, "DisplayedControls", "XYZPG");
             m_machinetype = (eMachineType)xh.GetEnum(mc, "MachineType", typeof(eMachineType), eMachineType.UV_DLP);
             m_multimontype = (eMultiMonType)xh.GetEnum(mc, "MultiMonType", typeof(eMultiMonType), eMultiMonType.eHorizontal);
@@ -175,8 +179,11 @@ namespace UV_DLP_3D_Printer
             }
 
             CalcPixPerMM();
-
-            CorrectMonitorConfig();
+            //if we have a special render size, don't wipe it out...
+            if (m_OverrideRenderSize == false)
+            {
+                CorrectMonitorConfig();
+            }
             userParams = new UserParameterList();
             xh.LoadUserParamList(userParams);
             return retval;
@@ -213,6 +220,7 @@ namespace UV_DLP_3D_Printer
             xh.SetParameter(mc, "MaxZFeedRate", m_ZMaxFeedrate);
             xh.SetParameter(mc, "XRenderSize", XRenderSize);
             xh.SetParameter(mc, "YRenderSize", YRenderSize);
+            xh.SetParameter(mc, "OverrideRenderSize", m_OverrideRenderSize);
             xh.SetParameter(mc, "DisplayedControls", MachineControls);
 
             xh.SetParameter(mc, "MachineType", m_machinetype);
