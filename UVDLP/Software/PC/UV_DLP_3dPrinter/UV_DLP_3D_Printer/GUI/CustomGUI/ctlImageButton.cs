@@ -23,6 +23,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         C2DImage mGLImageCach;
         //ButtonStyle mButtStyle;
         String mOnClickCallback = null;
+        String mText = null;
+        Font mFont = null;
+        int mTextLen = 0;
+        ContentAlignment mTxtAlign = ContentAlignment.MiddleCenter;
 
 
         [Description("Image composesed of all 4 button states"), Category("Data")]
@@ -67,6 +71,23 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
         }
 
+        [Description("Display text"), Category("Data")]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Bindable(true)]
+        public override String Text
+        {
+            get { return mText; }
+            set
+            {
+                mText = value;
+                mTextLen = (mText != null) && (mText.Length > 0) ? -1 : 0;
+                mDstrc.X = 0;
+                Invalidate();
+            }
+        }
+
         [DefaultValue(null)]
         [Description("On Click callback command name"), Category("Data")]
         public String OnClickCallback
@@ -75,6 +96,14 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             set { mOnClickCallback = value; }
         }
 
+        [DefaultValue(ContentAlignment.MiddleCenter)]
+        [Description("GL font name"), Category("Data")]
+        public ContentAlignment TextAlign
+        {
+            get { return mTxtAlign; }
+            set { mTxtAlign = value; Invalidate(); }
+        }
+        
         public ctlImageButton()
         {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
@@ -98,8 +127,12 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             else
             {
                 int w = (int)((float)Height * iratio);
-                mDstrc = new Rectangle((Width - w) / 2, 0, w, Height);
+                int x = (Width - w) / 2;
+                if ((mText != null) && (mText.Length > 0))
+                    x = 0;
+                mDstrc = new Rectangle(x, 0, w, Height);
             }
+            mFont = new System.Drawing.Font("Arial", (float)Height / 2, GraphicsUnit.Pixel);
             Invalidate();
         }
 
@@ -125,9 +158,9 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             //Rectangle srcrc = new Rectangle(0, 0, img.Width, img.Height);
             float scale = 1;
             if (mCtlState == CtlState.Hover)
-                scale = Style.HoverSize / 100;
+                scale = (float)Style.HoverSize / 100;
             if (mCtlState == CtlState.Pressed)
-                scale = Style.PressedSize / 100;
+                scale = (float)Style.PressedSize / 100;
 
             RectangleF dstrc;
             if ((scale < 0.999f) || (scale > 1.001f))
@@ -169,6 +202,16 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 {
                     mCheckrc.X = Checked ? mSubChkImgWidth : 0;
                     gr.DrawImage(mCheckImage, mDstrc, mCheckrc, GraphicsUnit.Pixel);
+                }
+            }
+
+            if (mText != null && mText.Length > 0 && mFont != null)
+            {
+                using (Brush br = new SolidBrush(GetPaintColor(Style)))
+                {
+                    if (mTextLen <= 0)
+                        mTextLen = (int)gr.MeasureString(mText, mFont).Width;
+                    gr.DrawString(mText, mFont, br, mDstrc.Width + (Width - mDstrc.Width - mTextLen) / 2, (Height - mFont.Height) / 2);
                 }
             }
             //base.OnPaint(pevent);
@@ -291,6 +334,20 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             else
             {
                 gr.Image(mGLImageCach, 0, 0, mGLImageCach.w, mGLImageCach.h, 0, 0, Width, Height);
+            }
+        }
+
+        public void FitWidth()
+        {
+            if (mText != null && mText.Length > 0 && mFont != null)
+            {
+                Graphics g = CreateGraphics();
+                SizeF txtsize = g.MeasureString(mText, mFont);
+                mTextLen = (int)g.MeasureString(mText, mFont).Width;
+                int minlen = mDstrc.Width + mTextLen + 10;
+                if (minlen < Width)
+                    Width = minlen;
+                Invalidate();
             }
         }
 
