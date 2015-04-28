@@ -172,5 +172,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI.Expanding
         {
             UVDLPApp.Instance().Engine3D.RearrangeObjects();
         }
+
+        public override void RegisterSubControls(string parentName)
+        {
+            UVDLPApp.Instance().m_gui_config.AddButton(parentName + ".title", ctlTitle1);
+        }
     }
 }

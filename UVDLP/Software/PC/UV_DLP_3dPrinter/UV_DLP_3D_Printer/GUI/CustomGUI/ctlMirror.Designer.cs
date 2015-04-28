@@ -97,8 +97,10 @@
             this.ctlTitle1.Gapx = 0;
             this.ctlTitle1.Gapy = 0;
             this.ctlTitle1.GLBackgroundImage = null;
+            this.ctlTitle1.GLImage = null;
             this.ctlTitle1.GLVisible = false;
             this.ctlTitle1.GuiAnchor = null;
+            this.ctlTitle1.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.ctlTitle1.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttMirror;
             this.ctlTitle1.Location = new System.Drawing.Point(0, 3);
             this.ctlTitle1.Name = "ctlTitle1";
@@ -106,6 +108,7 @@
             this.ctlTitle1.StyleName = null;
             this.ctlTitle1.TabIndex = 7;
             this.ctlTitle1.Text = "Mirror";
+            this.ctlTitle1.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.ctlTitle1.Click += new System.EventHandler(this.ctlTitle1_Click);
             // 
             // ctlMirror
@@ -115,7 +118,7 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.ctlTitle1);
             this.Name = "ctlMirror";
-            this.Size = new System.Drawing.Size(242, 55);
+            this.Size = new System.Drawing.Size(242, 124);
             this.Resize += new System.EventHandler(this.ctlMirror_Resize);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);

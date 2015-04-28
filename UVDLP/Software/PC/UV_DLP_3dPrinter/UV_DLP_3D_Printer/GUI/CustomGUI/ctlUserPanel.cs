@@ -257,5 +257,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
             base.OnInvalidated(e);
         }
+
+        // override this function if you wish to register sub items to be exposed to gui config
+        public virtual void RegisterSubControls(string parentName)
+        {
+        }
     }
 }

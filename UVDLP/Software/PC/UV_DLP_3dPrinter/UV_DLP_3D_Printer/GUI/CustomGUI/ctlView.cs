@@ -216,6 +216,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             flowLayoutPanel3.Width = flowLayoutPanel3.Parent.Width - 6;
         }
 
+        public override void RegisterSubControls(string parentName)
+        {
+            UVDLPApp.Instance().m_gui_config.AddButton(parentName + ".title", ctlTitle1);
+        }
 
     }
 }

@@ -1157,10 +1157,6 @@ namespace UV_DLP_3D_Printer.GUI.Controls
                                     
                                 case ePlItemType.eControl:
                                     UserControl ctl = plugin.GetControl(pi.m_name);
-                                    if ((ctl.GetType() == typeof(ctlTitle)) || ctl.GetType().IsSubclassOf(typeof(ctlTitle)))
-                                    {
-                                        guiconf.AddControl(pi.m_name, ctl);
-                                    }
                                     if ((ctl.GetType() == typeof(ctlImageButton)) || ctl.GetType().IsSubclassOf(typeof(ctlImageButton)))
                                     {
                                         guiconf.AddButton(pi.m_name, (ctlImageButton)ctl);

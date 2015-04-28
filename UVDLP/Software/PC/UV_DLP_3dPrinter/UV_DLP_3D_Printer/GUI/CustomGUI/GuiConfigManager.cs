@@ -62,6 +62,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public void AddControl(string name, Control ctl)
         {
             Controls[name] = ctl;
+            if (ctl is ctlUserPanel)
+                ((ctlUserPanel)ctl).RegisterSubControls(name);
             if ((ctl.Parent == null) && (mTopLevelControl != null))
                 mTopLevelControl.Controls.Add(ctl);
         }
@@ -299,14 +301,22 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 HideAllButtons();
 
             // apply default style if exists
-            GuiControlStyle defstl = conf.GetControlStyle("DefaultButton");
-            if (defstl != null)
+            GuiControlStyle defbutstl = conf.GetControlStyle("DefaultButton");
+            if (defbutstl != null)
+                DefaultButtonStyle = defbutstl;
+            GuiControlStyle deftitstl = conf.GetControlStyle("DefaultTitle");
+            foreach (KeyValuePair<String, ctlImageButton> pair in Buttons)
             {
-                DefaultButtonStyle = defstl;
-                foreach (KeyValuePair<String, ctlImageButton> pair in Buttons)
+                ctlImageButton butt = pair.Value;
+                if (butt is ctlTitle)
                 {
-                    ctlImageButton butt = pair.Value;
-                    butt.ApplyStyle(defstl);
+                    if (deftitstl != null)
+                        butt.ApplyStyle(deftitstl);
+                }
+                else
+                {
+                    if (defbutstl != null)
+                        butt.ApplyStyle(defbutstl);
                 }
             }
             foreach (KeyValuePair<string, GuiButton> pair in conf.GuiButtonsDict)

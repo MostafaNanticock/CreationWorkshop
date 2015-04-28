@@ -1577,7 +1577,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             return dock;
         }
 
-        GuiParam<string> GetDockingParam(XmlNode xnode, string paramName, GuiParam<string> defVal)
+        GuiParam<string> GetDockingParam(XmlNode xnode, string paramName, object defVal)
         {
             GuiParam<string> res;
             if (defVal is GuiParam<string>)

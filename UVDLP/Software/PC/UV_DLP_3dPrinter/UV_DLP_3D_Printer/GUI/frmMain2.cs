@@ -25,10 +25,10 @@ namespace UV_DLP_3D_Printer.GUI
         {
             static int idxgen = 0;
             public int m_tabidx;
-            public ctlTitle m_title;
+            public ctlImageButton m_title;
             public Control m_panel;
             public string m_name;
-            public tabview(string name, ctlTitle title, Control pcontrol) 
+            public tabview(string name, ctlImageButton title, Control pcontrol) 
             {
                 m_name = name;
                 m_title = title;
@@ -143,16 +143,17 @@ namespace UV_DLP_3D_Printer.GUI
             UVDLPApp.Instance().m_gui_config.AddButton("buttExpandLeft", buttExpandLeft);
             
         }
-        public void AddTabView(string name, ctlTitle title, Control view) 
+        public void AddTabView(string name, ctlImageButton title, Control view) 
         {
             m_lsttabs.Add(new tabview(name, title, view));
+            UVDLPApp.Instance().m_gui_config.AddButton(name + ".title", title);
         }
         private void SetupTabs() 
         {
-            m_lsttabs.Add(new tabview("3dView",ctlTitle3dView, pnl3dview));
-            m_lsttabs.Add(new tabview("SliceView",ctlTitleViewSlice, pnlSliceView));
-            m_lsttabs.Add(new tabview("ManualControlView",ctlTitleViewControls, ctlMainManual1));
-            m_lsttabs.Add(new tabview("ConfigureView",ctlTitleConfigure, ctlMainConfig1));
+            AddTabView("3dView",ctlTitle3dView, pnl3dview);
+            AddTabView("SliceView",ctlTitleViewSlice, pnlSliceView);
+            AddTabView("ManualControlView",ctlTitleViewControls, ctlMainManual1);
+            AddTabView("ConfigureView",ctlTitleConfigure, ctlMainConfig1);
         }
         private void AddControls() 
         {
@@ -1050,7 +1051,7 @@ namespace UV_DLP_3D_Printer.GUI
                 tabview tabv = null;
                 foreach (tabview tv in m_lsttabs) 
                 {
-                    if (tv.m_title.Button == button) 
+                    if (tv.m_title == button) 
                     {
                         tabv = tv;
                         break;

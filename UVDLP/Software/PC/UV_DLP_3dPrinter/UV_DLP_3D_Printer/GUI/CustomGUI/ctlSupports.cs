@@ -490,6 +490,11 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             {
                 this.Height = ctlTitle1.Height + 5;
             }
-        }  
+        }
+
+        public override void RegisterSubControls(string parentName)
+        {
+            UVDLPApp.Instance().m_gui_config.AddButton(parentName + ".title", ctlTitle1);
+        }
     }
 }
