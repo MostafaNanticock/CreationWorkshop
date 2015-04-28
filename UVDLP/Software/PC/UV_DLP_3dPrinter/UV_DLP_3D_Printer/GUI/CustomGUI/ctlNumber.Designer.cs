@@ -66,14 +66,18 @@
             this.buttPlus.CheckImage = null;
             this.buttPlus.Gapx = 5;
             this.buttPlus.Gapy = 5;
+            this.buttPlus.GLBackgroundImage = null;
+            this.buttPlus.GLImage = null;
+            this.buttPlus.GLVisible = false;
+            this.buttPlus.GuiAnchor = null;
             this.buttPlus.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttPlus.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttPlus;
             this.buttPlus.Location = new System.Drawing.Point(261, 5);
             this.buttPlus.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.buttPlus.Name = "buttPlus";
             this.buttPlus.Size = new System.Drawing.Size(28, 28);
+            this.buttPlus.StyleName = null;
             this.buttPlus.TabIndex = 6;
-            this.buttPlus.Text = "ctlImageButton8";
             this.buttPlus.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttPlus.Click += new System.EventHandler(this.buttPlus_Click);
             this.buttPlus.DoubleClick += new System.EventHandler(this.buttPlus_Click);
@@ -85,14 +89,18 @@
             this.buttMinus.CheckImage = null;
             this.buttMinus.Gapx = 5;
             this.buttMinus.Gapy = 5;
+            this.buttMinus.GLBackgroundImage = null;
+            this.buttMinus.GLImage = null;
+            this.buttMinus.GLVisible = false;
+            this.buttMinus.GuiAnchor = null;
             this.buttMinus.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttMinus.Image = global::UV_DLP_3D_Printer.Properties.Resources.butMinus;
             this.buttMinus.Location = new System.Drawing.Point(3, 5);
             this.buttMinus.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.buttMinus.Name = "buttMinus";
             this.buttMinus.Size = new System.Drawing.Size(28, 28);
+            this.buttMinus.StyleName = null;
             this.buttMinus.TabIndex = 3;
-            this.buttMinus.Text = "ctlImageButton2";
             this.buttMinus.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.buttMinus.Click += new System.EventHandler(this.buttMinus_Click);
             this.buttMinus.DoubleClick += new System.EventHandler(this.buttMinus_Click);
@@ -100,13 +108,22 @@
             // scrollData
             // 
             this.scrollData.BackColor = System.Drawing.Color.Navy;
+            this.scrollData.Checked = false;
             this.scrollData.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.scrollData.Gapx = 5;
+            this.scrollData.Gapy = 5;
+            this.scrollData.GLBackgroundImage = null;
+            this.scrollData.GLVisible = false;
+            this.scrollData.GuiAnchor = null;
+            this.scrollData.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.scrollData.Increment = 10;
             this.scrollData.Location = new System.Drawing.Point(103, 3);
             this.scrollData.Name = "scrollData";
             this.scrollData.Size = new System.Drawing.Size(152, 32);
+            this.scrollData.StyleName = null;
             this.scrollData.TabIndex = 7;
             this.scrollData.Value = 0;
+            this.scrollData.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.scrollData.Visible = false;
             this.scrollData.ValueChanged += new System.EventHandler(this.scrollData_ValueChanged);
             // 
