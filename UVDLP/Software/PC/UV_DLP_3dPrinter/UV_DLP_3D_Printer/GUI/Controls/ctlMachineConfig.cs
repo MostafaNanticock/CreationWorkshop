@@ -27,6 +27,8 @@ namespace UV_DLP_3D_Printer.GUI.Controls
             InitializeComponent();
             settingup = false;
             m_userparmtab = tabControl1.TabPages["tabPage2"];
+            UVDLPApp.Instance().m_gui_config.AddControl("groupMCControls", groupMCControls);
+
         }
         public void ShowMachineControls(bool val)
         {
