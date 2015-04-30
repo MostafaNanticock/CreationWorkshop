@@ -228,6 +228,7 @@
     <Compile Include="GUI\Controls\ctlGL.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="GUI\CustomGUI\C9Patch.cs" />
     <Compile Include="GUI\CustomGUI\ctlCollapse.cs">
       <SubType>UserControl</SubType>
     </Compile>

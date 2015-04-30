@@ -60,7 +60,7 @@ namespace UV_DLP_3D_Printer.Plugin
 
         public Bitmap GetImage(string name)
         {
-            if ((m_images != null) && (m_images.ContainsKey(name)))
+            if ((name != null) && (m_images != null) && (m_images.ContainsKey(name)))
                 return m_images[name];
             return null;
         }

@@ -14,6 +14,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
     { 
         Image mImage;
         Image mCheckImage;
+        Image mBackImage = null;
         Rectangle mDstrc;
         Rectangle mSrcrc;
         Rectangle mCheckrc;
@@ -217,6 +218,25 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             //base.OnPaint(pevent);
         }
 
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            if (GLDisplay)
+                return;
+            base.OnPaintBackground(e);
+            if (Style == null)
+                return;
+            Graphics gr = e.Graphics;
+            Rectangle rc = new Rectangle(0,0,Width,Height);
+            if (Style.BackImage9Patch != null)
+            {
+                Style.BackImage9Patch.Draw(gr, rc, Style.FrameColor);
+            }
+            else if (Style.BackImageCache != null)
+            {
+                gr.DrawImage(Style.BackImageCache, rc);
+            }
+        }
+
         //public override void ApplyStyle(ControlStyle ct) { } // dummy fuction to eliminate compilation errors 
         public override void ApplyStyle(GuiControlStyle ct)
         {
@@ -366,7 +386,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 GLPaint4(gr);
             if (stl.SubImgCount == 1)
                 GLPaint1(gr, stl);
-            C2DImage cimg = stl.CheckedImageCach;
+            C2DImage cimg = stl.CheckedImageCacheGl;
             if (Enabled && (cimg != null))
             {
                 int chimgw = cimg.w / 2;
@@ -375,5 +395,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 gr.Image(cimg, posx, 0, chimgw, cimg.h, 0, 0, Width, Height);
             }
         }
+
     }
 }

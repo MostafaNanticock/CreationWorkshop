@@ -372,7 +372,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             ForeColor = forecol;
             BackColor = backcol;
             FrameColor = NullColor;
-            BackImage = null;
+            mBackImage = null;
         }
 
         public GuiControlStyle(string name)
@@ -381,15 +381,19 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             ForeColor = NullColor;
             BackColor = NullColor;
             FrameColor = NullColor;
-            BackImage = null;
+            mBackImage = null;
         }
+
+        public GuiConfigDB confDb = null;
 
         // general purpose control style
         public String Name;
         public GuiParam<Color> ForeColor;
         public GuiParam<Color> BackColor;
         public GuiParam<Color> FrameColor;
-        public GuiParam<String> BackImage;
+        public GuiParam<String> mBackImage;
+        Image mBackImageCache = null;
+        C9Patch mBackImage9PCache = null;
         public GuiParam<bool> glMode;
 
         // button styles
@@ -403,14 +407,16 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         //public GuiParam<string> BgndImageName;
         public GuiParam<String> mCheckedImage;
         public GuiParam<String> BorderShape;
-        C2DImage mCheckedImageCach;
+        C2DImage mCheckedImageCacheGl;
+        Image mCheckedImageCache = null;
         public GuiControlPad PanelPad;
 
         // misc
         public GuiParam<bool> applySubControls;
         public GuiParam<bool> applyWindowsControls;
         public GuiParam<string> inheritFrom;
-        public GuiControlStyle parent; 
+        public GuiControlStyle parent;
+
 
 
         public virtual void SetDefault()
@@ -426,7 +432,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             DisabledColor = new GuiParam<Color>(Color.FromArgb(60, 255, 255, 255));
             SubImgCount = new GuiParam<int>(1);
             glMode = new GuiParam<bool>(false);
-            BackImage = new GuiParam<string>();
+            mBackImage = new GuiParam<string>();
             CheckedImage = new GuiParam<string>();
             BorderShape = new GuiParam<string>();
             inheritFrom = new GuiParam<string>();
@@ -444,7 +450,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             ForeColor = sctl.ForeColor.GetCopy();
             BackColor = sctl.BackColor.GetCopy();
             FrameColor = sctl.FrameColor.GetCopy();
-            BackImage = sctl.BackImage.GetCopy();
+            mBackImage = sctl.mBackImage.GetCopy();
             glMode = sctl.glMode.GetCopy();
 
             SubImgCount = sctl.SubImgCount.GetCopy();
@@ -476,7 +482,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             ForeColor.InheritFrom(sctl.ForeColor);
             BackColor.InheritFrom(sctl.BackColor);
             FrameColor.InheritFrom(sctl.FrameColor);
-            BackImage.InheritFrom(sctl.BackImage);
+            mBackImage.InheritFrom(sctl.mBackImage);
             glMode.InheritFrom(sctl.glMode);
 
             SubImgCount.InheritFrom(sctl.SubImgCount);
@@ -503,20 +509,60 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             set
             {
                 mCheckedImage = value;
-                mCheckedImageCach = null;
+                mCheckedImageCacheGl = null;
+                mCheckedImageCache = null;
             }
         }
 
-        public C2DImage CheckedImageCach
+        public C2DImage CheckedImageCacheGl
         {
             get
             {
-                if (mCheckedImageCach == null)
-                    mCheckedImageCach = UVDLPApp.Instance().m_2d_graphics.GetImage(mCheckedImage);
-                return mCheckedImageCach;
+                if (mCheckedImageCacheGl == null)
+                    mCheckedImageCacheGl = UVDLPApp.Instance().m_2d_graphics.GetImage(mCheckedImage);
+                return mCheckedImageCacheGl;
             }
         }
 
+        public Image CheckedImageCache
+        {
+            get
+            {
+                if (((string)mCheckedImage != null) && (mCheckedImageCache == null) && (confDb != null))
+                    mCheckedImageCache = confDb.GetImage(mCheckedImage);
+                return mCheckedImageCache;
+            }
+        }
+
+        public GuiParam<String> BackImage
+        {
+            get { return mBackImage; }
+            set
+            {
+                mBackImage = value;
+                mBackImageCache = null;
+            }
+        }
+
+        public Image BackImageCache
+        {
+            get
+            {
+                if (((string)mBackImage != null) && (mBackImageCache == null) && (confDb != null))
+                    mBackImageCache = confDb.GetImage(mBackImage);
+                return mBackImageCache;
+            }
+        }
+
+        public C9Patch BackImage9Patch
+        {
+            get
+            {
+                if ((mBackImage9PCache == null) && (BackImageCache != null) && ((string)mBackImage).StartsWith("9p"))
+                    mBackImage9PCache = new C9Patch((Bitmap)BackImageCache);
+                return mBackImage9PCache;
+            }
+        }
     }
 
     public class GuiControl
@@ -985,6 +1031,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 GuiButtonStyles.Add(bt);
                 bt.SetDefault();
             }
+            bt.confDb = this;
             UpdateStyle(xnode, bt);
 
             /* move to manager
@@ -1135,6 +1182,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 GuiControlStyles.Add(ct);
                 ct.SetDefault();
             }
+            ct.confDb = this;
             UpdateStyle(xnode, ct);
 
             /* move to manager
@@ -1397,7 +1445,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         #endregion
 
 
-#region UserParameters
+        #region UserParameters
         void HandleUserParams(XmlNode upnode)
         {
             foreach (XmlNode xnode in upnode.ChildNodes)
@@ -1635,93 +1683,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
         }
 
-        #endregion
-
-        #region Perform layout
-
-        /* move to manager 
-        void Draw(List<DecorItem> dlist, C2DGraphics g2d, int w, int h)
-        {
-            foreach (DecorItem di in dlist)
-            {
-                di.Show(g2d, w, h);
-            }
-        }
-
-        public void DrawForeground(C2DGraphics g2d, int w, int h)
-        {
-            Draw(FgndDecorList, g2d, w, h);
-        }
-
-        public void DrawBackground(C2DGraphics g2d, int w, int h)
-        {
-            Draw(BgndDecorList, g2d, w, h);
-        }
-
-        public void LayoutGui(int w, int h)
-        {
-            LayoutButtons(w, h);
-            LayoutControls(w, h);
-        }
-
-        void LayoutButtons(int w, int h)
-        {
-            foreach (KeyValuePair<String, ctlImageButton> pair in Buttons)
-            {
-                ctlImageButton butt = pair.Value;
-                if (butt.GuiAnchor == null)
-                    continue;
-                int px = GetPosition(0, w, butt.Width, butt.Gapx, butt.GuiAnchor[1]);
-                int py = GetPosition(0, h, butt.Height, butt.Gapy, butt.GuiAnchor[0]);
-                butt.Location = new System.Drawing.Point(px, py);
-            }
-        }
-        
-        void LayoutControls(int w, int h)
-        {
-            foreach (KeyValuePair<String, Control> pair in Controls)
-            {
-                if (pair.Value is ctlUserPanel)
-                {
-                    ctlUserPanel ctl = (ctlUserPanel)pair.Value;
-                    if (ctl.GuiAnchor == null)
-                        continue;
-                    int px = GetPosition(0, w, ctl.Width, ctl.Gapx, ctl.GuiAnchor[1]);
-                    int py = GetPosition(0, h, ctl.Height, ctl.Gapy, ctl.GuiAnchor[0]);
-                    ctl.Location = new System.Drawing.Point(px, py);
-                }
-                else 
-                {
-                    
-                }
-            }
-        }
-
-        public void ClearLayout()
-        {
-            BgndDecorList = new List<GuiDecorItem>();
-            FgndDecorList = new List<GuiDecorItem>();
-        }
-
-         move to manager
-        public void HideAllButtons()
-        {
-            foreach (KeyValuePair<String, ctlImageButton> pair in Buttons)
-            {
-                ctlImageButton butt = pair.Value;
-                butt.Visible = false;
-            }
-        }
-
-        void HideAllControls()
-        {
-            foreach (KeyValuePair<String, Control> pair in Controls)
-            {
-                Control ctl = pair.Value;
-                ctl.Visible = false;
-            }
-        }
-        */
         #endregion
 
         #region Save configuration

@@ -25,5 +25,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             base.OnPaint(e);
         }
+
+        public override void ApplyStyle(GuiControlStyle ct)
+        {
+            base.ApplyStyle(ct);
+        }
     }
 }
