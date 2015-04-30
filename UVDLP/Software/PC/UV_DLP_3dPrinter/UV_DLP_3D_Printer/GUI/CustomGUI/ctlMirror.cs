@@ -76,6 +76,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (ct.BackColor.IsValid())
             {
                 BackColor = ct.BackColor;
+                flowLayoutPanel2.BackColor = ct.BackColor;
                 lblX.BackColor = ct.BackColor;
                 lblY.BackColor = ct.BackColor;
                 lblZ.BackColor = ct.BackColor;

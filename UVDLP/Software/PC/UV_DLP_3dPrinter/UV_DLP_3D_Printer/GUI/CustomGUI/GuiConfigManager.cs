@@ -31,6 +31,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         Control mTopLevelControl = null;
         public GuiControlStyle DefaultControlStyle;
         public GuiControlStyle DefaultButtonStyle;
+        public GuiControlStyle DefaultTitleStyle;
         GuiConfigDB guiConf;
         bool firstTime;
         
@@ -50,6 +51,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             DefaultControlStyle.SetDefault();
             DefaultButtonStyle = new GuiControlStyle("DefaultButton");
             DefaultButtonStyle.SetDefault();
+            DefaultTitleStyle = new GuiControlStyle("DefaultTitle");
+            DefaultTitleStyle.SetDefault();
             firstTime = true;
         }
 

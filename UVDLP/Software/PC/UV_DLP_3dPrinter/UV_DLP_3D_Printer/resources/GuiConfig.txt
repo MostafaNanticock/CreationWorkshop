@@ -10,7 +10,7 @@
 		<button name="redo" dock="tl" x="60" y="30" image="buttRedo" w="48" h="48"/>
 	</buttons>
 	<controls>		
-		<style bgndimage="cwpanel" panelpad="2" backcolor="Navy" framecolor="RoyalBlue" hovercolor="White" forecolor="#DCDCDC" checkcolor="#DCDCDC" presscolor="White" nimages="1" pressscale="92" gl="false"/>
+		<style panelpad="2" backcolor="Navy" framecolor="RoyalBlue" hovercolor="White" forecolor="#DCDCDC" checkcolor="#DCDCDC" presscolor="White" nimages="1" pressscale="92" gl="false"/>
 		<style name="TopBars" backcolor="RoyalBlue" hovercolor="White" forecolor="#DCDCDC" checkcolor="#DCDCDC" presscolor="White" nimages="1" pressscale="92"/>
 		<style name="SideBars" backcolor="RoyalBlue" forecolor="White" applysubcontrols="false"/>
 		<style name="Windows" backcolor="default" forecolor="default" applysubcontrols="true"/>

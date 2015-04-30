@@ -33,7 +33,9 @@
             this.lblY = new System.Windows.Forms.Label();
             this.lblZ = new System.Windows.Forms.Label();
             this.ctlTitle1 = new UV_DLP_3D_Printer.GUI.CustomGUI.ctlTitle();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel1.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -42,7 +44,7 @@
             this.flowLayoutPanel1.Controls.Add(this.lblX);
             this.flowLayoutPanel1.Controls.Add(this.lblY);
             this.flowLayoutPanel1.Controls.Add(this.lblZ);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 57);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 54);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(224, 59);
             this.flowLayoutPanel1.TabIndex = 8;
@@ -102,7 +104,7 @@
             this.ctlTitle1.GuiAnchor = null;
             this.ctlTitle1.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.ctlTitle1.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttMirror;
-            this.ctlTitle1.Location = new System.Drawing.Point(0, 3);
+            this.ctlTitle1.Location = new System.Drawing.Point(3, 3);
             this.ctlTitle1.Name = "ctlTitle1";
             this.ctlTitle1.Size = new System.Drawing.Size(235, 45);
             this.ctlTitle1.StyleName = null;
@@ -111,16 +113,27 @@
             this.ctlTitle1.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.ctlTitle1.Click += new System.EventHandler(this.ctlTitle1_Click);
             // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.BackColor = System.Drawing.Color.Navy;
+            this.flowLayoutPanel2.Controls.Add(this.ctlTitle1);
+            this.flowLayoutPanel2.Controls.Add(this.flowLayoutPanel1);
+            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(242, 126);
+            this.flowLayoutPanel2.TabIndex = 9;
+            // 
             // ctlMirror
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.RoyalBlue;
-            this.Controls.Add(this.flowLayoutPanel1);
-            this.Controls.Add(this.ctlTitle1);
+            this.Controls.Add(this.flowLayoutPanel2);
             this.Name = "ctlMirror";
-            this.Size = new System.Drawing.Size(242, 124);
+            this.Size = new System.Drawing.Size(242, 126);
             this.Resize += new System.EventHandler(this.ctlMirror_Resize);
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -132,5 +145,6 @@
         private System.Windows.Forms.Label lblX;
         private System.Windows.Forms.Label lblY;
         private System.Windows.Forms.Label lblZ;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
     }
 }

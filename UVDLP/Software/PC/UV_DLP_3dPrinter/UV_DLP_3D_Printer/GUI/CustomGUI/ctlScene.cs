@@ -216,7 +216,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         private void ctlScene_Resize(object sender, EventArgs e)
         {
-            manipObject.Width = manipObject.Parent.Width -6;
+            manipObject.Width = manipObject.Parent.Width;
             ctlTitle1.Width = ctlTitle1.Parent.Width - 6;
             //flowLayoutPanel1.Width = flowLayoutPanel1.Parent.Width - 6;
             panel1.Width = panel1.Parent.Width - 6;

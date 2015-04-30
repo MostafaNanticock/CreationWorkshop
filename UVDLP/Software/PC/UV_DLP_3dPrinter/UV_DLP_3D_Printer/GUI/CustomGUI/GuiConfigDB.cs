@@ -147,6 +147,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             GuiParam<T> newPar = new GuiParam<T>();
             newPar.state = state;
+            newPar.var = var;
             newPar.defVal = defVal;
             newPar.defaultSet = defaultSet;
             newPar.parrent = parrent;

@@ -113,7 +113,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 h += flowLayoutPanel3.Height;
                 h += flowLayoutPanel4.Height;
                 h += flowLayoutPanel5.Height;
-                h += 3 * 6; // vertical margins
+                h += 3 * 7; // vertical margins
                 this.Height = h;
             }
             else
