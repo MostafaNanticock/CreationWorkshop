@@ -255,15 +255,11 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         public void DoClick(EventArgs e) 
         {
-            OnClick(e);
-        }
-        protected override void OnClick(EventArgs e)
-        {
             base.OnClick(e);
             if (mOnClickCallback == null)
                 return;
             Object retobj = UVDLPApp.Instance().m_callbackhandler.Activate(mOnClickCallback, this);
-            if(retobj != null)
+            if (retobj != null)
             {
                 //if the return object is null, then this was probably a successful call
                 //if the return object type is boolean, and the value is false,
@@ -273,15 +269,20 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 try
                 {
                     Boolean val = (System.Boolean)retobj;
-                    if (val == false) 
+                    if (val == false)
                     {
                         // try to execute it as a sequence
-                        SequenceManager.Instance().ExecuteSequence(mOnClickCallback); 
+                        SequenceManager.Instance().ExecuteSequence(mOnClickCallback);
                     }
                 }
                 catch (Exception) { }
             }
-            
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            if (mCtlState == CtlState.Pressed)
+                DoClick(e);
         }
 
         private void InitializeComponent()

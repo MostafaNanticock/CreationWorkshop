@@ -34,6 +34,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         protected int mAutorepeatPeriod;
         protected Timer mAuturepTimer = null;
         protected MouseEventArgs mLastMouseArgs;
+
        //Control mCtlRefPos;
 
         // will apear in properties panel
@@ -192,6 +193,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
+            if (mevent.Button != System.Windows.Forms.MouseButtons.Left)
+                return;
             mCtlState = CtlState.Pressed;
             if ((mAuturepTimer != null) && (!mAuturepTimer.Enabled))
                 StartAutorepeat(mevent);
