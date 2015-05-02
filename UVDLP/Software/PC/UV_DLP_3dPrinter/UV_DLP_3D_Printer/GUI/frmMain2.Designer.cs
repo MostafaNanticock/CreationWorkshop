@@ -469,6 +469,7 @@
             this.buttExpandLeft.Size = new System.Drawing.Size(42, 42);
             this.buttExpandLeft.StyleName = null;
             this.buttExpandLeft.TabIndex = 0;
+            this.buttExpandLeft.Text = null;
             this.buttExpandLeft.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             // 
             // ctlSupports1
@@ -597,8 +598,10 @@
             this.ctlTitle3dView.Gapx = 0;
             this.ctlTitle3dView.Gapy = 0;
             this.ctlTitle3dView.GLBackgroundImage = null;
+            this.ctlTitle3dView.GLImage = null;
             this.ctlTitle3dView.GLVisible = false;
             this.ctlTitle3dView.GuiAnchor = null;
+            this.ctlTitle3dView.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.ctlTitle3dView.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttViewModel;
             this.ctlTitle3dView.Location = new System.Drawing.Point(3, 3);
             this.ctlTitle3dView.Name = "ctlTitle3dView";
@@ -607,6 +610,7 @@
             this.ctlTitle3dView.StyleName = null;
             this.ctlTitle3dView.TabIndex = 0;
             this.ctlTitle3dView.Text = "3D View";
+            this.ctlTitle3dView.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             // 
             // ctlTitleViewSlice
             // 
@@ -616,8 +620,10 @@
             this.ctlTitleViewSlice.Gapx = 0;
             this.ctlTitleViewSlice.Gapy = 0;
             this.ctlTitleViewSlice.GLBackgroundImage = null;
+            this.ctlTitleViewSlice.GLImage = null;
             this.ctlTitleViewSlice.GLVisible = false;
             this.ctlTitleViewSlice.GuiAnchor = null;
+            this.ctlTitleViewSlice.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.ctlTitleViewSlice.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttViewSlice;
             this.ctlTitleViewSlice.Location = new System.Drawing.Point(189, 3);
             this.ctlTitleViewSlice.Name = "ctlTitleViewSlice";
@@ -626,6 +632,7 @@
             this.ctlTitleViewSlice.StyleName = null;
             this.ctlTitleViewSlice.TabIndex = 1;
             this.ctlTitleViewSlice.Text = "Slice View";
+            this.ctlTitleViewSlice.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             // 
             // ctlTitleViewControls
             // 
@@ -636,8 +643,10 @@
             this.ctlTitleViewControls.Gapx = 0;
             this.ctlTitleViewControls.Gapy = 0;
             this.ctlTitleViewControls.GLBackgroundImage = null;
+            this.ctlTitleViewControls.GLImage = null;
             this.ctlTitleViewControls.GLVisible = false;
             this.ctlTitleViewControls.GuiAnchor = null;
+            this.ctlTitleViewControls.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.ctlTitleViewControls.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttMachineControl;
             this.ctlTitleViewControls.Location = new System.Drawing.Point(375, 3);
             this.ctlTitleViewControls.Name = "ctlTitleViewControls";
@@ -646,6 +655,7 @@
             this.ctlTitleViewControls.StyleName = null;
             this.ctlTitleViewControls.TabIndex = 2;
             this.ctlTitleViewControls.Text = "Control";
+            this.ctlTitleViewControls.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             // 
             // ctlTitleConfigure
             // 
@@ -655,8 +665,10 @@
             this.ctlTitleConfigure.Gapx = 0;
             this.ctlTitleConfigure.Gapy = 0;
             this.ctlTitleConfigure.GLBackgroundImage = null;
+            this.ctlTitleConfigure.GLImage = null;
             this.ctlTitleConfigure.GLVisible = false;
             this.ctlTitleConfigure.GuiAnchor = null;
+            this.ctlTitleConfigure.HorizontalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             this.ctlTitleConfigure.Image = global::UV_DLP_3D_Printer.Properties.Resources.buttMachineConfig;
             this.ctlTitleConfigure.Location = new System.Drawing.Point(561, 3);
             this.ctlTitleConfigure.Name = "ctlTitleConfigure";
@@ -665,6 +677,7 @@
             this.ctlTitleConfigure.StyleName = null;
             this.ctlTitleConfigure.TabIndex = 3;
             this.ctlTitleConfigure.Text = "Configure";
+            this.ctlTitleConfigure.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.None;
             // 
             // buttOpenFile
             // 
@@ -686,6 +699,7 @@
             this.buttOpenFile.Size = new System.Drawing.Size(48, 48);
             this.buttOpenFile.StyleName = null;
             this.buttOpenFile.TabIndex = 36;
+            this.buttOpenFile.Text = null;
             this.buttOpenFile.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.Top;
             // 
             // buttSaveScene
@@ -708,6 +722,7 @@
             this.buttSaveScene.Size = new System.Drawing.Size(48, 48);
             this.buttSaveScene.StyleName = null;
             this.buttSaveScene.TabIndex = 44;
+            this.buttSaveScene.Text = null;
             this.buttSaveScene.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.Top;
             this.buttSaveScene.Click += new System.EventHandler(this.SaveScene);
             // 
@@ -731,6 +746,7 @@
             this.buttConnect.Size = new System.Drawing.Size(48, 48);
             this.buttConnect.StyleName = null;
             this.buttConnect.TabIndex = 41;
+            this.buttConnect.Text = null;
             this.buttConnect.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.Top;
             // 
             // buttDisconnect
@@ -753,6 +769,7 @@
             this.buttDisconnect.Size = new System.Drawing.Size(48, 48);
             this.buttDisconnect.StyleName = null;
             this.buttDisconnect.TabIndex = 42;
+            this.buttDisconnect.Text = null;
             this.buttDisconnect.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.Top;
             // 
             // buttSlice
@@ -775,6 +792,7 @@
             this.buttSlice.Size = new System.Drawing.Size(48, 48);
             this.buttSlice.StyleName = null;
             this.buttSlice.TabIndex = 43;
+            this.buttSlice.Text = null;
             this.buttSlice.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.Top;
             // 
             // buttPlay
@@ -797,6 +815,7 @@
             this.buttPlay.Size = new System.Drawing.Size(48, 48);
             this.buttPlay.StyleName = null;
             this.buttPlay.TabIndex = 37;
+            this.buttPlay.Text = null;
             this.buttPlay.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.Top;
             // 
             // buttPause
@@ -819,6 +838,7 @@
             this.buttPause.Size = new System.Drawing.Size(48, 48);
             this.buttPause.StyleName = null;
             this.buttPause.TabIndex = 38;
+            this.buttPause.Text = null;
             this.buttPause.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.Top;
             // 
             // buttStop
@@ -841,6 +861,7 @@
             this.buttStop.Size = new System.Drawing.Size(48, 48);
             this.buttStop.StyleName = null;
             this.buttStop.TabIndex = 39;
+            this.buttStop.Text = null;
             this.buttStop.VerticalAnchor = UV_DLP_3D_Printer.GUI.CustomGUI.ctlAnchorable.AnchorTypes.Top;
             // 
             // frmMain2
@@ -857,6 +878,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Creation Workshop";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.frmMain2_MouseClick);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.frmMain2_MouseMove);
             this.pnlTopIcons.ResumeLayout(false);
             this.pnl3dview.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);

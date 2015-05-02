@@ -13,11 +13,44 @@ using UV_DLP_3D_Printer._3DEngine;
 using UV_DLP_3D_Printer.Device_Interface;
 using UV_DLP_3D_Printer.Device_Interface.AutoDetect;
 
+
 namespace UV_DLP_3D_Printer.GUI
 {
     public partial class frmMain2 : Form
     {
-        
+        // this section is to hook into the global mouse events for the application
+        // we're going to do hit testing when the right mouse button is clicked. for 
+        //'Pro'feature skinning
+        public delegate void MouseMovedEvent();
+        public delegate void MouseRDownEvent();
+        public class GlobalMouseHandler : IMessageFilter
+        {
+            private const int WM_MOUSEMOVE = 0x0200;
+            private const int WM_RBUTTONDOWN = 0x0204;
+            public event MouseMovedEvent TheMouseMoved;
+            public event MouseRDownEvent TheMouseRDown;
+            #region IMessageFilter Members
+            public bool PreFilterMessage(ref Message m)
+            {
+                if (m.Msg == WM_MOUSEMOVE)
+                {
+                    if (TheMouseMoved != null)
+                    {
+                        TheMouseMoved();
+                    }
+                }
+                else if (m.Msg == WM_RBUTTONDOWN) 
+                {
+                    if (TheMouseRDown != null) 
+                    {
+                        TheMouseRDown();
+                    }
+                }
+                // Always allow message to continue to the next filter control
+                return false;
+            }
+            #endregion
+        }        
         // the tabview class is used to display a ctlTitle with a panel object on the pnlTopTabs
         // I'm adding this small tracker class so we can add new tabs / controls loaded
         // from plugins or from the guiconfig files.
@@ -49,13 +82,14 @@ namespace UV_DLP_3D_Printer.GUI
         private int m_viewtype;
         public event delBuildStatus BuildStatusInvoked; // rund the build delegate in Form thread
         public string m_appname = "Creation Workshop";
-        //frmDLP m_frmdlp = new frmDLP();
         frmSlice m_frmSlice = new frmSlice();
         public ManualControl m_manctl;
         int rightToolsWidth = 0;
         StringBuilder m_logSB;
         List<tabview> m_lsttabs;
         private string SceneFileExt;
+        public GlobalMouseHandler app_mouse_handler = new GlobalMouseHandler();
+        
         public frmMain2()
         {
             SceneFileExt = "cws";// default to creation workshop CWS files
@@ -117,6 +151,55 @@ namespace UV_DLP_3D_Printer.GUI
             #endif
                 SetTitle();
             UVDLPApp.Instance().PerformPluginCommand("MainFormLoadedCommand", true);
+            AddGlobalMouseHandler();
+        }
+        private void AddGlobalMouseHandler() 
+        {
+            
+            //app_mouse_handler = new GlobalMouseHandler();
+            app_mouse_handler.TheMouseMoved += new MouseMovedEvent(gmh_TheMouseMoved);
+           // app_mouse_handler.TheMouseRDown += new MouseRDownEvent(gmh_TheMouseRDown);
+            Application.AddMessageFilter(app_mouse_handler);
+        
+        }
+        /*
+        void gmh_TheMouseRDown()
+        {
+            Point cur_pos = System.Windows.Forms.Cursor.Position;
+            //recursive hit test controls here 
+            DebugLogger.Instance().LogInfo("pos x,y = " + cur_pos.X + "," + cur_pos.Y);
+            // change the control coordiantes to screen coordinates
+            Point cur_pos_screen = this.PointToScreen(cur_pos);
+            // pass this main window, along with the click position in screen coordinates
+            List<Control> lstctl = HTLoc(this,cur_pos);
+            DebugLogger.Instance().LogInfo("count :" + lstctl.Count);
+        }
+
+        List<Control> HTLoc(Control tctrl, Point loc_screen) 
+        {
+            List<Control> lst = new List<Control>();
+            // first, convert the screen coords into this controls local coords
+            Point loc_control = tctrl.PointToClient(loc_screen);
+            //test to see if these screen coordniates fall within the bounding box of tctrl bounds
+            if (tctrl.ClientRectangle.Contains(loc_control)) // bounds
+            {
+                // if it does, add tctrl
+                lst.Add(tctrl);
+                DebugLogger.Instance().LogInfo(tctrl.Name);
+                // and now, iterate through all child controls
+                foreach (Control c in tctrl.Controls)
+                {
+                    lst.AddRange(HTLoc(c, loc_screen));
+                }
+            }
+            return lst;
+        }
+        */
+
+        void gmh_TheMouseMoved()
+        {
+            Point cur_pos = System.Windows.Forms.Cursor.Position;
+           
         }
         public void SetAboutVisible(bool val) 
         {
@@ -205,42 +288,16 @@ namespace UV_DLP_3D_Printer.GUI
             
 
         }
-        /// <summary>
-        /// Need to implement this at mainform level too
-        /// </summary>
-        /// <param name="ct"></param>
-        public void ApplyStyle(GuiControlStyle ct)
-        {
-            /*
-            if(ct.BackColor !=null)
-            {
-                pnlTopIcons.BackColor = ct.BackColor;
-                pnlTopTabs.BackColor = ct.BackColor;
-            }
-            */
-            /*
-            mStyle = ct;
-            mStyleName = ct.Name;
-            ApplyStyleRecurse(this, ct);
-            if (ct.BackColor != ControlStyle.NullColor)
-                bgndPanel.col = ct.BackColor;
-            if (ct.BgndImageName != null)
-                bgndPanel.imageName = ct.BgndImageName;
-             * */
-        }
-
 
         private void SetTimeMessage(String message)
         {
             lblTime.Text = message;
-            //ctl3DView1.TimeMessage = message;
         }
         private void SetMainMessage(String message)
         {
             try
             {
                 lblMainMessage.Text = message;
-                //ctl3DView1.MainMessage = message;
             }
             catch (Exception ex)
             {
@@ -1004,7 +1061,7 @@ namespace UV_DLP_3D_Printer.GUI
                     {
                         if (c.Width > maxwidth) 
                         {
-                            maxwidth = c.Width ;
+                           // maxwidth = c.Width + c. ;
                         }
                     }
 
@@ -1224,6 +1281,21 @@ namespace UV_DLP_3D_Printer.GUI
         private void ctl3DView1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void frmMain2_MouseClick(object sender, MouseEventArgs e)
+        {
+            // can I hit - test every control in the form from here?
+            // the goal here is to find out what control was clicked on so we can start skinning that way.
+            int x = e.Location.X;
+            int y = e.Location.Y;
+            //this.Controls
+
+        }
+
+        private void frmMain2_MouseMove(object sender, MouseEventArgs e)
+        {
+            e = e;
         }
     }
 }
