@@ -248,11 +248,22 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
     {
         public abstract void Show(C2DGraphics g2d, int w, int h);
         public GuiParam<bool> visible = new GuiParam<bool>(true);
+        public GuiParam<string> level = new GuiParam<string>("foreground");
         public GuiParam<string> name = new GuiParam<string>();
     }
 
     public class GuiDecorImage : GuiDecorItem
     {
+        public GuiDecorImage()
+        {
+            this.imgname = new GuiParam<string>();
+            this.docking = new GuiParam<string>("cc");
+            this.x = new GuiParam<int>(0);
+            this.y = new GuiParam<int>(0);
+            this.col = new GuiParam<Color>(Color.White);
+            this.opacity = new GuiParam<int>(-1);
+        }
+
         public GuiDecorImage(string imgname, GuiParam<string> docking, GuiParam<int> x, GuiParam<int> y, GuiParam<Color> col, GuiParam<int> opacity)
         {
             this.imgname = imgname;
@@ -262,7 +273,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             this.col = col;
             this.opacity = opacity;
         }
-        public string imgname;
+        public GuiParam<string> imgname;
         public GuiParam<string> docking; // tl = top left, rc = right center, nn = no dock, etc
         public GuiParam<int> x, y;       // gap to edge when docked, absolute if not
         public GuiParam<int> opacity;
@@ -294,14 +305,22 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
     public class GuiDecorBar : GuiDecorItem
     {
+        public GuiDecorBar(bool isgrad)
+        {
+            this.docking = new GuiParam<string>("n");
+            this.bw = new GuiParam<int>(100);
+            this.coltl = new GuiParam<Color>(Color.White);
+            this.coltr = new GuiParam<Color>(Color.White);
+            this.colbl = new GuiParam<Color>(Color.White);
+            this.colbr = new GuiParam<Color>(Color.White);
+            this.isgrad = isgrad;
+        }
+
         public GuiDecorBar(GuiParam<string> docking, GuiParam<int> w, GuiParam<Color> col) // solid bar
         {
             this.docking = docking;
             this.bw = w;
             coltl = col;
-            coltr = col;
-            colbl = col;
-            colbr = col;
             isgrad = false;
         }
 
@@ -332,7 +351,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 case "r": px = w - bw; py = 0; pw = bw; ph = h; break;
                 default: px = 0; py = 0; pw = w; ph = h; break;
             }
-            g2d.GradientRect(px, py, pw, ph, coltl, coltr, colbl, colbr);
+            if (isgrad)
+                g2d.GradientRect(px, py, pw, ph, coltl, coltr, colbl, colbr);
+            else
+                g2d.GradientRect(px, py, pw, ph, coltl, coltl, coltl, coltl);
         }
     }
 
@@ -707,8 +729,6 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         public Dictionary<String, Image> GuiUserImages;
         //List<GuiControl> GuiControls;
         //List<GuiButton> GuiButtons;
-        public List<GuiDecorItem> BgndDecorList;
-        public List<GuiDecorItem> FgndDecorList;
         public List<CommandSequence> CmdSequenceList;
         ResourceManager Res; // the resource manager for the main CW application
         IPlugin Plugin;
@@ -741,8 +761,8 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             GuiUserImages = null;
             //GuiControls = new List<GuiControl>();
             //GuiButtons = new List<GuiButton>();
-            BgndDecorList = new List<GuiDecorItem>();
-            FgndDecorList = new List<GuiDecorItem>();
+            //BgndDecorList = new List<GuiDecorItem>();
+            //FgndDecorList = new List<GuiDecorItem>();
             CmdSequenceList = new List<CommandSequence>();
             
             GuiLayouts = new List<GuiLayout>();
@@ -759,6 +779,31 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             m_userparms = new UserParameterList();
         }
 
+        public List<GuiDecorItem> BgndDecorList
+        {
+            get
+            {
+                return GetDecorListByLevel("background");
+            }
+        }
+        public List<GuiDecorItem> FgndDecorList
+        {
+            get
+            {
+                return GetDecorListByLevel("foreground");
+            }
+        }
+
+        public List<GuiDecorItem> GetDecorListByLevel(string level)
+        {
+            List<GuiDecorItem> lst = new List<GuiDecorItem>();
+            foreach (KeyValuePair<string, GuiDecorItem> pair in GuiDecorItemsDict)
+            {
+                if ((string)pair.Value.level == level)
+                    lst.Add(pair.Value);
+            }
+            return lst;
+        }
 
         public Control TopLevelControl
         {
@@ -929,6 +974,14 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
 
         #region Decals
 
+        string GenerateDecalName(string basename)
+        {
+            int i = 1;
+            while (GuiDecorItemsDict.ContainsKey(basename + i.ToString()))
+                i++;
+            return basename + i.ToString();
+        }
+
         void HandleDecals(XmlNode decalnode)
         {
             HideAllDecals = GetBoolParam(decalnode, "HideAll", false);
@@ -942,7 +995,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             }
         }
 
-        List<GuiDecorItem> GetListFromLevel(XmlNode xnode)
+        /*List<GuiDecorItem> GetListFromLevel(XmlNode xnode)
         {
             List<GuiDecorItem> dlist = FgndDecorList;
             if (GetStrParam(xnode, "level", "") == "background")
@@ -950,16 +1003,15 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 dlist = BgndDecorList;
             }
             return dlist;
-        }
+        }*/
 
 
         void HandleBars(XmlNode barnode)
         {
-            GuiParam<string> docking = GetDockingParam(barnode, "dock", "n");
+            GuiParam<string> docking = GetStrParam(barnode, "dock", "n");
             GuiParam<int> w = GetIntParam(barnode, "width", 100);
             string name = GetStrParam(barnode, "name", null);
-            List<GuiDecorItem> dlist = GetListFromLevel(barnode);
-            GuiDecorItem dcr = null;
+            GuiDecorBar dcr = null;
             if (!GetStrParam(barnode, "color", null).IsExplicit())
             {
                 Color coltl = GetColorParam(barnode, "tlcolor", Color.White);
@@ -973,12 +1025,11 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
                 Color col = GetColorParam(barnode, "color", Color.White);
                 dcr = new GuiDecorBar(docking, w, col);
             }
-            dlist.Add(dcr);
-            if (name != null)
-            {
-                dcr.name = name;
-                GuiDecorItemsDict[name] = dcr;
-            }
+            dcr.level = GetStrParam(barnode, "level", "foreground");
+            if (name == null)
+                name = GenerateDecalName(dcr.isgrad ? "Gradient" : "Bar");
+            dcr.name = name;
+            GuiDecorItemsDict[name] = dcr;
         }
 
         void HandleImages(XmlNode imgnode)
@@ -987,19 +1038,17 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             if (imgname == null)
                 return;
             string name = GetStrParam(imgnode, "name", null);
+            if (name == null)
+                name = GenerateDecalName("Image");
             GuiParam<string> docking = GetDockingParam(imgnode, "dock", "cc");
             GuiParam<int> x = GetIntParam(imgnode, "x", 0);
             GuiParam<int> y = GetIntParam(imgnode, "y", 0);
             GuiParam<Color> col = GetColorParam(imgnode, "color", Color.White);
             GuiParam<int> opacity = GetIntParam(imgnode, "opacity", -1);
-            List<GuiDecorItem> dlist = GetListFromLevel(imgnode);
             GuiDecorItem dcr = new GuiDecorImage(imgname, docking, x, y, col, opacity);
-            dlist.Add(dcr);
-            if (name != null)
-            {
-                dcr.name = name;
-                GuiDecorItemsDict[name] = dcr;
-            }
+            dcr.level = GetStrParam(imgnode, "level", "foreground");
+            dcr.name = name;
+            GuiDecorItemsDict[name] = dcr;
         }
         #endregion
 
@@ -1149,6 +1198,28 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             List<string> res = new List<string>();
             foreach (GuiControlStyle gcs in GuiButtonStyles)
                 res.Add(gcs.Name);
+            return res;
+        }
+
+        public List<string> GetGuiDecorImageNames()
+        {
+            List<string> res = new List<string>();
+            foreach (KeyValuePair<string, GuiDecorItem> pair in GuiDecorItemsDict)
+            {
+                if (pair.Value is GuiDecorImage)
+                    res.Add((string)pair.Value.name);
+            }
+            return res;
+        }
+
+        public List<string> GetGuiDecorBarNames(bool isgrad)
+        {
+            List<string> res = new List<string>();
+            foreach (KeyValuePair<string, GuiDecorItem> pair in GuiDecorItemsDict)
+            {
+                if ((pair.Value is GuiDecorBar) && (((GuiDecorBar)pair.Value).isgrad == isgrad))
+                    res.Add((string)pair.Value.name);
+            }
             return res;
         }
 
@@ -1859,7 +1930,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             SaveButtonDefs(xd, buttunsNode);
         }
 
-        void SaveBar(XmlDocument xd, XmlNode parent, GuiDecorBar db, bool isBgnd)
+        void SaveBar(XmlDocument xd, XmlNode parent, GuiDecorBar db)
         {
             XmlNode dbnode = xd.CreateElement("bar");
             parent.AppendChild(dbnode);
@@ -1877,11 +1948,10 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             {
                 db.coltl.Save(xd, dbnode, "color");
             }
-            if (isBgnd)
-                AddParameter(xd, dbnode, "level", "background");
+            db.level.Save(xd, dbnode, "level");
         }
 
-        void SaveImage(XmlDocument xd, XmlNode parent, GuiDecorImage di, bool isBgnd)
+        void SaveImage(XmlDocument xd, XmlNode parent, GuiDecorImage di)
         {
             XmlNode dinode = xd.CreateElement("image");
             parent.AppendChild(dinode);
@@ -1892,30 +1962,22 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
             di.y.Save(xd, dinode, "y");
             di.col.Save(xd, dinode, "color");
             di.opacity.Save(xd, dinode, "opacity");
-            if (isBgnd)
-                AddParameter(xd, dinode, "level", "background");
-        }
+            di.level.Save(xd, dinode, "level");
+       }
 
         void SaveDecals(XmlDocument xd, XmlNode parent)
         {
             XmlNode decNode = xd.CreateElement("decals");
             parent.AppendChild(decNode);
             HideAllDecals.Save(xd, decNode, "HideAll");
-            foreach (GuiDecorItem dec in BgndDecorList)
+            foreach (KeyValuePair<string, GuiDecorItem> pair in GuiDecorItemsDict)
             {
+                GuiDecorItem dec = pair.Value;
                 if (dec is GuiDecorBar)
-                    SaveBar(xd, decNode, (GuiDecorBar)dec, true);
+                    SaveBar(xd, decNode, (GuiDecorBar)dec);
                 else if (dec is GuiDecorImage)
-                    SaveImage(xd, decNode, (GuiDecorImage)dec, true);
+                    SaveImage(xd, decNode, (GuiDecorImage)dec);
             }
-            foreach (GuiDecorItem dec in FgndDecorList)
-            {
-                if (dec is GuiDecorBar)
-                    SaveBar(xd, decNode, (GuiDecorBar)dec, false);
-                else if (dec is GuiDecorImage)
-                    SaveImage(xd, decNode, (GuiDecorImage)dec, false);
-            }
-
         }
         
         void SaveSequences(XmlDocument xd, XmlNode parent)

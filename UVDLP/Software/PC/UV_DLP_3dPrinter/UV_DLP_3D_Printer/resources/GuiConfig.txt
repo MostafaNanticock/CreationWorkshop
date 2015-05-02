@@ -43,9 +43,9 @@
 		<control name="pnlLeftBar" style="SideBars"/>
 	</controls>
 	<decals>
-		<bar dock="n" tlcolor="AliceBlue" trcolor="AliceBlue" blcolor="LightBlue" brcolor="SkyBlue" level="background"/>
+		<bar name="Background" dock="n" tlcolor="AliceBlue" trcolor="AliceBlue" blcolor="LightBlue" brcolor="SkyBlue" level="background"/>
 		<!-- <bar dock="b" width="70" color="RoyalBlue"/> -->
-		<image image="cwlogo_tr" dock="tr" x="0" y="0" />
+		<image name="Logo" image="cwlogo_tr" dock="tr" x="0" y="0" />
 	</decals>
 </GuiConfig>
 
