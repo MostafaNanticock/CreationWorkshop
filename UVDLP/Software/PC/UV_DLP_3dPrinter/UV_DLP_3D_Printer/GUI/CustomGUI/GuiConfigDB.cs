@@ -1955,7 +1955,7 @@ namespace UV_DLP_3D_Printer.GUI.CustomGUI
         {
             XmlNode dinode = xd.CreateElement("image");
             parent.AppendChild(dinode);
-            AddParameter(xd, dinode, "image", di.imgname);
+            di.imgname.Save(xd, dinode, "image");
             di.name.Save(xd, dinode, "name");
             di.docking.Save(xd, dinode, "dock");
             di.x.Save(xd, dinode, "x");
