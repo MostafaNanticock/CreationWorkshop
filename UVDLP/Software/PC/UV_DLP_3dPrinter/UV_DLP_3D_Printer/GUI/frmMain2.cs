@@ -1061,7 +1061,7 @@ namespace UV_DLP_3D_Printer.GUI
                     {
                         if (c.Width > maxwidth) 
                         {
-                           // maxwidth = c.Width + c. ;
+                            maxwidth = c.Width;
                         }
                     }
 
