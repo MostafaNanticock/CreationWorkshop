@@ -123,14 +123,14 @@ namespace Engine3D
                 var BBRx = bb2.BottomRightLatLong.Longitude;
                 var BBRy = bb2.BottomRightLatLong.Latitude;
 
-                var rabx = Math.abs(ATLx + ABRx – BTLx – BBRx);
-                var raby = Math.abs(ATLy + ABRy – BTLy – BBRy);
+                var rabx = Math.abs(ATLx + ABRx ?BTLx ?BBRx);
+                var raby = Math.abs(ATLy + ABRy ?BTLy ?BBRy);
 
                 //rAx + rBx
-                var raxPrbx = ABRx – ATLx + BBRx – BTLx;
+                var raxPrbx = ABRx ?ATLx + BBRx ?BTLx;
 
                 //rAy + rBy
-                var rayPrby = ATLy – ABRy + BTLy – BBRy;
+                var rayPrby = ATLy ?ABRy + BTLy ?BBRy;
 
                 if(rabx <= raxPrbx && raby <= rayPrby)
                 {
